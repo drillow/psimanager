@@ -1,11 +1,14 @@
-import { Copy } from "lucide-react"
 import { Checkbox } from "./ui/checkbox"
 import { useState } from "react"
+import { CopyButton } from "./CopyButton"
+import { Badge } from "./ui/badge"
+import { Link, MapPin } from "lucide-react"
 
 interface CardProps {
   patient: {
     name: string
     time: string
+    isOnline: boolean
   }
   isCompled?: boolean
 }
@@ -14,7 +17,7 @@ export const Card: React.FC<CardProps> = ({ patient, isCompled = false}) => {
   const [isCompleted, setIsCompleted] = useState(isCompled)
 
   return (
-    <div className="p-2 bg-white rounded-lg border border-zinc-200 flex flex-col">
+    <div className="p-2 bg-white rounded-lg border border-zinc-200 flex flex-col flex-1 max-h-[119px]">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Checkbox checked={isCompleted} onCheckedChange={() => setIsCompleted(!isCompleted)}/>
@@ -22,11 +25,28 @@ export const Card: React.FC<CardProps> = ({ patient, isCompled = false}) => {
         </div>
         <span className="text-xs text-zinc-400">{patient.time}</span>
       </div>
-      <div className="pb-4 pt-4">
-        <span className={`text-xs ${isCompleted ? 'line-through text-zinc-300' : 'text-zinc-400'}`}>https://meet.google.com/kjsdai1</span>
-      </div>
-      <div className="w-full flex justify-end gap-2">
-        <Copy className={`w-4 h-4 ${isCompleted ? 'text-zinc-400' : 'text-purple-400 cursor-pointer'}`}/>
+      {patient.isOnline ? (
+        <div className="py-4 flex items-center gap-2">
+          <Link className="w-4 h-4 text-zinc-400"/>
+          <span className={`text-xs ${isCompleted ? 'line-through text-zinc-300' : 'text-zinc-400'}`}>
+            https://meet.google.com/kjsdai1
+          </span>
+        </div>
+      ) : (
+        <div className="py-4 flex items-center gap-2">
+          <MapPin className="w-4 h-4 text-zinc-400"/>
+          <span className={`text-xs ${isCompleted ? 'line-through text-zinc-300' : 'text-zinc-400'}`}>
+            Clinica AmorPsi
+          </span>
+        </div>
+      )}
+      <div className="flex justify-between items-center">
+        {patient.isOnline ? (
+          <Badge variant={"secondary"}>Online</Badge>
+        ) : (
+          <Badge variant={"outline"}>Presencial</Badge>
+        )}
+        {patient.isOnline && <CopyButton disabled={isCompleted} copyText={"https://meet.google.com/kjsdai1"} />}
       </div>
     </div>
   )

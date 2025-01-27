@@ -5,6 +5,8 @@ import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group"
 import { Switch } from "./ui/switch"
+import { Checkbox } from "./ui/checkbox"
+import { Separator } from "./ui/separator"
 
 export const CreateUserButton = () => {
   return (
@@ -12,7 +14,7 @@ export const CreateUserButton = () => {
       <DialogTrigger asChild>
         <Button>
           <PlusIcon />
-          Adicionar
+          Adicionar paciente
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[525px]">
@@ -22,25 +24,36 @@ export const CreateUserButton = () => {
             Make changes to your profile here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 py-2">
           <div className="flex flex-col items-start gap-2">
             <Label htmlFor="name" className="text-right">
               Name
             </Label>
             <Input id="name" value="" placeholder="Nome completo do paciente" className="col-span-3" />
           </div>
-          <div className="flex flex-col items-start gap-2 w-full">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col items-start gap-2 w-full">
               <Label htmlFor="email" className="text-right">
                 E-mail
               </Label>
               <Input id="email" value="" placeholder="umemail@email.com" />
             </div>
-          <div className="flex itesm-center gap-4 w-full">
+          
             <div className="flex flex-col items-start gap-2 w-full">
               <Label htmlFor="cellphone" className="text-right">
                 Celular
               </Label>
               <Input id="cellphone" value="" placeholder="(11) 11111-1111" />
+            </div>
+          </div>
+      
+
+          <div className="grid grid-cols-3">
+            <div className="flex flex-col gap-2 w-full">
+              <Label htmlFor="recurrence">Recorrente</Label>
+              <div className="h-9 flex items-center">
+                <Switch id="recurrence"/>
+              </div>
             </div>
             <div className="flex flex-col gap-2 w-full">
               <Label htmlFor="has-whatsapp">WhatsApp</Label>
@@ -48,8 +61,17 @@ export const CreateUserButton = () => {
                 <Switch id="has-whatsapp"/>
               </div>
             </div>
+
+            <div className="flex flex-col gap-2 w-full">
+              <Label htmlFor="isOnline" className="text-left">
+                Consulta online
+              </Label>
+              <div className="h-9 flex items-center">
+                <Switch id="isOnline"/>
+              </div>
+            </div>
           </div>
-          
+{/*           
           <div className="flex flex-col items-start gap-2">
             <Label htmlFor="username" className="text-right">
               Dias da semana
@@ -63,8 +85,8 @@ export const CreateUserButton = () => {
               <ToggleGroupItem value="sab" className="w-full">Sab</ToggleGroupItem>
               <ToggleGroupItem value="dom" className="w-full">Dom</ToggleGroupItem>
             </ToggleGroup>
-          </div>
-          <div className="flex items-center gap-4">
+          </div> */}
+          {/* <div className="flex items-center gap-4">
             <div className="flex flex-col items-start gap-2 w-full">
               <Label>
                 Horario da consulta
@@ -77,18 +99,14 @@ export const CreateUserButton = () => {
                 <Switch id="recurrence"/>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-2 w-full">
-            <Label htmlFor="isOnline" className="text-left">
-              Consulta online
-            </Label>
-            <div className="h-9 flex items-center">
-              <Switch id="isOnline"/>
-            </div>
-          </div>
+          </div> */}
+         
         </div>
         <DialogFooter>
-          <Button type="submit">Salvar</Button>
+          <DialogTrigger asChild>
+            <Button variant={"outline"} className="w-3/12">Cancelar</Button>
+          </DialogTrigger>
+          <Button type="submit" className="w-3/12">Salvar</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

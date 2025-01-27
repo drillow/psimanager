@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { useAuth } from "@/context/auth"
 
 export const UserMenu = () => {
+  const { signOut } = useAuth()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -17,13 +19,13 @@ export const UserMenu = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link to={"/settings"}>
-              Confirgurações
+              Configurações
               {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         {/* <DropdownMenuSeparator /> */}
-        <DropdownMenuItem className="text-red-400">
+        <DropdownMenuItem className="text-red-400" onClick={() => signOut()}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>

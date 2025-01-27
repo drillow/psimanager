@@ -5,15 +5,33 @@ import { Patients } from "@/pages/Patients"
 import { Plans } from "@/pages/Plans"
 import { Services } from "@/pages/Services"
 import { Settings } from "@/pages/Settings"
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { setDefaultOptions } from "date-fns"
+import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
+import { ptBR } from 'date-fns/locale'
+import { AuthProvider } from "@/context/auth"
+import { PrivateRouter } from "@/components/PrivateRouter"
+import { Login } from "@/pages/Login"
+import { SignUp } from "@/pages/SingUp"
 
 const router = createBrowserRouter([
   {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '/signup',
+    element: <SignUp />
+  },
+  {
     path: '/',
-    element: <Layout />,
+    element:
+      <PrivateRouter>
+        <Layout />
+      </PrivateRouter>
+   ,
     children: [
       {
-        path: 'dashboard',
+        path: '',
         element: <Home />
       },
       {
@@ -41,7 +59,11 @@ const router = createBrowserRouter([
 ])
 
 export const Router = () => {
+  setDefaultOptions({ locale: ptBR })
+  
   return (
-    <RouterProvider router={router}/>
+    <AuthProvider>
+      <RouterProvider router={router}/>
+    </AuthProvider>
   )
 }
