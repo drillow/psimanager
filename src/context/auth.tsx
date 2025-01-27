@@ -1,8 +1,6 @@
 import React, { ReactNode, useContext, useState } from 'react'
 
 import JWT, { JwtPayload } from 'jsonwebtoken'
-
-
 import { IAuthContext, TUserData, INITIAL_STATE } from './auth.types'
 import { EPaths } from '@/types'
 import { ACCESS_TOKEN_KEY } from '@/utils/constants'
@@ -20,7 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUserData(INITIAL_STATE)
     window.location.href = EPaths.LOGIN
   }
-  
+
   const validateToken = () => {
     const localToken = localStorage.getItem(ACCESS_TOKEN_KEY)
     if (!localToken) return false

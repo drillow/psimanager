@@ -157,7 +157,7 @@ export const Home = () => {
           </div>
           <div className="bg-white rounded-xl w-5/12 h-full p-4 border border-zinc-200 relative">
             <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-50 bg-white rounded-md p-2">Em breve</p>
-            <div className="flex flex-col gap-10 blur-lg">
+            <div className="flex flex-col gap-10 blur-lgs">
               <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg font-semibold text-zinc-700">Métricas</h2>
