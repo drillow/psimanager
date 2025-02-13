@@ -1,7 +1,16 @@
-import { Link } from "react-router-dom"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { useAuth } from "@/context/auth"
+import { Link } from 'react-router-dom'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu'
+import { useAuth } from '@/context/auth'
 
 export const UserMenu = () => {
   const { signOut } = useAuth()
@@ -18,7 +27,7 @@ export const UserMenu = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link to={"/settings"}>
+            <Link to={'/settings'}>
               Configurações
               {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
             </Link>

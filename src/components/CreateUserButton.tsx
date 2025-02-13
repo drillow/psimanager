@@ -1,12 +1,17 @@
-import { PlusIcon } from "lucide-react"
-import { Button } from "./ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
-import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group"
-import { Switch } from "./ui/switch"
-import { Checkbox } from "./ui/checkbox"
-import { Separator } from "./ui/separator"
+import { PlusIcon } from 'lucide-react'
+import { Button } from './ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog'
+import { Input } from './ui/input'
+import { Label } from './ui/label'
+import { Switch } from './ui/switch'
 
 export const CreateUserButton = () => {
   return (
@@ -29,7 +34,12 @@ export const CreateUserButton = () => {
             <Label htmlFor="name" className="text-right">
               Name
             </Label>
-            <Input id="name" value="" placeholder="Nome completo do paciente" className="col-span-3" />
+            <Input
+              id="name"
+              value=""
+              placeholder="Nome completo do paciente"
+              className="col-span-3"
+            />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col items-start gap-2 w-full">
@@ -38,7 +48,7 @@ export const CreateUserButton = () => {
               </Label>
               <Input id="email" value="" placeholder="umemail@email.com" />
             </div>
-          
+
             <div className="flex flex-col items-start gap-2 w-full">
               <Label htmlFor="cellphone" className="text-right">
                 Celular
@@ -46,19 +56,18 @@ export const CreateUserButton = () => {
               <Input id="cellphone" value="" placeholder="(11) 11111-1111" />
             </div>
           </div>
-      
 
           <div className="grid grid-cols-3">
             <div className="flex flex-col gap-2 w-full">
               <Label htmlFor="recurrence">Recorrente</Label>
               <div className="h-9 flex items-center">
-                <Switch id="recurrence"/>
+                <Switch id="recurrence" />
               </div>
             </div>
             <div className="flex flex-col gap-2 w-full">
               <Label htmlFor="has-whatsapp">WhatsApp</Label>
               <div className="h-9 flex items-center">
-                <Switch id="has-whatsapp"/>
+                <Switch id="has-whatsapp" />
               </div>
             </div>
 
@@ -67,11 +76,11 @@ export const CreateUserButton = () => {
                 Consulta online
               </Label>
               <div className="h-9 flex items-center">
-                <Switch id="isOnline"/>
+                <Switch id="isOnline" />
               </div>
             </div>
           </div>
-{/*           
+          {/*           
           <div className="flex flex-col items-start gap-2">
             <Label htmlFor="username" className="text-right">
               Dias da semana
@@ -100,13 +109,16 @@ export const CreateUserButton = () => {
               </div>
             </div>
           </div> */}
-         
         </div>
         <DialogFooter>
           <DialogTrigger asChild>
-            <Button variant={"outline"} className="w-3/12">Cancelar</Button>
+            <Button variant={'outline'} className="w-3/12">
+              Cancelar
+            </Button>
           </DialogTrigger>
-          <Button type="submit" className="w-3/12">Salvar</Button>
+          <Button type="submit" className="w-3/12">
+            Salvar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

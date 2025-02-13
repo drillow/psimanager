@@ -1,5 +1,4 @@
 import { AddPatientToCalendar } from "@/components/AddPatientToCalendar"
-import { CreateUserButton } from "@/components/CreateUserButton"
 import { EmptyColumn } from "@/components/EmptyColumn"
 import { PageHeader } from "@/components/PageHeader"
 import { PatientCard } from "@/components/PatientCard"
@@ -7,7 +6,7 @@ import { ScrollDayColumn } from "@/components/ScrollDayColumn"
 import { Separator } from "@/components/ui/separator"
 import { useSidebar } from "@/components/ui/sidebar"
 import { Toggle } from "@/components/ui/toggle"
-import { Filter } from "lucide-react"
+
 import { useEffect, useState } from "react"
 
 enum FilterOptions {

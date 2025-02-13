@@ -1,7 +1,7 @@
-import { Check, ChevronsUpDown } from "lucide-react"
+import { Check, ChevronsUpDown } from 'lucide-react'
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import {
   Command,
   CommandEmpty,
@@ -9,41 +9,41 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from '@/components/ui/command'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { useState } from "react"
-import { Label } from "./ui/label"
+} from '@/components/ui/popover'
+import { useState } from 'react'
+import { Label } from './ui/label'
 
 const frameworks = [
   {
-    value: "next.js",
-    label: "Felipe Vieira Lima",
+    value: 'next.js',
+    label: 'Felipe Vieira Lima',
   },
   {
-    value: "sveltekit",
-    label: "Tamires Brito dos Santos",
+    value: 'sveltekit',
+    label: 'Tamires Brito dos Santos',
   },
   {
-    value: "nuxt.js",
-    label: "Suzy Anne Teles Vieira",
+    value: 'nuxt.js',
+    label: 'Suzy Anne Teles Vieira',
   },
   {
-    value: "remix",
-    label: "Alexandre GusMão Lima",
+    value: 'remix',
+    label: 'Alexandre GusMão Lima',
   },
   {
-    value: "astro",
-    label: "Gabriel Vieira Lima",
+    value: 'astro',
+    label: 'Gabriel Vieira Lima',
   },
 ]
 
 export function ComboboxDemo() {
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
+  const [value, setValue] = useState('')
 
   return (
     <div className="flex flex-col gap-2">
@@ -58,13 +58,13 @@ export function ComboboxDemo() {
           >
             {value
               ? frameworks.find((framework) => framework.value === value)?.label
-              : "Selecione um paciente..."}
+              : 'Selecione um paciente...'}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0">
           <Command>
-            <CommandInput placeholder="Buscar paciente..."/>
+            <CommandInput placeholder="Buscar paciente..." />
             <CommandList>
               <CommandEmpty>Nenhum paciente encontrado.</CommandEmpty>
               <CommandGroup>
@@ -73,14 +73,14 @@ export function ComboboxDemo() {
                     key={framework.value}
                     value={framework.value}
                     onSelect={(currentValue) => {
-                      setValue(currentValue === value ? "" : currentValue)
+                      setValue(currentValue === value ? '' : currentValue)
                       setOpen(false)
                     }}
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4",
-                        value === framework.value ? "opacity-100" : "opacity-0"
+                        'mr-2 h-4 w-4',
+                        value === framework.value ? 'opacity-100' : 'opacity-0',
                       )}
                     />
                     {framework.label}

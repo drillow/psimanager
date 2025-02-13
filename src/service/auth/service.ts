@@ -1,6 +1,8 @@
-import { api } from "../api"
+import { api } from '../api'
 
-export const signIn = async (payload): Promise<{ access_token: string, message?: string, code?: number }> => {
+export const signIn = async (
+  payload,
+): Promise<{ access_token: string; message?: string; code?: number }> => {
   const response = await api.post(`/api/auth/signin`, payload)
 
   return response.data

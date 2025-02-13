@@ -1,8 +1,9 @@
 import { EPaths } from '@/types'
 import axios from 'axios'
 
-const ACCESS_TOKEN_KEY = "x-access-token"
-const accessToken = typeof window !== 'undefined' ? localStorage.getItem(ACCESS_TOKEN_KEY) : ''
+const ACCESS_TOKEN_KEY = 'x-access-token'
+const accessToken =
+  typeof window !== 'undefined' ? localStorage.getItem(ACCESS_TOKEN_KEY) : ''
 
 const api = axios.create({
   baseURL: `http://localhost:8080`,
@@ -22,6 +23,5 @@ api.interceptors.response.use(
     return error.response
   },
 )
-
 
 export { api }

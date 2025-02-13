@@ -1,69 +1,69 @@
-import Layout from "@/components/layout/Layout"
-import { Billings } from "@/pages/Billings"
-import { Home } from "@/pages/Home"
-import { Patients } from "@/pages/Patients"
-import { Plans } from "@/pages/Plans"
-import { Services } from "@/pages/Services"
-import { Settings } from "@/pages/Settings"
-import { setDefaultOptions } from "date-fns"
-import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
+import Layout from '@/components/layout/Layout'
+import { Billings } from '@/pages/Billings'
+import { Home } from '@/pages/Home'
+import { Patients } from '@/pages/Patients'
+import { Plans } from '@/pages/Plans'
+import { Services } from '@/pages/Services'
+import { Settings } from '@/pages/Settings'
+import { setDefaultOptions } from 'date-fns'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ptBR } from 'date-fns/locale'
-import { AuthProvider } from "@/context/auth"
-import { PrivateRouter } from "@/components/PrivateRouter"
-import { Login } from "@/pages/Login"
-import { SignUp } from "@/pages/SingUp"
+import { AuthProvider } from '@/context/auth'
+import { PrivateRouter } from '@/components/PrivateRouter'
+import { Login } from '@/pages/Login'
+import { SignUp } from '@/pages/SingUp'
 
 const router = createBrowserRouter([
   {
     path: '/login',
-    element: <Login />
+    element: <Login />,
   },
   {
     path: '/signup',
-    element: <SignUp />
+    element: <SignUp />,
   },
   {
     path: '/',
-    element:
+    element: (
       <PrivateRouter>
         <Layout />
       </PrivateRouter>
-   ,
+    ),
     children: [
       {
         path: '',
-        element: <Home />
+        element: <Home />,
       },
       {
         path: 'weekly-consults',
-        element: <Services />
+        element: <Services />,
       },
       {
         path: 'patients',
-        element: <Patients />
+        element: <Patients />,
       },
       {
         path: 'settings',
-        element: <Settings />
+        element: <Settings />,
       },
       {
         path: 'plan',
-        element: <Plans />
+        element: <Plans />,
       },
       {
         path: 'billing',
-        element: <Billings />
-      }
-    ]
-  }
+        element: <Billings />,
+      },
+    ],
+  },
 ])
 
 export const Router = () => {
   setDefaultOptions({ locale: ptBR })
-  
+
   return (
     <AuthProvider>
-      <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </AuthProvider>
   )
 }

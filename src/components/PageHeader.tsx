@@ -1,7 +1,7 @@
-import { format } from "date-fns"
-import { NotificationDropdown } from "./NotificationDropdown"
-import { SidebarTrigger } from "./ui/sidebar"
-import { UserMenu } from "./UserMenu"
+import { format } from 'date-fns'
+import { NotificationDropdown } from './NotificationDropdown'
+import { SidebarTrigger } from './ui/sidebar'
+import { UserMenu } from './UserMenu'
 
 interface PageHeaderProps {
   pageTitle: string
@@ -9,16 +9,22 @@ interface PageHeaderProps {
   showCurrentDay?: boolean
 }
 
-export const PageHeader: React.FC<PageHeaderProps> = ({ pageTitle, hasToggleSidebar = false, showCurrentDay = false }) => {
+export const PageHeader: React.FC<PageHeaderProps> = ({
+  pageTitle,
+  hasToggleSidebar = false,
+  showCurrentDay = false,
+}) => {
   return (
     <div className="w-full flex items-center justify-between">
       <div className="flex items-baseline gap-2">
-        {hasToggleSidebar && (
-          <SidebarTrigger />
-        )}
-        <h1 className="text-2xl font-semibold text-zinc-700 rounded">{pageTitle}</h1>
+        {hasToggleSidebar && <SidebarTrigger />}
+        <h1 className="text-2xl font-semibold text-zinc-700 rounded">
+          {pageTitle}
+        </h1>
         {showCurrentDay && (
-          <span className="text-xl font-semibold text-zinc-400 ml-2">{format(new Date(), "'Hoje é' eeee, dd 'de' MMMM 'de' yyyy")}</span>
+          <span className="text-xl font-semibold text-zinc-400 ml-2">
+            {format(new Date(), "'Hoje é' eeee, dd 'de' MMMM 'de' yyyy")}
+          </span>
         )}
       </div>
       <div className="flex items-center gap-6">

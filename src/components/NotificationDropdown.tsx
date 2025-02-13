@@ -1,12 +1,18 @@
-import { BellDot } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { Separator } from "./ui/separator"
+import { BellDot } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu'
+import { Separator } from './ui/separator'
 
 export const NotificationDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <BellDot className="w-5 h-5"/>
+        <BellDot className="w-5 h-5" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-72 h-96 mt-2 mr-4">
         <DropdownMenuLabel>Notificações</DropdownMenuLabel>
@@ -18,7 +24,9 @@ export const NotificationDropdown = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm font-bold">Uma nova notificação</span>
-              <p className="text-xs">Sua consulta com Felipe Vieira acaba de ser confirmada</p>
+              <p className="text-xs">
+                Sua consulta com Felipe Vieira acaba de ser confirmada
+              </p>
             </div>
           </div>
           <Separator />
@@ -28,7 +36,9 @@ export const NotificationDropdown = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm font-bold">Uma nova notificação</span>
-              <p className="text-xs">Sua consulta com Felipe Vieira acaba de ser confirmada</p>
+              <p className="text-xs">
+                Sua consulta com Felipe Vieira acaba de ser confirmada
+              </p>
             </div>
           </div>
           <Separator />
@@ -38,7 +48,9 @@ export const NotificationDropdown = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm font-bold">Uma nova notificação</span>
-              <p className="text-xs">Sua consulta com Felipe Vieira acaba de ser confirmada</p>
+              <p className="text-xs">
+                Sua consulta com Felipe Vieira acaba de ser confirmada
+              </p>
             </div>
           </div>
           <Separator />
@@ -48,7 +60,9 @@ export const NotificationDropdown = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm font-bold">Uma nova notificação</span>
-              <p className="text-xs">Sua consulta com Felipe Vieira acaba de ser confirmada</p>
+              <p className="text-xs">
+                Sua consulta com Felipe Vieira acaba de ser confirmada
+              </p>
             </div>
           </div>
           <Separator />

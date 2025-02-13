@@ -1,14 +1,22 @@
-import { useToast } from "@/hooks/use-toast"
-import { CheckCheck, Copy } from "lucide-react"
+import { useToast } from '@/hooks/use-toast'
+import { CheckCheck, Copy } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip'
 
 type CopyButtonProps = {
   copyText: string
   disabled?: boolean
 }
 
-export const CopyButton: React.FC<CopyButtonProps> = ({ disabled, copyText }) => {
+export const CopyButton: React.FC<CopyButtonProps> = ({
+  disabled,
+  copyText,
+}) => {
   const [isCopy, setIsCopy] = useState(false)
 
   const { toast } = useToast()
@@ -16,8 +24,8 @@ export const CopyButton: React.FC<CopyButtonProps> = ({ disabled, copyText }) =>
     navigator.clipboard.writeText(copyText)
     setIsCopy(true)
     toast({
-      title: "Link copiado com sucesso!",
-      description: "URL da sessão foi copiado para sua área de transferência.",
+      title: 'Link copiado com sucesso!',
+      description: 'URL da sessão foi copiado para sua área de transferência.',
     })
   }
 
@@ -34,11 +42,16 @@ export const CopyButton: React.FC<CopyButtonProps> = ({ disabled, copyText }) =>
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className={disabled ? 'cursor-default' : "cursor-pointer"} onClick={() => !disabled && handleCopyToClipboard()}>
+          <div
+            className={disabled ? 'cursor-default' : 'cursor-pointer'}
+            onClick={() => !disabled && handleCopyToClipboard()}
+          >
             {isCopy ? (
-              <CheckCheck className="w-4 h-4 text-green-500"/>
+              <CheckCheck className="w-4 h-4 text-green-500" />
             ) : (
-              <Copy className={`w-4 h-4 ${disabled ? 'text-zinc-400' : 'text-violet-400'}`}/>
+              <Copy
+                className={`w-4 h-4 ${disabled ? 'text-zinc-400' : 'text-violet-400'}`}
+              />
             )}
           </div>
         </TooltipTrigger>

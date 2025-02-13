@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query"
-import { recovery, signIn, signUp } from "./service"
+import { useMutation } from '@tanstack/react-query'
+import { recovery, signIn, signUp } from './service'
 
 export const useSignIn = () => {
   const { mutateAsync, isPending, isError } = useMutation({
@@ -15,7 +15,7 @@ export const useSignIn = () => {
 
 export const useSignUp = () => {
   const { mutateAsync, isPending, isError } = useMutation({
-    mutationFn: signUp
+    mutationFn: signUp,
   })
 
   return {
@@ -27,7 +27,7 @@ export const useSignUp = () => {
 
 export const useRecoveryPassword = () => {
   const { mutateAsync, isPending, isError } = useMutation({
-    mutationFn: recovery
+    mutationFn: recovery,
   })
 
   return {

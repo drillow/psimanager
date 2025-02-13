@@ -10,7 +10,9 @@ export const AuthContext = React.createContext<IAuthContext>({} as IAuthContext)
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const token = localStorage.getItem(ACCESS_TOKEN_KEY)
 
-  const payload: TUserData = token ? (JWT.decode(token) as TUserData) : INITIAL_STATE
+  const payload: TUserData = token
+    ? (JWT.decode(token) as TUserData)
+    : INITIAL_STATE
   const [userData, setUserData] = useState<TUserData>(payload)
 
   const signOut = () => {
@@ -23,10 +25,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const localToken = localStorage.getItem(ACCESS_TOKEN_KEY)
     if (!localToken) return false
 
-    const decodedToken: JwtPayload | null = JWT.decode(localToken, { complete: true })
+    const decodedToken: JwtPayload | null = JWT.decode(localToken, {
+      complete: true,
+    })
     const dateNow = new Date()
 
-    if (!decodedToken || decodedToken?.payload?.exp * 1000 < dateNow.getTime()) {
+    if (
+      !decodedToken ||
+      decodedToken?.payload?.exp * 1000 < dateNow.getTime()
+    ) {
       localStorage.removeItem(ACCESS_TOKEN_KEY)
       return false
     }
@@ -47,6 +54,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
-
 export const useAuth = (): IAuthContext => useContext(AuthContext)
-
