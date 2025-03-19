@@ -14,7 +14,7 @@ import {
 } from '../ui/sidebar'
 import {
   CalendarDays,
-  Settings,
+  // Settings,
   Users,
   LayoutDashboard,
   Headphones,
@@ -22,10 +22,12 @@ import {
   DollarSign,
   Crown,
   ChartColumnBig,
+  SettingsIcon,
 } from 'lucide-react'
 import { useEffect } from 'react'
 import { Progress } from '../ui/progress'
 import { Badge } from '../ui/badge'
+import { Settings } from '@/pages/Settings'
 
 const applicationItems = [
   {
@@ -58,21 +60,21 @@ const financeItems = [
     disabled: true,
     asSoon: true,
   },
-  {
-    title: 'Plano',
-    url: 'plan',
-    icon: Crown,
-    disabled: false,
-    asSoon: false,
-  },
+  // {
+  //   title: 'Plano',
+  //   url: 'plan',
+  //   icon: Crown,
+  //   disabled: false,
+  //   asSoon: false,
+  // },
 ]
 
 const footerItems = [
-  {
-    title: 'Configurações',
-    url: 'settings',
-    icon: Settings,
-  },
+  // {
+  //   title: 'Configurações',
+  //   url: 'settings',
+  //   icon: Settings,
+  // },
   {
     title: 'Ajuda e Suporte',
     url: 'help-support',
@@ -99,7 +101,9 @@ export function AppSidebar() {
         >
           <Hexagon className={`${open ? 'w-5 h-5' : 'w-4 h-4'} text-zinc-50`} />
         </div>
-        {open && <h1 className="font-bold text-2xl text-violet-600">Idfk</h1>}
+        {open && (
+          <h1 className="font-bold text-2xl text-violet-600">[MindSync]</h1>
+        )}
       </SidebarHeader>
       {/* <Separator /> */}
       <SidebarContent>
@@ -175,6 +179,12 @@ export function AppSidebar() {
             </div>
           </div>
         )}
+        <Settings>
+          <SidebarMenuButton>
+            <SettingsIcon />
+            <span>Configurações</span>
+          </SidebarMenuButton>
+        </Settings>
         {footerItems.map((item) => (
           <SidebarMenuButton asChild key={item.title}>
             <Link to={item.url}>

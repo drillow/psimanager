@@ -8,7 +8,7 @@ interface WIdgetCardLinkProps {
   icon: React.ReactNode
   hasBadge?: boolean
   badgeText?: string
-  toPath: string
+  toPath?: string
 }
 
 export const WidgetCardLink: React.FC<WIdgetCardLinkProps> = ({
@@ -19,18 +19,39 @@ export const WidgetCardLink: React.FC<WIdgetCardLinkProps> = ({
   badgeText = 'Text',
   toPath,
 }) => {
+  if (toPath) {
+    return (
+      <Link
+        to={toPath}
+        className="border border-zinc-200 rounded-xl w-full h-[245px] p-4 flex flex-col justify-between bg-white hover:bg-zinc-50"
+      >
+        <div className="flex items-start justify-between">
+          <div className="w-20 h-20 rounded-xl border border-zinc-200 flex items-center justify-center">
+            {icon}
+          </div>
+          <ExternalLink className="text-violet-500" />
+        </div>
+        <div className="flex flex-col gap-2">
+          {hasBadge && (
+            <Badge className="flex items-center justify-center w-5/12">
+              {badgeText}
+            </Badge>
+          )}
+          <span className="text-lg font-semibold text-zinc-600">{title}</span>
+          <p className="text-xs text-zinc-400 h-8">{description}</p>
+        </div>
+      </Link>
+    )
+  }
   return (
-    <Link
-      to={toPath}
-      className="border border-zinc-200 rounded-xl w-full h-full p-4 flex flex-col justify-between bg-white hover:bg-zinc-50"
-    >
-      <div className="flex items-start justify-between">
+    <div className="border border-zinc-200 rounded-xl w-full h-[245px] p-4 flex flex-col justify-between items-start bg-white hover:bg-zinc-50">
+      <div className="w-full flex items-start justify-between">
         <div className="w-20 h-20 rounded-xl border border-zinc-200 flex items-center justify-center">
           {icon}
         </div>
         <ExternalLink className="text-violet-500" />
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-start gap-2">
         {hasBadge && (
           <Badge className="flex items-center justify-center w-5/12">
             {badgeText}
@@ -39,6 +60,6 @@ export const WidgetCardLink: React.FC<WIdgetCardLinkProps> = ({
         <span className="text-lg font-semibold text-zinc-600">{title}</span>
         <p className="text-xs text-zinc-400 h-8">{description}</p>
       </div>
-    </Link>
+    </div>
   )
 }

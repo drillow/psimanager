@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import { NotificationDropdown } from './NotificationDropdown'
 import { SidebarTrigger } from './ui/sidebar'
 import { UserMenu } from './UserMenu'
+import { UserButton } from '@clerk/clerk-react'
 
 interface PageHeaderProps {
   pageTitle: string
@@ -30,6 +31,14 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       <div className="flex items-center gap-6">
         <NotificationDropdown />
         <UserMenu />
+        {/* <UserButton
+          appearance={{
+            elements: {
+              button: { borderRadius: 8 },
+              avatarBox: { borderRadius: 8 },
+            },
+          }}
+        /> */}
       </div>
     </div>
   )

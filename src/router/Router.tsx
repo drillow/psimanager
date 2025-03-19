@@ -3,8 +3,7 @@ import { Billings } from '@/pages/Billings'
 import { Home } from '@/pages/Home'
 import { Patients } from '@/pages/Patients'
 import { Plans } from '@/pages/Plans'
-import { Services } from '@/pages/Services'
-import { Settings } from '@/pages/Settings'
+import Services from '@/pages/Services'
 import { setDefaultOptions } from 'date-fns'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ptBR } from 'date-fns/locale'
@@ -12,6 +11,9 @@ import { AuthProvider } from '@/context/auth'
 import { PrivateRouter } from '@/components/PrivateRouter'
 import { Login } from '@/pages/Login'
 import { SignUp } from '@/pages/SingUp'
+import { GoogleConnect } from '@/pages/GoogleConnect'
+
+// const Services = lazy(async () => await import('@/pages/Services'))
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <SignUp />,
+  },
+  {
+    path: 'connect-google',
+    element: <GoogleConnect />,
   },
   {
     path: '/',
@@ -41,10 +47,6 @@ const router = createBrowserRouter([
       {
         path: 'patients',
         element: <Patients />,
-      },
-      {
-        path: 'settings',
-        element: <Settings />,
       },
       {
         path: 'plan',

@@ -9,6 +9,8 @@ interface CardProps {
     name: string
     time: string
     isOnline: boolean
+    url?: string
+    place?: string
   }
   isCompled?: boolean
 }
@@ -17,7 +19,7 @@ export const Card: React.FC<CardProps> = ({ patient, isCompled = false }) => {
   const [isCompleted, setIsCompleted] = useState(isCompled)
 
   return (
-    <div className="p-2 bg-white rounded-lg border border-zinc-200 flex flex-col flex-1 max-h-[119px]">
+    <div className="p-2 bg-white rounded-lg border border-zinc-200 flex flex-col flex-1 justify-between h-[119px] max-h-[119px]">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Checkbox
@@ -33,16 +35,17 @@ export const Card: React.FC<CardProps> = ({ patient, isCompled = false }) => {
         <span className="text-xs text-zinc-400">{patient.time}</span>
       </div>
       {patient.isOnline ? (
-        <div className="py-4 flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <Link className="w-4 h-4 text-zinc-400" />
-          <span
-            className={`text-xs ${isCompleted ? 'line-through text-zinc-300' : 'text-zinc-400'}`}
+          <a
+            className={`text-xs ${isCompleted ? 'line-through text-zinc-300' : 'text-violet-400 underline underline-offset-1'}`}
+            href={patient.url}
           >
-            https://meet.google.com/kjsdai1
-          </span>
+            Google Meet Link
+          </a>
         </div>
       ) : (
-        <div className="py-4 flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <MapPin className="w-4 h-4 text-zinc-400" />
           <span
             className={`text-xs ${isCompleted ? 'line-through text-zinc-300' : 'text-zinc-400'}`}
@@ -57,11 +60,8 @@ export const Card: React.FC<CardProps> = ({ patient, isCompled = false }) => {
         ) : (
           <Badge variant={'outline'}>Presencial</Badge>
         )}
-        {patient.isOnline && (
-          <CopyButton
-            disabled={isCompleted}
-            copyText={'https://meet.google.com/kjsdai1'}
-          />
+        {patient.isOnline && patient.url && (
+          <CopyButton disabled={isCompleted} copyText={patient.url} />
         )}
       </div>
     </div>

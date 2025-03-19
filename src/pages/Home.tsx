@@ -1,27 +1,18 @@
-import { Card } from '@/components/Card'
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { Link } from 'react-router-dom'
+
 import { WidgetCardLink } from '@/components/WidgetCardLink'
 import {
-  Ellipsis,
   UserPlus2,
   Crown,
-  Settings,
+  Settings as SettingsIcon,
   ChartColumnBig,
   Eye,
   EyeOff,
 } from 'lucide-react'
 import { MainChart } from '@/components/MainChart'
 import { useState } from 'react'
-import { EmptyColumn } from '@/components/EmptyColumn'
-import {
-  calculateNextDateByNumberOfDaysAfter,
-  getFirstFourItems,
-  meetingIsCompleted,
-} from '@/utils/functions'
-import { mockData } from './Services'
 import {
   Dialog,
   DialogContent,
@@ -31,6 +22,10 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
+import { DashboardCalendar } from '@/components/DashboadCalendar'
+import { MenuItens, Settings } from './Settings'
+
+// import { datetime, RRule } from 'rrule'
 
 export const Home = () => {
   const [isAmountVisible, setIsAmountVisible] = useState(true)
@@ -38,122 +33,18 @@ export const Home = () => {
   const handleAmountVisibility = () =>
     setIsAmountVisible((prevState) => !prevState)
 
-  const todayDate = calculateNextDateByNumberOfDaysAfter(0)
-  const tomorrowDate = calculateNextDateByNumberOfDaysAfter(1)
-  const inTwoDays = calculateNextDateByNumberOfDaysAfter(2)
-
-  console.log(inTwoDays)
   return (
     <div className="w-full h-screen p-4 flex flex-col gap-4">
       <PageHeader pageTitle="Dashboard" />
 
       <div className="flex flex-col gap-4 h-full">
-        <div className="flex items-start gap-4">
-          <div className="bg-slate-100 rounded-xl flex w-7/12 h-full p-4 gap-4">
-            <div className="flex flex-col flex-1 gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-zinc-400">
-                  Hoje
-                </span>
-                <span className="font-semibold text-xs text-zinc-700">
-                  {todayDate.date}
-                </span>
-              </div>
-              <div className="flex flex-col gap-2 h-full">
-                {getFirstFourItems(mockData[todayDate.weekDay]).map(
-                  (patient) => (
-                    <Card
-                      key={patient.name}
-                      patient={patient}
-                      isCompled={meetingIsCompleted(
-                        todayDate.date,
-                        patient.time,
-                      )}
-                    />
-                  ),
-                )}
-                {mockData[todayDate.weekDay].length > 4 && (
-                  <Button variant={'link'} asChild>
-                    <Link to="/weekly-consults">
-                      <Ellipsis />
-                    </Link>
-                  </Button>
-                )}
-                {mockData[todayDate.weekDay].length === 0 && <EmptyColumn />}
-              </div>
-            </div>
-            <Separator orientation="vertical" />
-            <div className="flex flex-col flex-1 gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-zinc-400">
-                  Amanhã
-                </span>
-                <span className="font-semibold text-xs text-zinc-700">
-                  {tomorrowDate.date}
-                </span>
-              </div>
-              <div className="flex flex-col gap-2 h-full">
-                {getFirstFourItems(mockData[tomorrowDate.weekDay]).map(
-                  (patient) => (
-                    <Card
-                      key={patient.name}
-                      patient={patient}
-                      isCompled={meetingIsCompleted(
-                        tomorrowDate.date,
-                        patient.time,
-                      )}
-                    />
-                  ),
-                )}
-                {mockData[tomorrowDate.weekDay].length > 4 && (
-                  <Button variant={'link'} asChild>
-                    <Link to="/weekly-consults">
-                      <Ellipsis className="text-violet-500" />
-                    </Link>
-                  </Button>
-                )}
-                {mockData[tomorrowDate.weekDay].length === 0 && <EmptyColumn />}
-              </div>
-            </div>
-            <Separator orientation="vertical" />
-            <div className="flex flex-col flex-1 gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-zinc-400">
-                  Em 2 dias
-                </span>
-                <span className="font-semibold text-xs text-zinc-700">
-                  {inTwoDays.date}
-                </span>
-              </div>
-              <div className="flex flex-col gap-2 flex-1">
-                {getFirstFourItems(mockData[inTwoDays.weekDay]).map(
-                  (patient) => (
-                    <Card
-                      key={patient.name}
-                      patient={patient}
-                      isCompled={meetingIsCompleted(
-                        inTwoDays.date,
-                        patient.time,
-                      )}
-                    />
-                  ),
-                )}
-                {mockData[inTwoDays.weekDay].length > 4 && (
-                  <Button variant={'link'} asChild>
-                    <Link to="/weekly-consults">
-                      <Ellipsis className="text-violet-500" />
-                    </Link>
-                  </Button>
-                )}
-                {mockData[inTwoDays.weekDay].length === 0 && <EmptyColumn />}
-              </div>
-            </div>
-          </div>
+        <div className="flex flex-1 h-full items-start gap-4">
+          <DashboardCalendar />
           <div className="bg-white rounded-xl w-5/12 h-full p-4 border border-zinc-200 relative">
             <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-50 bg-white rounded-md p-2">
               Em breve
             </p>
-            <div className="flex flex-col gap-10 blur-lgs">
+            <div className="flex flex-col gap-10 blur-lg">
               <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg font-semibold text-zinc-700">
@@ -216,21 +107,23 @@ export const Home = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-4 h-full">
+        <div className="grid grid-cols-4 gap-4">
           <WidgetCardLink
             title="Adicionar paciente"
             description="Inclua um novo paciente, gerencie os dias da consulta e muito mais."
             icon={<UserPlus2 className="w-8 h-8" />}
             toPath="/patients"
           />
-          <WidgetCardLink
-            title="Gerenciar plano"
-            description="Genrencie seu plano e verifique sua assinatura"
-            icon={<Crown className="w-8 h-8" />}
-            hasBadge
-            badgeText="Plano gratuíto"
-            toPath="/plan"
-          />
+          <Settings openScreen={MenuItens.FINANCE}>
+            <WidgetCardLink
+              title="Gerenciar plano"
+              description="Genrencie seu plano e verifique sua assinatura"
+              icon={<Crown className="w-8 h-8" />}
+              hasBadge
+              badgeText="Plano gratuíto"
+              // toPath="/plan"
+            />
+          </Settings>
 
           <WidgetCardLink
             title="Métricas"
@@ -238,12 +131,13 @@ export const Home = () => {
             icon={<ChartColumnBig className="w-8 h-8" />}
             toPath="/settings"
           />
-          <WidgetCardLink
-            title="Configurações"
-            description="Configure seu perfil, notificações e muito mais."
-            icon={<Settings className="w-8 h-8" />}
-            toPath="/settings"
-          />
+          <Settings openScreen={MenuItens.USER}>
+            <WidgetCardLink
+              title="Configurações"
+              description="Configure seu perfil, notificações e muito mais."
+              icon={<SettingsIcon className="w-8 h-8" />}
+            />
+          </Settings>
         </div>
       </div>
       <Dialog>

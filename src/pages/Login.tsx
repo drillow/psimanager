@@ -3,16 +3,22 @@ import { LoadingSpinner } from '@/components/Spinner'
 import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/toaster'
 import { useAuth } from '@/context/auth'
+import { TUserData } from '@/context/auth.types'
 import { useToast } from '@/hooks/use-toast'
 import { useRecoveryPassword, useSignIn } from '@/service/auth/hooks'
 import { Hexagon } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import JWT from 'jsonwebtoken'
+import { ACCESS_TOKEN_KEY } from '@/utils/constants'
+
+import Cookies from 'universal-cookie'
 
 export const Login: React.FC = () => {
+  const cookies = new Cookies()
   const [recoveryPasswordForm, setRecoveryPasswordForm] = useState(false)
   const navigate = useNavigate()
-  const { validateToken } = useAuth()
+  const { validateToken, signIn } = useAuth()
   const { execute, isLoading } = useSignIn()
   const { toast } = useToast()
 
@@ -30,11 +36,12 @@ export const Login: React.FC = () => {
         title: 'Error',
         description: 'dsads',
       })
-
-      return
     }
 
-    localStorage.setItem('x-app-access-token', data.access_token)
+    cookies.set(ACCESS_TOKEN_KEY, data.access_token)
+    // document.cookie = `x-app-access-token=${data.access_token};
+
+    signIn(JWT.decode(data.access_token) as TUserData)
 
     if (validateToken()) {
       navigate('/')
@@ -57,9 +64,9 @@ export const Login: React.FC = () => {
   return (
     <>
       <Toaster />
-      <div className="w-screen h-screen grid grid-cols-12">
-        <div className="col-start-1 col-end-8 border-r border-zinc-200"></div>
-        <div className="col-start-8 col-end-13 flex items-center justify-center">
+      <div className="w-screen h-screen grid grid-cols-12 p-4  bg-[url(/src/assets/Helix.jpg)] bg-no-repeat bg-cover">
+        <div className="col-start-1 col-end-8"></div>
+        <div className="col-start-8 col-end-13 flex items-center justify-center rounded-3xl shadow-2xl bg-white">
           {recoveryPasswordForm ? (
             <div className="flex flex-col items-center justify-center gap-4 w-full px-40">
               <div className="flex flex-col items-center justify-center gap-2">
@@ -128,6 +135,19 @@ export const Login: React.FC = () => {
               >
                 {isLoading ? <LoadingSpinner /> : 'Entrar'}
               </Button>
+              {/* <SignIn
+              fallbackRedirectUrl="/"
+              signUpUrl="/signup"
+              component="div"
+              appearance={{
+                elements: {
+                  cardBox: { border: 0, boxShadow: 'none' },
+                  card: { border: 0, boxShadow: 'none' },
+                  footer: { background: 'none' },
+                  formButtonPrimary: 'bg-violet-600 hover:bg-violet-700',
+                },
+              }}
+            /> */}
               <span className="flex flex-col items-center gap-2">
                 Ainda não tem conta?
                 <button

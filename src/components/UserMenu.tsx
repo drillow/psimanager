@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
   DropdownMenu,
@@ -11,6 +10,9 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { useAuth } from '@/context/auth'
+import { Settings } from '@/pages/Settings'
+import { LogOut, SettingsIcon } from 'lucide-react'
+import { SidebarMenuButton } from './ui/sidebar'
 
 export const UserMenu = () => {
   const { signOut } = useAuth()
@@ -27,15 +29,24 @@ export const UserMenu = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link to={'/settings'}>
-              Configurações
-              {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
-            </Link>
+            <Settings>
+              <SidebarMenuButton>
+                <SettingsIcon />
+                <span>Configurações</span>
+              </SidebarMenuButton>
+            </Settings>
+            {/* <Link to={'/settings'}>
+              Configurações */}
+            {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
+            {/* </Link> */}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         {/* <DropdownMenuSeparator /> */}
         <DropdownMenuItem className="text-red-400" onClick={() => signOut()}>
+          {/* <div>÷ */}
+          <LogOut />
           Log out
+          {/* </div> */}
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

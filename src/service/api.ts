@@ -1,15 +1,18 @@
 import { EPaths } from '@/types'
+import { ACCESS_TOKEN_KEY } from '@/utils/constants'
 import axios from 'axios'
+import Cookies from 'universal-cookie'
 
-const ACCESS_TOKEN_KEY = 'x-access-token'
-const accessToken =
-  typeof window !== 'undefined' ? localStorage.getItem(ACCESS_TOKEN_KEY) : ''
+const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY)
+const cookies = new Cookies()
+const accessTokenCookie = cookies.get(ACCESS_TOKEN_KEY)
 
+console.log('API', accessToken)
 const api = axios.create({
   baseURL: `http://localhost:8080`,
   headers: {
-    [ACCESS_TOKEN_KEY]: accessToken ?? '',
     'Content-Type': 'application/json',
+    [ACCESS_TOKEN_KEY]: accessTokenCookie,
   },
 })
 

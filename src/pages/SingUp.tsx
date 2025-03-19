@@ -22,6 +22,15 @@ export const SignUp = () => {
   const handleBack = () => navigate('/login')
   return (
     <div className="w-screen h-screen grid grid-cols-12">
+      {/* <ClerkSignUp
+            appearance={{
+              elements: {
+                cardBox: { border: 0, boxShadow: 'none' },
+                card: { border: 0, boxShadow: 'none' },
+                footer: { background: 'none' },
+              },
+            }}
+          /> */}
       <div className="col-start-1 col-end-8 border-r border-zinc-200"></div>
       <div className="col-start-8 col-end-13 flex items-center justify-center relative">
         <Button
