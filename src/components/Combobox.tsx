@@ -18,37 +18,46 @@ import {
 import { useState } from 'react'
 import { Label } from './ui/label'
 
-const frameworks = [
-  {
-    value: 'next.js',
-    label: 'Felipe Vieira Lima',
-  },
-  {
-    value: 'sveltekit',
-    label: 'Tamires Brito dos Santos',
-  },
-  {
-    value: 'nuxt.js',
-    label: 'Suzy Anne Teles Vieira',
-  },
-  {
-    value: 'remix',
-    label: 'Alexandre GusMão Lima',
-  },
-  {
-    value: 'astro',
-    label: 'Gabriel Vieira Lima',
-  },
-]
+// const frameworks = [
+//   {
+//     value: 'next.js',
+//     label: 'Felipe Vieira Lima',
+//   },
+//   {
+//     value: 'sveltekit',
+//     label: 'Tamires Brito dos Santos',
+//   },
+//   {
+//     value: 'nuxt.js',
+//     label: 'Suzy Anne Teles Vieira',
+//   },
+//   {
+//     value: 'remix',
+//     label: 'Alexandre GusMão Lima',
+//   },
+//   {
+//     value: 'astro',
+//     label: 'Gabriel Vieira Lima',
+//   },
+// ]
 
-export function ComboboxDemo() {
+interface ComboboxProps {
+  dataList: { label: string; value: string }[]
+  onSelectValue: (value: string) => void
+  selectedValue: string
+}
+
+export function Combobox({
+  dataList,
+  selectedValue,
+  onSelectValue,
+}: ComboboxProps) {
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState('')
 
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor="recurrence">Selecione o paciente</Label>
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={setOpen} modal>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
@@ -56,34 +65,42 @@ export function ComboboxDemo() {
             aria-expanded={open}
             className="w-full justify-between"
           >
-            {value
-              ? frameworks.find((framework) => framework.value === value)?.label
+            {selectedValue
+              ? dataList.find((item) => item.value === selectedValue)?.label
               : 'Selecione um paciente...'}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0">
-          <Command>
-            <CommandInput placeholder="Buscar paciente..." />
+        <PopoverContent className="p-0 w-[475px]">
+          <Command className="w-full">
+            {/* <CommandInput
+              placeholder="Buscar paciente..."
+              className="h-9 w-full"
+              autoFocus={true}
+            /> */}
             <CommandList>
               <CommandEmpty>Nenhum paciente encontrado.</CommandEmpty>
               <CommandGroup>
-                {frameworks.map((framework) => (
+                {dataList.map((item) => (
                   <CommandItem
-                    key={framework.value}
-                    value={framework.value}
+                    key={item.value}
+                    value={item.value}
                     onSelect={(currentValue) => {
-                      setValue(currentValue === value ? '' : currentValue)
+                      onSelectValue(
+                        currentValue === selectedValue ? '' : currentValue,
+                      )
                       setOpen(false)
                     }}
                   >
                     <Check
                       className={cn(
                         'mr-2 h-4 w-4',
-                        value === framework.value ? 'opacity-100' : 'opacity-0',
+                        selectedValue === item.value
+                          ? 'opacity-100'
+                          : 'opacity-0',
                       )}
                     />
-                    {framework.label}
+                    {item.label}
                   </CommandItem>
                 ))}
               </CommandGroup>

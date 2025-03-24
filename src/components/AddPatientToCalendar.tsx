@@ -32,6 +32,9 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem } from './ui/form'
 import { format } from 'date-fns'
+import { Combobox } from './Combobox'
+import { useGetSelectListPatient } from '@/service/patient/hooks'
+import { useAuth } from '@/context/auth'
 
 const formSchema = z.object({
   patientName: z.string().min(2).max(50),
@@ -49,6 +52,7 @@ const formSchema = z.object({
 })
 
 export const AddPatientToCalendar = () => {
+  const { user } = useAuth()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,7 +61,9 @@ export const AddPatientToCalendar = () => {
     },
   })
 
-  const handleSubmitForm = (data) => console.log(data)
+  const { data, isLoading } = useGetSelectListPatient(user.id)
+
+  const handleSubmitForm = (dataPayload) => console.log(dataPayload)
 
   return (
     <Form {...form}>
@@ -91,10 +97,15 @@ export const AddPatientToCalendar = () => {
                   render={({ field: { value, onChange } }) => (
                     <FormItem className="w-full">
                       <FormControl>
-                        <Input
+                        {/* <Input
                           placeholder="Nome do paciente"
                           value={value}
                           onChange={onChange}
+                        /> */}
+                        <Combobox
+                          dataList={data}
+                          selectedValue={value}
+                          onSelectValue={onChange}
                         />
                       </FormControl>
                     </FormItem>

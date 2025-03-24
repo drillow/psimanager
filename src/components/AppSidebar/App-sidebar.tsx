@@ -49,6 +49,8 @@ const applicationItems = [
     title: 'Métricas',
     url: 'metrics',
     icon: ChartColumnBig,
+    disabled: true,
+    asSoon: true,
   },
 ]
 
@@ -114,10 +116,31 @@ export function AppSidebar() {
               {applicationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link to={item.url}>
+                    {/* <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </Link>
+                    </Link> */}
+                    {item.disabled ? (
+                      <div className="cursor-pointer text-zinc-500">
+                        <item.icon />
+                        <span className="flex items-center gap-2">
+                          {item.title}
+                          {item.asSoon && (
+                            <Badge variant={'secondary'}>Em breve</Badge>
+                          )}
+                        </span>
+                      </div>
+                    ) : (
+                      <Link to={item.url}>
+                        <item.icon />
+                        <span className="flex items-center gap-2">
+                          {item.title}
+                          {item.asSoon && (
+                            <Badge variant={'secondary'}>Em breve</Badge>
+                          )}
+                        </span>
+                      </Link>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

@@ -14,17 +14,40 @@ import { Label } from './ui/label'
 import { Switch } from './ui/switch'
 // import { useAddPatient } from '@/service/patient/hooks'
 // import { useAuth } from '@/context/auth'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+import { useAddPatient } from '@/service/patient/hooks'
+import { useAuth } from '@/context/auth'
+import { PatientPayload } from '@/service/patient/service'
+import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const CreateUserButton = () => {
-  // const { user } = useAuth()
-  // const { execute, isError, isLoading } = useAddPatient(user.id)
-  const { handleSubmit } = useForm()
+  const [open, setOpen] = useState(false)
+  const queryClient = useQueryClient()
+  const { user } = useAuth()
+  const { execute, isError, isLoading } = useAddPatient(user.id, () => {
+    setOpen(false)
+    queryClient.invalidateQueries({
+      queryKey: ['PATIENT_LIST'],
+    })
+  })
 
-  const handlePayload = (data) => console.log(data)
+  const { handleSubmit, control } = useForm<PatientPayload>({
+    defaultValues: {
+      email: '',
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
+      isWhatsApp: false,
+    },
+  })
+
+  const handlePayload = (data: PatientPayload) => {
+    execute(data)
+  }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
           <PlusIcon />
@@ -32,37 +55,53 @@ export const CreateUserButton = () => {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[525px]">
-        <DialogHeader>
-          <DialogTitle>Adicionar paciente</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription>
-        </DialogHeader>
         <form
           onSubmit={handleSubmit(handlePayload)}
           className="grid gap-4 py-2"
         >
+          <DialogHeader>
+            <DialogTitle>Adicionar paciente</DialogTitle>
+            <DialogDescription>
+              Make changes to your profile here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="name" className="text-right">
                 Name
               </Label>
-              <Input
-                id="name"
-                value=""
-                placeholder="Nome"
-                className="col-span-3"
+              <Controller
+                control={control}
+                name="firstName"
+                render={({ field: { onChange, value, ref } }) => (
+                  <Input
+                    id="name"
+                    value={value}
+                    onChange={onChange}
+                    placeholder="Nome"
+                    className="col-span-3"
+                    ref={ref}
+                  />
+                )}
               />
             </div>
             <div className="flex flex-col items-start gap-2">
               <Label htmlFor="name" className="text-right">
                 Sobrenome
               </Label>
-              <Input
-                id="lastName"
-                value=""
-                placeholder="Sobrenome"
-                className="col-span-3"
+              <Controller
+                control={control}
+                name="lastName"
+                render={({ field: { onChange, value, ref } }) => (
+                  <Input
+                    id="lastName"
+                    value={value}
+                    onChange={onChange}
+                    ref={ref}
+                    placeholder="Sobrenome"
+                    className="col-span-3"
+                  />
+                )}
               />
             </div>
           </div>
@@ -72,14 +111,38 @@ export const CreateUserButton = () => {
               <Label htmlFor="email" className="text-right">
                 E-mail
               </Label>
-              <Input id="email" value="" placeholder="umemail@email.com" />
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange, value, ref } }) => (
+                  <Input
+                    id="email"
+                    placeholder="umemail@email.com"
+                    value={value}
+                    onChange={onChange}
+                    ref={ref}
+                  />
+                )}
+              />
             </div>
 
             <div className="flex flex-col items-start gap-2 w-full">
               <Label htmlFor="cellphone" className="text-right">
                 Celular
               </Label>
-              <Input id="cellphone" value="" placeholder="(11) 11111-1111" />
+              <Controller
+                control={control}
+                name="phoneNumber"
+                render={({ field: { onChange, value, ref } }) => (
+                  <Input
+                    id="cellphone"
+                    value={value}
+                    placeholder="(11) 11111-1111"
+                    onChange={onChange}
+                    ref={ref}
+                  />
+                )}
+              />
             </div>
           </div>
 
@@ -87,21 +150,33 @@ export const CreateUserButton = () => {
             <div className="flex flex-col gap-2 w-full">
               <Label htmlFor="has-whatsapp">WhatsApp</Label>
               <div className="h-9 flex items-center">
-                <Switch id="has-whatsapp" />
+                <Controller
+                  name="isWhatsApp"
+                  control={control}
+                  render={({ field: { onChange, value, ref } }) => (
+                    <Switch
+                      id="has-whatsapp"
+                      checked={value}
+                      onCheckedChange={onChange}
+                      // onChange={onChange}
+                      ref={ref}
+                    />
+                  )}
+                />
               </div>
             </div>
           </div>
-        </form>
-        <DialogFooter>
-          <DialogTrigger asChild>
-            <Button variant={'outline'} className="w-3/12">
-              Cancelar
+          <DialogFooter>
+            <DialogTrigger asChild>
+              <Button variant={'outline'} className="w-3/12">
+                Cancelar
+              </Button>
+            </DialogTrigger>
+            <Button type="submit" className="w-3/12" disabled={isLoading}>
+              Salvar
             </Button>
-          </DialogTrigger>
-          <Button type="submit" className="w-3/12">
-            Salvar
-          </Button>
-        </DialogFooter>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

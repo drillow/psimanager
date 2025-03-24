@@ -13,6 +13,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
   TableBody,
@@ -21,103 +22,98 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useAuth } from '@/context/auth'
+import { useDeletePatient, useGetPatient } from '@/service/patient/hooks'
+import { PatientPayload } from '@/service/patient/service'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { PencilIcon, RocketIcon, X } from 'lucide-react'
-import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { PencilIcon, RocketIcon, Trash, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 const mockData = [
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: true,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: false,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: true,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: true,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: true,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: false,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: true,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: true,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: true,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: true,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
   {
     name: 'Felipe Vieira Lima',
     cellphone: '(11) 99999-9999',
     hasWhatsApp: true,
-    weekDay: 'SEG',
-    hour: '19:00',
-    everyWeek: true,
+    email: 'dsadsadsa@sadasdsa.com',
   },
 ]
 
 export const Patients = () => {
+  const { user } = useAuth()
+  const { isLoading, data } = useGetPatient(user.id)
   const [isFirstTime, setIsFFirstTime] = useState(true)
+  const queryClient = useQueryClient()
+
+  const {
+    execute,
+    isError,
+    isLoading: isLoadingDeletePatient,
+  } = useDeletePatient(user.id, () => {
+    queryClient.invalidateQueries({
+      queryKey: ['PATIENT_LIST'],
+    })
+  })
 
   return (
     <div className="w-full h-screen p-4 flex flex-col gap-4">
@@ -160,38 +156,60 @@ export const Patients = () => {
           <TableHeader>
             <TableHead>Nome</TableHead>
             <TableHead>Celular</TableHead>
-            <TableHead className="text-center">Dia da semana</TableHead>
-            <TableHead className="text-center">Horario</TableHead>
+            <TableHead>Email</TableHead>
             <TableHead className="text-center">Tem WhatsApp?</TableHead>
-            <TableHead className="text-center">É recorrente</TableHead>
-            <TableHead>Ações</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
           </TableHeader>
           <TableBody>
-            {mockData.map((data) => (
-              <TableRow key={data.name}>
-                <TableCell>{data.name}</TableCell>
-                <TableCell>{data.cellphone}</TableCell>
-                <TableCell className="text-center">{data.weekDay}</TableCell>
-                <TableCell className="text-center">{data.hour}</TableCell>
-                <TableCell className="text-center">
-                  {data.hasWhatsApp ? (
-                    <Badge className="bg-green-600 hover:bg-green-500">
-                      Sim
-                    </Badge>
-                  ) : (
-                    <Badge variant={'destructive'}>Não</Badge>
-                  )}
-                </TableCell>
-                <TableCell className="text-center">
-                  {data.everyWeek ? 'Sim' : 'Não'}
-                </TableCell>
-                <TableCell>
-                  <Button variant={'ghost'}>
-                    <PencilIcon />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {Array.from({ length: 8 }, (_, index) => {
+              return (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Skeleton className="h-6 w-full" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-6 w-full" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-6 w-full" />
+                  </TableCell>
+                  <TableCell className="flex justify-center">
+                    <Skeleton className="h-6 w-3/12" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-6 w-full" />
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+            {!isLoading &&
+              !isLoadingDeletePatient &&
+              data?.map((data: PatientPayload) => (
+                <TableRow key={data.firstName}>
+                  <TableCell>{`${data.first_name} ${data.last_name}`}</TableCell>
+                  <TableCell>{data.phone_number}</TableCell>
+                  <TableCell>{data.email}</TableCell>
+
+                  <TableCell className="text-center">
+                    {data.isWhatsApp ? (
+                      <Badge className="bg-green-600 hover:bg-green-500">
+                        Sim
+                      </Badge>
+                    ) : (
+                      <Badge variant={'destructive'}>Não</Badge>
+                    )}
+                  </TableCell>
+
+                  <TableCell className="text-right">
+                    <Button variant={'ghost'}>
+                      <PencilIcon />
+                    </Button>
+                    <Button variant={'ghost'} onClick={() => execute(data.id!)}>
+                      <Trash className="text-red-500" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
         <Pagination>
