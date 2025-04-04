@@ -6,7 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogDescription,
   DialogFooter,
 } from './ui/dialog'
 import { Label } from './ui/label'
@@ -32,7 +31,7 @@ export const EditPatientButton: React.FC<EditPatientButtonProps> = ({
 
   const queryClient = useQueryClient()
 
-  const { execute, isError, isLoading } = useEditPatient(
+  const { execute, isLoading } = useEditPatient(
     user.id,
     patientData.id!,
     () => {

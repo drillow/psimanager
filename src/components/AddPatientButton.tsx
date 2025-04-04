@@ -18,9 +18,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { useAddPatient } from '@/service/patient/hooks'
 import { useAuth } from '@/context/auth'
 import { PatientPayload } from '@/service/patient/service'
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { normalizePhoneNumber } from '@/utils/masks/phone_mask'
 
 export const AddPatientButton = () => {
   const [open, setOpen] = useState(false)
@@ -37,7 +36,7 @@ export const AddPatientButton = () => {
     },
   })
 
-  const { execute, isError, isLoading } = useAddPatient(user.id, () => {
+  const { execute, isLoading } = useAddPatient(user.id, () => {
     setOpen(false)
     queryClient.invalidateQueries({
       queryKey: ['PATIENT_LIST'],
@@ -64,7 +63,8 @@ export const AddPatientButton = () => {
           <DialogHeader>
             <DialogTitle>Adicionar paciente</DialogTitle>
             <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
+              Make changes to your profile here. Click save when you&apos;re
+              done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4">

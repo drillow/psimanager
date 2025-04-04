@@ -5,15 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
+
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
@@ -24,11 +16,11 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { useAuth } from '@/context/auth'
-import { useDeletePatient, useGetPatient } from '@/service/patient/hooks'
+import { useGetPatient } from '@/service/patient/hooks'
 import { PatientPayload } from '@/service/patient/service'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { useQueryClient } from '@tanstack/react-query'
-import { RocketIcon, Trash, X } from 'lucide-react'
+
+import { RocketIcon, X } from 'lucide-react'
 import { useState } from 'react'
 import { DeletePatient } from '@/components/DeletePatientButton'
 

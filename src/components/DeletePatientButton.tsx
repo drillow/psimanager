@@ -3,12 +3,9 @@ import { Button } from './ui/button'
 import {
   DialogHeader,
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
-  DialogOverlay,
-  DialogPortal,
   DialogTitle,
   DialogTrigger,
 } from './ui/dialog'

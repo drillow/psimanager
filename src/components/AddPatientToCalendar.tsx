@@ -36,9 +36,6 @@ import { format, formatISO } from 'date-fns'
 import { Combobox } from './Combobox'
 import { useGetSelectListPatient } from '@/service/patient/hooks'
 import { useAuth } from '@/context/auth'
-import { cx } from 'class-variance-authority'
-import { LoadingSpinner } from './Spinner'
-import { useState } from 'react'
 
 const formSchema = z.object({
   patientName: z.string().min(2).max(50),
