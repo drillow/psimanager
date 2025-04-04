@@ -9,7 +9,9 @@ export const signIn = async (payload: {
   return response.data
 }
 
-export const signUp = async (payload): Promise<{ access_token: string }> => {
+export const signUp = async (
+  payload: unknown,
+): Promise<{ access_token: string }> => {
   const response = await apiWithoutHeader.post(`/api/auth/signup`, payload)
 
   return response.data
