@@ -1,4 +1,5 @@
-import { CreateUserButton } from '@/components/CreateUserButton'
+import { EditPatientButton } from '@/components/EditButtonPatient'
+import { AddPatientButton } from '@/components/AddPatientButton'
 import { PageHeader } from '@/components/PageHeader'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
@@ -27,93 +28,14 @@ import { useDeletePatient, useGetPatient } from '@/service/patient/hooks'
 import { PatientPayload } from '@/service/patient/service'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useQueryClient } from '@tanstack/react-query'
-import { PencilIcon, RocketIcon, Trash, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
-
-const mockData = [
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: true,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: false,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: true,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: true,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: true,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: false,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: true,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: true,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: true,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: true,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-  {
-    name: 'Felipe Vieira Lima',
-    cellphone: '(11) 99999-9999',
-    hasWhatsApp: true,
-    email: 'dsadsadsa@sadasdsa.com',
-  },
-]
+import { RocketIcon, Trash, X } from 'lucide-react'
+import { useState } from 'react'
+import { DeletePatient } from '@/components/DeletePatientButton'
 
 export const Patients = () => {
   const { user } = useAuth()
   const { isLoading, data } = useGetPatient(user.id)
   const [isFirstTime, setIsFFirstTime] = useState(true)
-  const queryClient = useQueryClient()
-
-  const {
-    execute,
-    isError,
-    isLoading: isLoadingDeletePatient,
-  } = useDeletePatient(user.id, () => {
-    queryClient.invalidateQueries({
-      queryKey: ['PATIENT_LIST'],
-    })
-  })
 
   return (
     <div className="w-full h-screen p-4 flex flex-col gap-4">
@@ -150,7 +72,7 @@ export const Patients = () => {
               className="pl-8"
             />
           </div>
-          <CreateUserButton />
+          <AddPatientButton />
         </div>
         <Table>
           <TableHeader>
@@ -161,58 +83,59 @@ export const Patients = () => {
             <TableHead className="text-right">Ações</TableHead>
           </TableHeader>
           <TableBody>
-            {Array.from({ length: 8 }, (_, index) => {
-              return (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Skeleton className="h-6 w-full" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-6 w-full" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-6 w-full" />
-                  </TableCell>
-                  <TableCell className="flex justify-center">
-                    <Skeleton className="h-6 w-3/12" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-6 w-full" />
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-            {!isLoading &&
-              !isLoadingDeletePatient &&
-              data?.map((data: PatientPayload) => (
-                <TableRow key={data.firstName}>
-                  <TableCell>{`${data.first_name} ${data.last_name}`}</TableCell>
-                  <TableCell>{data.phone_number}</TableCell>
-                  <TableCell>{data.email}</TableCell>
+            {isLoading ? (
+              <>
+                {Array.from({ length: 8 }, (_, index) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Skeleton className="h-6 w-full" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-6 w-full" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-6 w-full" />
+                      </TableCell>
+                      <TableCell className="flex justify-center">
+                        <Skeleton className="h-6 w-3/12" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-6 w-full" />
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </>
+            ) : (
+              <>
+                {data?.map((data: PatientPayload) => (
+                  <TableRow key={data.firstName}>
+                    <TableCell>{`${data.firstName} ${data.lastName}`}</TableCell>
+                    <TableCell>{data.phoneNumber}</TableCell>
+                    <TableCell>{data.email}</TableCell>
 
-                  <TableCell className="text-center">
-                    {data.isWhatsApp ? (
-                      <Badge className="bg-green-600 hover:bg-green-500">
-                        Sim
-                      </Badge>
-                    ) : (
-                      <Badge variant={'destructive'}>Não</Badge>
-                    )}
-                  </TableCell>
+                    <TableCell className="text-center">
+                      {data.isWhatsApp ? (
+                        <Badge className="bg-green-600 hover:bg-green-500">
+                          Sim
+                        </Badge>
+                      ) : (
+                        <Badge variant={'destructive'}>Não</Badge>
+                      )}
+                    </TableCell>
 
-                  <TableCell className="text-right">
-                    <Button variant={'ghost'}>
-                      <PencilIcon />
-                    </Button>
-                    <Button variant={'ghost'} onClick={() => execute(data.id!)}>
-                      <Trash className="text-red-500" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell className="text-right">
+                      <EditPatientButton patientData={data} />
+                      <DeletePatient patientId={data.id!} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </>
+            )}
           </TableBody>
         </Table>
-        <Pagination>
+        {/* <Pagination>
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious href="#" />
@@ -227,7 +150,7 @@ export const Patients = () => {
               <PaginationNext href="#" />
             </PaginationItem>
           </PaginationContent>
-        </Pagination>
+        </Pagination> */}
       </div>
     </div>
   )

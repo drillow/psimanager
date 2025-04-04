@@ -1,47 +1,56 @@
-import { PlusIcon } from 'lucide-react'
+import { useState } from 'react'
 import { Button } from './ui/button'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
+  DialogFooter,
 } from './ui/dialog'
-import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { Switch } from './ui/switch'
-// import { useAddPatient } from '@/service/patient/hooks'
-// import { useAuth } from '@/context/auth'
 import { Controller, useForm } from 'react-hook-form'
-import { useAddPatient } from '@/service/patient/hooks'
-import { useAuth } from '@/context/auth'
+import { Input } from './ui/input'
+import { Switch } from './ui/switch'
 import { PatientPayload } from '@/service/patient/service'
-import { ChangeEvent, useState } from 'react'
+import { PencilIcon } from 'lucide-react'
+import { useEditPatient } from '@/service/patient/hooks'
+import { useAuth } from '@/context/auth'
 import { useQueryClient } from '@tanstack/react-query'
-import { normalizePhoneNumber } from '@/utils/masks/phone_mask'
 
-export const AddPatientButton = () => {
+interface EditPatientButtonProps {
+  patientData: PatientPayload
+}
+
+export const EditPatientButton: React.FC<EditPatientButtonProps> = ({
+  patientData,
+}) => {
   const [open, setOpen] = useState(false)
-  const queryClient = useQueryClient()
+
   const { user } = useAuth()
+
+  const queryClient = useQueryClient()
+
+  const { execute, isError, isLoading } = useEditPatient(
+    user.id,
+    patientData.id!,
+    () => {
+      queryClient.invalidateQueries({
+        queryKey: ['PATIENT_LIST'],
+      })
+      setOpen(false)
+    },
+  )
 
   const { handleSubmit, control } = useForm<PatientPayload>({
     defaultValues: {
-      email: '',
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
-      isWhatsApp: false,
+      email: patientData.email,
+      firstName: patientData.firstName,
+      lastName: patientData.lastName,
+      phoneNumber: patientData.phoneNumber,
+      isWhatsApp: patientData.isWhatsApp,
     },
-  })
-
-  const { execute, isError, isLoading } = useAddPatient(user.id, () => {
-    setOpen(false)
-    queryClient.invalidateQueries({
-      queryKey: ['PATIENT_LIST'],
-    })
   })
 
   const handlePayload = (data: PatientPayload) => {
@@ -49,11 +58,10 @@ export const AddPatientButton = () => {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal>
       <DialogTrigger asChild>
-        <Button>
-          <PlusIcon />
-          Adicionar paciente
+        <Button variant={'ghost'}>
+          <PencilIcon />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[525px]">
@@ -62,10 +70,10 @@ export const AddPatientButton = () => {
           className="grid gap-4 py-2"
         >
           <DialogHeader>
-            <DialogTitle>Adicionar paciente</DialogTitle>
-            <DialogDescription>
+            <DialogTitle>Editar paciente</DialogTitle>
+            {/* <DialogDescription>
               Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
+            </DialogDescription> */}
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col items-start gap-2">
@@ -132,7 +140,6 @@ export const AddPatientButton = () => {
               <Label htmlFor="cellphone" className="text-right">
                 Celular
               </Label>
-
               <Controller
                 control={control}
                 name="phoneNumber"
@@ -171,7 +178,11 @@ export const AddPatientButton = () => {
           </div>
           <DialogFooter>
             <DialogTrigger asChild>
-              <Button variant={'outline'} className="w-3/12">
+              <Button
+                variant={'outline'}
+                className="w-3/12"
+                disabled={isLoading}
+              >
                 Cancelar
               </Button>
             </DialogTrigger>

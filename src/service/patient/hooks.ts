@@ -1,6 +1,7 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   deletePatient,
+  editPatient,
   getAllPatients,
   getSelectListPatient,
   PatientPayload,
@@ -54,6 +55,24 @@ export const useGetSelectListPatient = (userId: string) => {
   return {
     data,
     isLoading,
+    isError,
+  }
+}
+
+export const useEditPatient = (
+  userId: string,
+  patientId: string,
+  onSuccess?: () => void,
+) => {
+  const { isPending, mutateAsync, isError } = useMutation({
+    mutationFn: (payload: PatientPayload) =>
+      editPatient(userId, patientId, payload),
+    onSuccess,
+  })
+
+  return {
+    execute: mutateAsync,
+    isLoading: isPending,
     isError,
   }
 }

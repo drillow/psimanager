@@ -6,7 +6,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
@@ -17,46 +16,26 @@ import {
 } from '@/components/ui/popover'
 import { useState } from 'react'
 import { Label } from './ui/label'
-
-// const frameworks = [
-//   {
-//     value: 'next.js',
-//     label: 'Felipe Vieira Lima',
-//   },
-//   {
-//     value: 'sveltekit',
-//     label: 'Tamires Brito dos Santos',
-//   },
-//   {
-//     value: 'nuxt.js',
-//     label: 'Suzy Anne Teles Vieira',
-//   },
-//   {
-//     value: 'remix',
-//     label: 'Alexandre GusMão Lima',
-//   },
-//   {
-//     value: 'astro',
-//     label: 'Gabriel Vieira Lima',
-//   },
-// ]
+import { Link } from 'react-router-dom'
 
 interface ComboboxProps {
   dataList: { label: string; value: string }[]
   onSelectValue: (value: string) => void
   selectedValue: string
+  isLoading: boolean
 }
 
 export function Combobox({
   dataList,
   selectedValue,
   onSelectValue,
+  isLoading,
 }: ComboboxProps) {
   const [open, setOpen] = useState(false)
 
   return (
     <div className="flex flex-col gap-2">
-      <Label htmlFor="recurrence">Selecione o paciente</Label>
+      <Label htmlFor="recurrence">Paciente</Label>
       <Popover open={open} onOpenChange={setOpen} modal>
         <PopoverTrigger asChild>
           <Button
@@ -64,6 +43,7 @@ export function Combobox({
             role="combobox"
             aria-expanded={open}
             className="w-full justify-between"
+            disabled={isLoading}
           >
             {selectedValue
               ? dataList.find((item) => item.value === selectedValue)?.label
@@ -73,13 +53,13 @@ export function Combobox({
         </PopoverTrigger>
         <PopoverContent className="p-0 w-[475px]">
           <Command className="w-full">
-            {/* <CommandInput
-              placeholder="Buscar paciente..."
-              className="h-9 w-full"
-              autoFocus={true}
-            /> */}
             <CommandList>
-              <CommandEmpty>Nenhum paciente encontrado.</CommandEmpty>
+              <CommandEmpty className="flex flex-col items-center text-sm py-4">
+                Nenhum paciente encontrado.
+                <a href={'/patients'} className="text-violet-500 underline">
+                  Clique aqui para adicionar um novo paciente
+                </a>
+              </CommandEmpty>
               <CommandGroup>
                 {dataList.map((item) => (
                   <CommandItem

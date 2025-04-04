@@ -27,14 +27,18 @@ import {
   SelectValue,
 } from './ui/select'
 import { useForm } from 'react-hook-form'
+import { RRule, Weekday } from 'rrule'
 
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem } from './ui/form'
-import { format } from 'date-fns'
+import { format, formatISO } from 'date-fns'
 import { Combobox } from './Combobox'
 import { useGetSelectListPatient } from '@/service/patient/hooks'
 import { useAuth } from '@/context/auth'
+import { cx } from 'class-variance-authority'
+import { LoadingSpinner } from './Spinner'
+import { useState } from 'react'
 
 const formSchema = z.object({
   patientName: z.string().min(2).max(50),
@@ -45,15 +49,20 @@ const formSchema = z.object({
   place: z.string().optional(),
   url: z.string().optional(),
   repeat: z.boolean().default(false),
-  frequency: z.object({
-    times: z.number(),
-    interval: z.union([z.literal('week'), z.literal('month')]),
-  }),
+  frequency: z
+    .object({
+      times: z.string().min(1),
+      interval: z.union([z.literal('week'), z.literal('month')]).optional(),
+      days: z.array(z.any()).optional(),
+    })
+    .optional(),
 })
+
+type FormProps = z.infer<typeof formSchema>
 
 export const AddPatientToCalendar = () => {
   const { user } = useAuth()
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormProps>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       consultType: 'presencial',
@@ -63,7 +72,50 @@ export const AddPatientToCalendar = () => {
 
   const { data, isLoading } = useGetSelectListPatient(user.id)
 
-  const handleSubmitForm = (dataPayload) => console.log(dataPayload)
+  const handleSubmitForm = (dataPayload: FormProps) => {
+    const wkst = dataPayload?.frequency?.days?.map((day) => {
+      const dayMapping: Record<string, Weekday> = {
+        MO: RRule.MO,
+        TU: RRule.TU,
+        WE: RRule.WE,
+        TH: RRule.TH,
+        FR: RRule.FR,
+        SA: RRule.SA,
+        SU: RRule.SU,
+      }
+      return dayMapping[day]
+    })
+
+    console.log(wkst)
+
+    const rrule = new RRule({
+      dtstart: dataPayload.startDate.date,
+
+      byweekday: wkst ?? null,
+      ...(dataPayload.repeat && {
+        freq:
+          dataPayload.frequency?.interval === 'month'
+            ? RRule.MONTHLY
+            : RRule.WEEKLY,
+      }),
+    })
+
+    const payload = {
+      patientId: dataPayload.patientName,
+      startDate: formatISO(dataPayload.startDate.date),
+      rrule: rrule.toString(),
+      type: dataPayload.consultType,
+      userId: '',
+      ...(dataPayload.place && { place: dataPayload.place }),
+      ...(dataPayload.url && { url: dataPayload.url }),
+    }
+
+    // TODO: Request here
+
+    console.log('Payload', payload)
+    console.log(rrule.toString())
+    console.log({ ...dataPayload, rrule: rrule.toString() })
+  }
 
   return (
     <Form {...form}>
@@ -88,24 +140,20 @@ export const AddPatientToCalendar = () => {
             {/* <Form {...form}> */}
             <div className="grid gap-6 py-2">
               <div className="flex flex-col items-start gap-2">
-                <Label htmlFor="username" className="text-right">
+                {/* <Label htmlFor="username" className="text-right">
                   Nome do paciente
-                </Label>
+                </Label> */}
                 <FormField
                   control={form.control}
                   name="patientName"
                   render={({ field: { value, onChange } }) => (
                     <FormItem className="w-full">
                       <FormControl>
-                        {/* <Input
-                          placeholder="Nome do paciente"
-                          value={value}
-                          onChange={onChange}
-                        /> */}
                         <Combobox
                           dataList={data}
                           selectedValue={value}
                           onSelectValue={onChange}
+                          isLoading={isLoading}
                         />
                       </FormControl>
                     </FormItem>
@@ -203,6 +251,7 @@ export const AddPatientToCalendar = () => {
                       <Label htmlFor="username" className="text-right">
                         Link da consulta
                       </Label>
+
                       <div className="relative w-full">
                         <Link2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
                         <Input
@@ -212,6 +261,13 @@ export const AddPatientToCalendar = () => {
                           {...field}
                         />
                       </div>
+                      <span className={'text-xs text-zinc-400'}>
+                        Com a conta do Google <strong>conectada</strong>, o link
+                        será gerado automaticamente ao salvar a consulta. Caso
+                        queira adicionar link de{' '}
+                        <strong>outra plataforma</strong> basta digitar no campo
+                        acima.
+                      </span>
                     </div>
                   )}
                 />
@@ -259,48 +315,81 @@ export const AddPatientToCalendar = () => {
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-zinc-600 w-12">A cada</span>
-                      <Input type="number" className="w-20" />
-                      <Select>
-                        <SelectTrigger className="w-24">
-                          <SelectValue placeholder="Tempo" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectItem value="week">Semana</SelectItem>
-                            <SelectItem value="month">Mês</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
+                      <FormField
+                        control={form.control}
+                        name="frequency.times"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                className="w-20"
+                                min={0}
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="frequency.interval"
+                        render={({ field: { name, onChange, value } }) => (
+                          <Select
+                            name={name}
+                            onValueChange={onChange}
+                            defaultValue={value}
+                          >
+                            <SelectTrigger className="w-24">
+                              <SelectValue placeholder="Tempo" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectItem value="week">Semana</SelectItem>
+                                <SelectItem value="month">Mês</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
                     </div>
                     <div className="flex items-center gap-2 w-full">
                       <span className="text-sm text-zinc-600 w-14">Em</span>
-                      <ToggleGroup
-                        type="multiple"
-                        variant={'outline'}
-                        className="w-full"
-                      >
-                        <ToggleGroupItem value="seg" className="w-full">
-                          Seg
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="ter" className="w-full">
-                          Ter
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="qua" className="w-full">
-                          Qua
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="qui" className="w-full">
-                          Qui
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="sex" className="w-full">
-                          Sex
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="sab" className="w-full">
-                          Sab
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="dom" className="w-full">
-                          Dom
-                        </ToggleGroupItem>
-                      </ToggleGroup>
+                      <FormField
+                        name="frequency.days"
+                        control={form.control}
+                        render={({ field: { onChange, value } }) => (
+                          <ToggleGroup
+                            type="multiple"
+                            variant={'outline'}
+                            className="w-full"
+                            onValueChange={onChange}
+                            value={value}
+                          >
+                            <ToggleGroupItem value="MO" className="w-full">
+                              Seg
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="TU" className="w-full">
+                              Ter
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="WE" className="w-full">
+                              Qua
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="TH" className="w-full">
+                              Qui
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="FR" className="w-full">
+                              Sex
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="SA" className="w-full">
+                              Sab
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="SU" className="w-full">
+                              Dom
+                            </ToggleGroupItem>
+                          </ToggleGroup>
+                        )}
+                      />
                     </div>
                   </div>
                 </div>
