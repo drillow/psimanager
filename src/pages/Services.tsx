@@ -10,8 +10,8 @@ import { Toggle } from "@/components/ui/toggle"
 import { useAuth } from "@/context/auth"
 import { useGetWeekConsults } from "@/service/consults/hooks"
 import { cx } from "class-variance-authority"
-import { format, parseISO, addDays } from "date-fns"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { format, parseISO, addDays, setWeek } from "date-fns"
+import { ChevronLeft, ChevronRight, PlusIcon } from "lucide-react"
 
 import { useEffect, useState } from "react"
 
@@ -35,6 +35,7 @@ type MockDataProps = {
 }
 
 const Services = () => {
+  const [isAddConsultModalOpen, setIsAddConsultModalOpen] = useState(false)
   const [weekOffset, setWeekOffset] = useState(0)
   const [patinents, setPatients] = useState<{ [key: PropertyKey]: any[]  }>()
   const [selectedFilter, setSelectedFilter] = useState<FilterOptions | null>(null)
@@ -91,6 +92,8 @@ const Services = () => {
     }
   }, [selectedFilter])
 
+  const today = new Date()
+
   return (
     <div className="w-full h-screen p-4 flex flex-col gap-4">
       <PageHeader pageTitle="Consultas" hasToggleSidebar showCurrentDay/>
@@ -99,6 +102,7 @@ const Services = () => {
           <div className="flex items-center gap-2">
             <Button variant={"outline"} onClick={() => setWeekOffset((prev) => prev - 1)}><ChevronLeft /></Button>
             <Button variant={"outline"} onClick={() => setWeekOffset((prev) => prev + 1)}><ChevronRight /></Button>
+            <Button variant={"outline"} onClick={() => setWeekOffset(0)}>Hoje</Button>
           </div>
           {/* <div className="flex items-center gap-2">
             <Toggle variant={"outline"} value={FilterOptions.ONLINE} pressed={selectedFilter === FilterOptions.ONLINE} onPressedChange={() => toggleFilter(FilterOptions.ONLINE)}>Online</Toggle>
@@ -106,7 +110,11 @@ const Services = () => {
           </div> */}
         </div>
         
-        <AddPatientToCalendar />
+        <Button type="button" onClick={() => setIsAddConsultModalOpen(true)}>
+          <PlusIcon />
+          Adicionar paciente
+        </Button>
+        
       </div>
       <div className="bg-slate-100 rounded-xl flex w-12/12 h-full p-4 gap-4">
         <div className="flex flex-col flex-1 gap-4">
@@ -114,7 +122,7 @@ const Services = () => {
           <span className={
               cx(
                 "text-sm font-semibold ",
-                data && format(new Date(), 'dd/MM') === format(parseISO(data?.startDate), 'dd/MM') ? "text-violet-500" : "text-zinc-400"
+                data && format(today, 'dd/MM') === format(parseISO(data?.startDate), 'dd/MM') ? "text-violet-500" : "text-zinc-400"
               )
             }>Segunda</span>
             <span className="text-sm text-zinc-400">{data && format(parseISO(data?.startDate), 'dd/MM')}</span>
@@ -155,7 +163,12 @@ const Services = () => {
         <Separator orientation="vertical"/>
         <div className="flex flex-col flex-1 gap-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-zinc-400">Quarta</span>
+            <span className={
+                  cx(
+                    "text-sm font-semibold ",
+                    data && format(new Date(), 'dd/MM') === format(addDays(parseISO(data?.startDate), 2), 'dd/MM') ? "text-violet-500" : "text-zinc-400"
+                  )
+            }>Quarta</span>
             <span className="text-sm text-zinc-400">{data && format(addDays(parseISO(data?.startDate), 2), 'dd/MM')}</span>
           </div>
           {!isLoading ? (
@@ -263,6 +276,8 @@ const Services = () => {
           )}
         </div>
       </div>
+      {isAddConsultModalOpen && <AddPatientToCalendar isOpen={isAddConsultModalOpen} setIsOpen={setIsAddConsultModalOpen}/>}
+      {/* {} */}
     </div>
   )
 }

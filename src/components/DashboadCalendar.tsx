@@ -60,7 +60,10 @@ export const DashboardCalendar = () => {
                     patient={{
                       name: consult.patientName,
                       time: format(
-                        toZonedTime(parseISO(consult?.date), 'UTC'),
+                        toZonedTime(
+                          parseISO(consult?.date),
+                          'America/Sao_Paulo',
+                        ),
                         'HH:mm',
                       ),
                       isOnline: consult.type === 'ONLINE',
@@ -108,7 +111,10 @@ export const DashboardCalendar = () => {
                     patient={{
                       name: consult.patientName,
                       time: format(
-                        toZonedTime(parseISO(consult?.date), 'UTC'),
+                        toZonedTime(
+                          parseISO(consult?.date),
+                          'America/Sao_Paulo',
+                        ),
                         'HH:mm',
                       ),
                       isOnline: consult.type === 'ONLINE',

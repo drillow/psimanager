@@ -9,6 +9,7 @@ interface WIdgetCardLinkProps {
   hasBadge?: boolean
   badgeText?: string
   toPath?: string
+  badgeVariant?: "default" | "secondary" | "destructive" | "outline"
 }
 
 export const WidgetCardLink: React.FC<WIdgetCardLinkProps> = ({
@@ -18,6 +19,7 @@ export const WidgetCardLink: React.FC<WIdgetCardLinkProps> = ({
   hasBadge = false,
   badgeText = 'Text',
   toPath,
+  badgeVariant
 }) => {
   if (toPath) {
     return (
@@ -33,7 +35,7 @@ export const WidgetCardLink: React.FC<WIdgetCardLinkProps> = ({
         </div>
         <div className="flex flex-col gap-2">
           {hasBadge && (
-            <Badge className="flex items-center justify-center w-5/12">
+            <Badge className="flex items-center justify-center w-5/12" variant={badgeVariant ? badgeVariant : 'default'}>
               {badgeText}
             </Badge>
           )}

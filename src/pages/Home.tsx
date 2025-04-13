@@ -24,7 +24,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { DashboardCalendar } from '@/components/DashboadCalendar'
 import { MenuItens, Settings } from './Settings'
-
+import WorkingImage from '@/assets/working-2.png'
 // import { datetime, RRule } from 'rrule'
 
 export const Home = () => {
@@ -40,11 +40,18 @@ export const Home = () => {
       <div className="flex flex-col gap-4 h-full">
         <div className="flex flex-1 h-full items-start gap-4">
           <DashboardCalendar />
-          <div className="bg-white rounded-xl w-5/12 h-full p-4 border border-zinc-200 relative">
-            <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-50 bg-white rounded-md p-2">
-              Em breve
-            </p>
-            <div className="flex flex-col gap-10 blur-lg">
+          <div className="bg-white rounded-xl w-5/12 h-full p-0 border border-zinc-200 relative flex flex-col items-end justify-between overflow-hidden">
+            <h2 className="text-lg font-semibold text-zinc-700 w-full p-4">
+              Métricas
+            </h2>
+            {/* <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-50 bg-white rounded-md p-2 text-zinc-700 font-medium text-sm">
+              Em breve uma novidade para te ajudar ainda mais.
+
+            </p> */}
+            <div className='bg-white z-50 rounded-md'>
+              <img src={WorkingImage} className='rounded-3xl'/>
+            </div>
+            {/* <div className="flex flex-col gap-10 blur-lg">
               <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg font-semibold text-zinc-700">
@@ -104,7 +111,7 @@ export const Home = () => {
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4">
@@ -129,9 +136,12 @@ export const Home = () => {
             title="Métricas"
             description="Veja total de consultas online e presencial, faturamento e outros."
             icon={<ChartColumnBig className="w-8 h-8" />}
-            toPath="/settings"
+            // hasBadge
+            // badgeText="Em breve"
+            // badgeVariant='secondary'
+            // toPath="/settings"
           />
-          <Settings openScreen={MenuItens.USER}>
+          <Settings openScreen={MenuItens.PERSONAL}>
             <WidgetCardLink
               title="Configurações"
               description="Configure seu perfil, notificações e muito mais."

@@ -20,14 +20,13 @@ import {
   Headphones,
   Hexagon,
   DollarSign,
-  Crown,
   ChartColumnBig,
   SettingsIcon,
 } from 'lucide-react'
 import { useEffect } from 'react'
-import { Progress } from '../ui/progress'
 import { Badge } from '../ui/badge'
 import { Settings } from '@/pages/Settings'
+import { PlanWidget } from '../PlanWidget'
 
 const applicationItems = [
   {
@@ -98,13 +97,14 @@ export function AppSidebar() {
   return (
     <Sidebar className="bg-white" collapsible="icon">
       <SidebarHeader className="flex flex-row w-full items-center">
-        <div
-          className={`${open ? 'w-8 h-8' : 'w-7 h-7'} bg-violet-600 rounded-md flex items-center justify-center`}
-        >
-          <Hexagon className={`${open ? 'w-5 h-5' : 'w-4 h-4'} text-zinc-50`} />
+        <div className={`w-8 h-8 flex items-center justify-center`}>
+          <Hexagon
+            className={`${open ? 'w-6 h-6' : 'w-5 h-5'} text-violet-600`}
+          />
         </div>
         {open && (
-          <h1 className="font-bold text-2xl text-violet-600">[MindSync]</h1>
+          <h1 className="font-bold text-2xl text-violet-600">Drillow</h1>
+          // <h1 className="font-bold text-2xl text-violet-600">MyPsi</h1>
         )}
       </SidebarHeader>
       {/* <Separator /> */}
@@ -183,25 +183,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        {open && (
-          <div className="flex flex-col border border-zinc-200 p-2 rounded-md mb-4">
-            <div className="flex flex-col gap-2 mb-4">
-              <h2 className="text-lg font-semibold text-zinc-700 flex items-center gap-2">
-                <Crown />
-                Plano Gratuito
-              </h2>
-              <span className="text-xs text-zinc-400">
-                Seu plano <strong>gratuíto</strong> permite adicionar até{' '}
-                <strong>5</strong> pacientes.
-              </span>
-            </div>
-            <Progress value={20} />
-            <div className="flex items-center justify-between mt-2">
-              <span className="text-xs text-zinc-400">1</span>
-              <span className="text-xs text-zinc-400">5</span>
-            </div>
-          </div>
-        )}
+        {open && <PlanWidget />}
         <Settings>
           <SidebarMenuButton>
             <SettingsIcon />

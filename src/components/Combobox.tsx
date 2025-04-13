@@ -60,7 +60,7 @@ export function Combobox({
                 </a>
               </CommandEmpty>
               <CommandGroup>
-                {dataList.map((item) => (
+                {dataList?.map((item) => (
                   <CommandItem
                     key={item.value}
                     value={item.value}

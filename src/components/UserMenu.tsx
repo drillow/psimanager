@@ -15,13 +15,13 @@ import { LogOut, SettingsIcon } from 'lucide-react'
 import { SidebarMenuButton } from './ui/sidebar'
 
 export const UserMenu = () => {
-  const { signOut } = useAuth()
+  const { signOut, user } = useAuth()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar className="w-8 h-8 rounded-md">
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
+        <Avatar className="w-8 h-8 rounded-md flex items-center justify-center">
+          <AvatarImage src={user.profileUrl} alt={user.email} />
+          <AvatarFallback className='h-16 w-16 rounded-xl'>{user.name.split(' ')[0].charAt(0)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mr-4">
@@ -47,7 +47,7 @@ export const UserMenu = () => {
           <LogOut />
           Log out
           {/* </div> */}
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+          {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

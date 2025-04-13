@@ -11,8 +11,8 @@ import { Separator } from './ui/separator'
 export const NotificationDropdown = () => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <BellDot className="w-5 h-5" />
+      <DropdownMenuTrigger disabled>
+        <BellDot className="w-5 h-5 text-zinc-400" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-72 h-96 mt-2 mr-4">
         <DropdownMenuLabel>Notificações</DropdownMenuLabel>

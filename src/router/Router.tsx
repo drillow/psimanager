@@ -10,7 +10,6 @@ import { ptBR } from 'date-fns/locale'
 import { AuthProvider } from '@/context/auth'
 import { PrivateRouter } from '@/components/PrivateRouter'
 import { Login } from '@/pages/Login'
-import { SignUp } from '@/pages/SingUp'
 import { GoogleConnect } from '@/pages/GoogleConnect'
 
 // const Services = lazy(async () => await import('@/pages/Services'))
@@ -19,10 +18,6 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
-  },
-  {
-    path: '/signup',
-    element: <SignUp />,
   },
   {
     path: 'connect-google',

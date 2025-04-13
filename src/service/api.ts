@@ -10,6 +10,7 @@ const accessTokenCookie = cookies.get(ACCESS_TOKEN_KEY)
 console.log('API', accessToken)
 const api = axios.create({
   baseURL: `http://localhost:8080`,
+  // baseURL: 'https://api-core.up.railway.app',
   headers: {
     'Content-Type': 'application/json',
     [ACCESS_TOKEN_KEY]: accessTokenCookie,

@@ -20,19 +20,52 @@ import { useGetPatient } from '@/service/patient/hooks'
 import { PatientPayload } from '@/service/patient/service'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 
-import { RocketIcon, X } from 'lucide-react'
-import { useState } from 'react'
+import { PlusIcon, RocketIcon, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { DeletePatient } from '@/components/DeletePatientButton'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination'
+import { formatCellphone } from '@/utils/masks/phone_mask'
 
 export const Patients = () => {
   const { user } = useAuth()
   const { isLoading, data } = useGetPatient(user.id)
-  const [isFirstTime, setIsFFirstTime] = useState(true)
+  const [isFirstTime, setIsFirstTime] = useState(true)
+  const [filteredList, setFilteredList] = useState([])
+  const [filter, setFilter] = useState("")
+
+  const [isAddPatientModalOpen, setIsAddPatientModalOpen] = useState(false)
+
+  // const handleFilter = (value: string) => {
+  //   if (value === "") { 
+  //     return setFilteredList(data)
+  //   }
+
+  //   const filterList = data.filter(item => item.firstName.includes(value))
+  //   return setFilteredList(filterList)
+  // } 
+
+  useEffect(() => {
+    if (data) {
+      setFilteredList(data)
+    }
+  }, [data])
+
+  // useEffect(() => {
+  //   handleFilter(filter)
+  // }, [filter])
 
   return (
     <div className="w-full h-screen p-4 flex flex-col gap-4">
       <PageHeader pageTitle="Pacientes" />
-      {isFirstTime && (
+      {/* {isFirstTime && (
         <Alert>
           <RocketIcon className="h-4 w-4" />
           <AlertTitle className="flex items-center justify-between">
@@ -52,26 +85,40 @@ export const Patients = () => {
             horarios e se tem recorrencia.
           </AlertDescription>
         </Alert>
-      )}
-      <div className="flex flex-col gap-2 border border-zinc-200 rounded-lg p-4 h-full">
+      )} */}
+      <div className="flex flex-col gap-4 border border-zinc-200 rounded-lg p-4 h-full">
         <div className="flex items-center justify-between">
           <div className="relative flex items-center w-2/12">
             <MagnifyingGlassIcon className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 transform" />
             <Input
               placeholder="Buscar por nome"
-              // value={search}
-              // onChange={(event) => setSearch(event.target.value)}
+              value={filter}
+              onChange={(event) => setFilter(event.target.value)}
               className="pl-8"
             />
           </div>
-          <AddPatientButton />
+          <Button
+            type="button"
+            onClick={() => setIsAddPatientModalOpen((prevState) => !prevState)}
+          >
+            <PlusIcon />
+            Adicionar paciente
+          </Button>
+          {isAddPatientModalOpen && (
+            <AddPatientButton
+              isOpen={isAddPatientModalOpen}
+              setIsOpen={setIsAddPatientModalOpen}
+            />
+          )}
         </div>
         <Table>
-          <TableHeader>
+          <TableHeader className='bg-gray-50'>
             <TableHead>Nome</TableHead>
+            <TableHead>ID do Paciente</TableHead>
+            <TableHead>Idade</TableHead>
             <TableHead>Celular</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead className="text-center">Tem WhatsApp?</TableHead>
+            <TableHead className="text-center">WhatsApp</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableHeader>
           <TableBody>
@@ -101,15 +148,17 @@ export const Patients = () => {
               </>
             ) : (
               <>
-                {data?.map((data: PatientPayload) => (
+                {filteredList?.map((data: PatientPayload) => (
                   <TableRow key={data.firstName}>
-                    <TableCell>{`${data.firstName} ${data.lastName}`}</TableCell>
-                    <TableCell>{data.phoneNumber}</TableCell>
-                    <TableCell>{data.email}</TableCell>
+                    <TableCell className='text-zinc-700 text-sm font-bold antialiased w-[250px]'>{`${data.firstName} ${data.lastName}`}</TableCell>
+                    <TableCell className='text-zinc-500 text-sm font-semibold w-[175px] antialiased'>#12342</TableCell>
+                    <TableCell className='text-zinc-500 text-sm font-semibold antialiased w-[175px]'>23</TableCell>
+                    <TableCell className='text-zinc-500 text-sm font-semibold antialiased w-[275px]'>{formatCellphone(data.phoneNumber)}</TableCell>
+                    <TableCell className='text-zinc-500 text-sm font-semibold antialiased'>{data.email}</TableCell>
 
                     <TableCell className="text-center">
                       {data.isWhatsApp ? (
-                        <Badge className="bg-green-600 hover:bg-green-500">
+                        <Badge className="bg-green-600 hover:bg-green-500 rounded-full">
                           Sim
                         </Badge>
                       ) : (
@@ -130,7 +179,7 @@ export const Patients = () => {
         {/* <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious href="#">Voltar</PaginationPrevious>
             </PaginationItem>
             <PaginationItem>
               <PaginationLink href="#">1</PaginationLink>

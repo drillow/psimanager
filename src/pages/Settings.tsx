@@ -13,6 +13,7 @@ import {
   Download,
   EyeClosed,
   Key,
+  KeyRound,
   LockKeyhole,
   Mail,
   Pen,
@@ -34,6 +35,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+import { UserInfoForm } from '@/components/forms/UserInfoForm'
+import { PersonalForm } from '@/components/forms/PersonalForm'
 // import {
 //   Dialog,
 //   DialogContent,
@@ -45,7 +48,8 @@ import { Badge } from '@/components/ui/badge'
 // } from './ui/dialog'
 
 export enum MenuItens {
-  USER,
+  ACCOUNT,
+  PERSONAL,
   FINANCE,
 }
 
@@ -54,7 +58,7 @@ type SettingsProps = {
   openScreen?: MenuItens
 }
 
-export const Settings = ({ children, openScreen = MenuItens.USER }: SettingsProps) => {
+export const Settings = ({ children, openScreen = MenuItens.PERSONAL }: SettingsProps) => {
   const { user } = useAuth()
 
   const [connectedGoogle, setConnectedGoogle] = useState(false)
@@ -97,14 +101,18 @@ export const Settings = ({ children, openScreen = MenuItens.USER }: SettingsProp
         {children}
       </DialogTrigger>
 
-      <DialogContent className="min-w-[1024px] flex p-0">
-        <div className="flex flex-col w-[300px] border-r border-zinc-300 p-4">
+      <DialogContent className="min-w-[1024px] grid grid-cols-12 p-0 gap-0">
+        <div className="col-start-1 col-end-4 flex flex-col border-r border-zinc-300 p-4">
           <h1 className="font-bold text-xl pb-4">Configurações</h1>
           <div className='flex flex-col justify-between h-full'>
             <div className='flex flex-col'>
-              <div className="flex items-center gap-2 py-2 cursor-pointer" onClick={() => setSelectedMenu(MenuItens.USER)}>
-                <User className={cx(`w-4 h-4`, selectedMenu === MenuItens.USER && 'text-violet-500')} />
-                <span className={cx("text-sm", selectedMenu === MenuItens.USER && 'text-violet-500')}>Informações da conta</span>
+              <div className="flex items-center gap-2 py-2 cursor-pointer" onClick={() => setSelectedMenu(MenuItens.PERSONAL)}>
+                <User className={cx(`w-4 h-4`, selectedMenu === MenuItens.PERSONAL && 'text-violet-500')} />
+                <span className={cx("text-sm", selectedMenu === MenuItens.PERSONAL && 'text-violet-500')}>Dados pessoais</span>
+              </div>
+              <div className="flex items-center gap-2 py-2 cursor-pointer" onClick={() => setSelectedMenu(MenuItens.ACCOUNT)}>
+                <KeyRound className={cx(`w-4 h-4`, selectedMenu === MenuItens.ACCOUNT && 'text-violet-500')} />
+                <span className={cx("text-sm", selectedMenu === MenuItens.ACCOUNT && 'text-violet-500')}>Informações da conta</span>
               </div>
               <div className="flex items-center gap-2 py-2 cursor-pointer" onClick={() => setSelectedMenu(MenuItens.FINANCE)}>
                 <CreditCard className={cx(`w-4 h-4`, selectedMenu === MenuItens.FINANCE && 'text-violet-500')} />
@@ -118,130 +126,137 @@ export const Settings = ({ children, openScreen = MenuItens.USER }: SettingsProp
          
           </div>
         </div>
-        {selectedMenu === MenuItens.USER && (
-          <div className="mx-auto w-full p-4 mr-4">
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col">
-                <h2 className="font-bold text-black text-lg">Informações da conta</h2>
-                <p className="text-xs text-zinc-500">
-                   Todos os seus dados e contas conectadas
-                </p>
-              </div>
+        <div className='col-start-4 col-end-13 flex flex-col'>
 
-              <Separator orientation="horizontal" />
+        {selectedMenu === MenuItens.ACCOUNT && (
+          <UserInfoForm />
+          // <div className="mx-auto w-full p-4 mr-4">
+          //   <div className="flex flex-col gap-4">
+          //     <div className="flex flex-col">
+          //       <h2 className="font-bold text-black text-lg">Informações da conta</h2>
+          //       <p className="text-xs text-zinc-500">
+          //          Todos os seus dados e contas conectadas
+          //       </p>
+          //     </div>
 
-              <div className="flex flex-col gap-4 py-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <Avatar className='h-16 w-16 rounded-xl'>
-                      <AvatarImage src="https://github.com/shadcn.png" />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    {/* <div className="h-16 w-16 bg-purple-500 rounded-xl"></div> */}
-                    <div className="flex flex-col gap-1">
-                      <Label className="text-left text-black">
-                        Foto perfil
-                      </Label>
-                      <span className="text-xs">PNG, JPEG até 15mb</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button>Alterar foto de perfil</Button>
-                    <Button variant={'outline'} className='border-red-500 text-red-500 hover:text-red-600 hover:border-red-600 hover:bg-transparent'>Remover</Button>
-                  </div>
-                </div>
+          //     <Separator orientation="horizontal" />
 
-                <div className="flex items-center gap-4">
-                  <CustomInput
-                    label="Primeiro nome"
-                    className="bg-white"
-                    value={'Felipe'}
-                  />
-                  <CustomInput
-                    label="Segundo nome"
-                    className="bg-white"
-                    value={'Lima'}
-                  />
-                </div>
-              </div>
+          //     <div className="flex flex-col gap-4 py-4">
+          //       <div className="flex items-center justify-between">
+          //         <div className="flex items-center gap-4">
+          //           <Avatar className='h-16 w-16 rounded-xl'>
+          //             <AvatarImage src="" />
+          //             <AvatarFallback className='h-16 w-16 rounded-xl'>{user.name.split(' ')[0].charAt(0)}</AvatarFallback>
+          //           </Avatar>
+          //           {/* <div className="h-16 w-16 bg-purple-500 rounded-xl"></div> */}
+          //           <div className="flex flex-col gap-1">
+          //             <Label className="text-left text-black">
+          //               Foto perfil
+          //             </Label>
+          //             <span className="text-xs">PNG, JPEG até 15mb</span>
+          //           </div>
+          //         </div>
+          //         <div className="flex items-center gap-2">
+          //           <Button>Alterar foto de perfil</Button>
+          //           <Button variant={'outline'} className='border-red-500 text-red-500 hover:text-red-600 hover:border-red-600 hover:bg-transparent'>Remover</Button>
+          //         </div>
+          //       </div>
 
-              <Separator />
+          //       <div className="flex items-center gap-4">
+          //         <CustomInput
+          //           label="Primeiro nome"
+          //           className="bg-white"
+          //           value={'Felipe'}
+          //         />
+          //         <CustomInput
+          //           label="Segundo nome"
+          //           className="bg-white"
+          //           value={'Lima'}
+          //         />
+          //       </div>
+          //     </div>
 
-              <div className="flex flex-col gap-4 pb-4 pt-2">
-                <div className="flex flex-col">
-                  <Label className="text-base">Acesso</Label>
-                  <span className="text-xs text-zinc-500">
-                    Gerencie seus dados de login
-                  </span>
-                </div>
-                <div className="flex flex-col gap-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <CustomInput
-                      leftIcon={Mail}
-                      label="Email"
-                      value={'felip.3lima@hotmail.com'}
-                      disabled
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <CustomInput
-                      leftIcon={LockKeyhole}
-                      label="Senha atual"
-                      type="password"
-                      // className=''
-                    />
-                    <CustomInput
-                      leftIcon={LockKeyhole}
-                      label="Nova senha"
-                      type="password"
-                    />
-                  </div>
-                </div>
-              </div>
+          //     <Separator />
 
-              <Separator/>
+          //     <div className="flex flex-col gap-4 pb-4 pt-2">
+          //       <div className="flex flex-col">
+          //         <Label className="text-base">Acesso</Label>
+          //         <span className="text-xs text-zinc-500">
+          //           Gerencie seus dados de login
+          //         </span>
+          //       </div>
+          //       <div className="flex flex-col gap-4">
+          //         <div className="grid grid-cols-2 gap-4">
+          //           <CustomInput
+          //             leftIcon={Mail}
+          //             label="Email"
+          //             value={'felip.3lima@hotmail.com'}
+          //             disabled
+          //           />
+          //         </div>
+          //         <div className="grid grid-cols-2 gap-4">
+          //           <CustomInput
+          //             leftIcon={LockKeyhole}
+          //             label="Senha atual"
+          //             type="password"
+          //             // className=''
+          //           />
+          //           <CustomInput
+          //             leftIcon={LockKeyhole}
+          //             label="Nova senha"
+          //             type="password"
+          //           />
+          //         </div>
+          //       </div>
+          //     </div>
 
-              <div className="flex flex-col gap-4 pb-4 pt-2">
-                <div className="flex flex-col">
-                  <Label className="text-base">Contas integradas</Label>
-                  <span className="text-xs text-zinc-500">
-                    Conecte sua conta a outros serviços.
-                  </span>
-                </div>
+          //     <Separator/>
 
-                <div className="border border-zinc-300 rounded-md p-2 bg-white flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center justify-center h-12 w-12 bg-zinc-100 rounded-md">
-                      <img src={GoogleLogo} alt="Google Logo" />
-                    </div>
-                    <div className="flex flex-col items-start">
-                      <span className="text-sm font-semibold text-black">
-                        Conta Google
-                      </span>
-                      <span className="font-normal text-xs text-zinc-500">
-                        Conecte sua conta do Google para gerar automaticamente salas de video-chamadas.
-                      </span>
-                    </div>
-                  </div>
-                  <Button
-                    variant={'outline'}
-                    className="border-green-500 text-green-500 hover:text-green-500 hover:bg-transparent hover:cursor-default"
-                  >
-                    {connectedGoogle ? 'Conectado' : 'Conectar'}
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-end gap-4 mt-4">
-              <Button className="bg-white text-black border border-zinc-300 hover:bg-zinc-50">
-                Salvar alterações
-              </Button>
-            </div>
-          </div>
+          //     <div className="flex flex-col gap-4 pb-4 pt-2">
+          //       <div className="flex flex-col">
+          //         <Label className="text-base">Contas integradas</Label>
+          //         <span className="text-xs text-zinc-500">
+          //           Conecte sua conta a outros serviços.
+          //         </span>
+          //       </div>
+
+          //       <div className="border border-zinc-300 rounded-md p-2 bg-white flex items-center justify-between">
+          //         <div className="flex items-center gap-2">
+          //           <div className="flex items-center justify-center h-12 w-12 bg-zinc-100 rounded-md">
+          //             <img src={GoogleLogo} alt="Google Logo" />
+          //           </div>
+          //           <div className="flex flex-col items-start">
+          //             <span className="text-sm font-semibold text-black">
+          //               Conta Google
+          //             </span>
+          //             <span className="font-normal text-xs text-zinc-500">
+          //               Conecte sua conta do Google para gerar automaticamente salas de video-chamadas.
+          //             </span>
+          //           </div>
+          //         </div>
+          //         <Button
+          //           variant={'outline'}
+          //           className="border-green-500 text-green-500 hover:text-green-500 hover:bg-transparent hover:cursor-default"
+          //         >
+          //           {connectedGoogle ? 'Conectado' : 'Conectar'}
+          //         </Button>
+          //       </div>
+          //     </div>
+          //   </div>
+          //   <div className="flex justify-end gap-4 mt-4">
+          //     <Button className="bg-white text-black border border-zinc-300 hover:bg-zinc-50">
+          //       Salvar alterações
+          //     </Button>
+          //   </div>
+          // </div>
+        )}
+
+        {selectedMenu === MenuItens.PERSONAL && (
+          <PersonalForm />
         )}
 
         {selectedMenu === MenuItens.FINANCE && (
-          <div className="mx-auto w-full p-4 mr-4">
+          <div className="w-full py-4 px-6">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col">
                 <h2 className="font-bold text-black text-lg">Financeiro</h2>
@@ -260,7 +275,7 @@ export const Settings = ({ children, openScreen = MenuItens.USER }: SettingsProp
                   </span>
                 </div>
                 <div className='grid grid-cols-2 gap-4 py-2'>
-                  <div className="flex flex-col border border-zinc-200 p-2 rounded-md w-full">
+                  <div className="flex flex-col border border-zinc-200 p-4 rounded-md w-full">
                     <div className="flex flex-col gap-2 mb-4">
                       <div className='flex items-center justify-between'>
                         <h2 className="text-lg font-semibold text-zinc-700 flex items-center gap-2">
@@ -282,7 +297,7 @@ export const Settings = ({ children, openScreen = MenuItens.USER }: SettingsProp
                     </ul>
                   </div>
 
-                  <div className="flex flex-col border border-zinc-200 p-2 rounded-md w-full">
+                  <div className="flex flex-col border border-zinc-200 p-4 rounded-md w-full">
                     <div className="flex flex-col gap-2 mb-4">
                       <div className='flex items-start justify-between'>
                         <h2 className="text-lg font-semibold text-zinc-700 flex items-center gap-2">
@@ -406,6 +421,7 @@ export const Settings = ({ children, openScreen = MenuItens.USER }: SettingsProp
           
           </div>
         )}
+        </div>
       </DialogContent>
     </Dialog>
   )

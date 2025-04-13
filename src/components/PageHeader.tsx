@@ -2,7 +2,6 @@ import { format } from 'date-fns'
 import { NotificationDropdown } from './NotificationDropdown'
 import { SidebarTrigger } from './ui/sidebar'
 import { UserMenu } from './UserMenu'
-import { UserButton } from '@clerk/clerk-react'
 
 interface PageHeaderProps {
   pageTitle: string

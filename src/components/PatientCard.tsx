@@ -1,8 +1,9 @@
-import { Copy, Trash, Edit, Link, MapPin } from 'lucide-react'
+import { Copy, Edit, Link, MapPin } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { format, parseISO } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
-import { Checkbox } from './ui/checkbox'
+import { DeleteConsult } from './DeleteConsult'
+import { useState } from 'react'
 
 interface PatientCardProps {
   patient: {
@@ -18,17 +19,22 @@ interface PatientCardProps {
 }
 
 export const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false)
+
   return (
     <div className="p-2 bg-white rounded-lg border border-zinc-200 flex flex-col gap-4">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-2">
-          <Checkbox checked={false} onCheckedChange={() => null} />
+          {/* <Checkbox checked={false} onCheckedChange={() => null} /> */}
           <span className={`font-semibold text-sm text-zinc-700`}>
             {patient.patientName}
           </span>
         </div>
         <span className="text-xs text-zinc-400">
-          {format(toZonedTime(parseISO(patient?.date), 'UTC'), 'HH:mm')}
+          {format(
+            toZonedTime(parseISO(patient?.date), 'America/Sao_Paulo'),
+            'HH:mm',
+          )}
         </span>
       </div>
 
@@ -59,8 +65,16 @@ export const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
         )}
         <div className="flex items-center gap-2">
           <Edit className="w-4 h-4 text-zinc-500 cursor-pointer" />
-          <Copy className={`w-4 h-4 text-violet-400 cursor-pointer`} />
-          <Trash className={`w-4 h-4 text-red-400 cursor-pointer`} />
+          {patient.type === 'ONLINE' && (
+            <Copy className={`w-4 h-4 text-violet-400 cursor-pointer`} />
+          )}
+          <DeleteConsult
+            consultId={patient.id}
+            patientName={patient.patientName}
+            isOpen={isRemoveModalOpen}
+            onSetOpen={() => setIsRemoveModalOpen((prevState) => !prevState)}
+            consultDate={patient.date}
+          />
         </div>
       </div>
     </div>

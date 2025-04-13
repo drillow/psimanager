@@ -1,4 +1,4 @@
-import { CalendarIcon, Link2, MapPin, PlusIcon } from 'lucide-react'
+import { CalendarIcon, Link2, MapPin } from 'lucide-react'
 import { Button } from './ui/button'
 import {
   Dialog,
@@ -31,16 +31,20 @@ import { RRule, Weekday } from 'rrule'
 
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormControl, FormField, FormItem } from './ui/form'
+import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
 import { format, formatISO } from 'date-fns'
 import { Combobox } from './Combobox'
 import { useGetSelectListPatient } from '@/service/patient/hooks'
 import { useAuth } from '@/context/auth'
+import { useAddNewConsult } from '@/service/consults/hooks'
+import { useQueryClient } from '@tanstack/react-query'
+import { QueryKeys } from '@/utils/queryKeys'
+import React from 'react'
 
 const formSchema = z.object({
-  patientName: z.string().min(2).max(50),
+  patientName: z.string({ message: 'Selecione um paciente' }).min(2).max(50),
   startDate: z.object({
-    date: z.date(),
+    date: z.date({ message: 'Obrigatório' }),
   }),
   consultType: z.string(),
   place: z.string().optional(),
@@ -57,19 +61,36 @@ const formSchema = z.object({
 
 type FormProps = z.infer<typeof formSchema>
 
-export const AddPatientToCalendar = () => {
+type AddPatientToCalendarProps = {
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+}
+
+export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
+  isOpen,
+  setIsOpen,
+}) => {
   const { user } = useAuth()
+  const queryClient = useQueryClient()
+
   const form = useForm<FormProps>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      consultType: 'presencial',
+      consultType: 'IN_PERSON',
       repeat: false,
     },
   })
 
   const { data, isLoading } = useGetSelectListPatient(user.id)
 
-  const handleSubmitForm = (dataPayload: FormProps) => {
+  const { execute } = useAddNewConsult(() => {
+    queryClient.invalidateQueries({
+      queryKey: [QueryKeys.WEEK_CONSULTS],
+    })
+    setIsOpen(false)
+  })
+
+  const handleSubmitForm = async (dataPayload: FormProps) => {
     const wkst = dataPayload?.frequency?.days?.map((day) => {
       const dayMapping: Record<string, Weekday> = {
         MO: RRule.MO,
@@ -87,7 +108,6 @@ export const AddPatientToCalendar = () => {
 
     const rrule = new RRule({
       dtstart: dataPayload.startDate.date,
-
       byweekday: wkst ?? null,
       ...(dataPayload.repeat && {
         freq:
@@ -95,20 +115,24 @@ export const AddPatientToCalendar = () => {
             ? RRule.MONTHLY
             : RRule.WEEKLY,
       }),
+      until: new Date(
+        new Date(dataPayload.startDate.date).setMonth(
+          dataPayload.startDate.date.getMonth() + 6,
+        ),
+      ),
     })
 
     const payload = {
       patientId: dataPayload.patientName,
       startDate: formatISO(dataPayload.startDate.date),
-      rrule: rrule.toString(),
       type: dataPayload.consultType,
-      userId: '',
+      userId: user.id,
+      ...(dataPayload.repeat && { rrule: rrule.toString() }),
       ...(dataPayload.place && { place: dataPayload.place }),
       ...(dataPayload.url && { url: dataPayload.url }),
     }
 
-    // TODO: Request here
-
+    await execute(payload)
     console.log('Payload', payload)
     console.log(rrule.toString())
     console.log({ ...dataPayload, rrule: rrule.toString() })
@@ -116,13 +140,7 @@ export const AddPatientToCalendar = () => {
 
   return (
     <Form {...form}>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button type="button">
-            <PlusIcon />
-            Adicionar paciente
-          </Button>
-        </DialogTrigger>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-[525px]">
           <form
             onSubmit={form.handleSubmit(handleSubmitForm)}
@@ -137,9 +155,6 @@ export const AddPatientToCalendar = () => {
             {/* <Form {...form}> */}
             <div className="grid gap-6 py-2">
               <div className="flex flex-col items-start gap-2">
-                {/* <Label htmlFor="username" className="text-right">
-                  Nome do paciente
-                </Label> */}
                 <FormField
                   control={form.control}
                   name="patientName"
@@ -153,6 +168,7 @@ export const AddPatientToCalendar = () => {
                           isLoading={isLoading}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -185,6 +201,7 @@ export const AddPatientToCalendar = () => {
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
+                      
                           <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
@@ -195,6 +212,7 @@ export const AddPatientToCalendar = () => {
                             />
                           </PopoverContent>
                         </Popover>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -203,10 +221,16 @@ export const AddPatientToCalendar = () => {
                   control={form.control}
                   name="startDate.date"
                   render={({ field: { value, onChange } }) => (
-                    <TimePicker
-                      date={value}
-                      setDate={(date) => onChange(date)}
-                    />
+                    <FormItem>
+                      <FormControl>
+
+                      <TimePicker
+                        date={value}
+                        setDate={(date) => onChange(date)}
+                      />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
                 />
               </div>
@@ -222,16 +246,16 @@ export const AddPatientToCalendar = () => {
                     <div className="flex items-center gap-2">
                       <Checkbox
                         title="Presencial"
-                        checked={field.value === 'presencial'}
-                        onCheckedChange={() => field.onChange('presencial')}
+                        checked={field.value === 'IN_PERSON'}
+                        onCheckedChange={() => field.onChange('IN_PERSON')}
                       />
                       <span className="text-sm text-zinc-600">Presencial</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Checkbox
                         title="Online"
-                        checked={field.value === 'remote'}
-                        onCheckedChange={() => field.onChange('remote')}
+                        checked={field.value === 'ONLINE'}
+                        onCheckedChange={() => field.onChange('ONLINE')}
                       />
                       <span className="text-sm text-zinc-600">Online</span>
                     </div>
@@ -280,7 +304,7 @@ export const AddPatientToCalendar = () => {
                       <div className="relative w-full">
                         <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
                         <Input
-                          placeholder="Endereço"
+                          placeholder="Clinica ou Endereço"
                           className="pl-10"
                           {...field}
                         />

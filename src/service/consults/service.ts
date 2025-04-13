@@ -36,4 +36,20 @@ export const getWeekConsults = async (userId: string, weekOffset: number) => {
   return response.data.data
 }
 
+export const createConsult = async (payload: unknown) => {
+  const response = await api.post('/api/consult/create', payload)
+
+  return response.data
+}
+
+export const removeConsult = async (
+  consultId: string,
+  removeAllNextConsults: boolean = false,
+) => {
+  const response = await api.delete(`/api/consult/${consultId}`, {
+    data: { deleteAllNextEvents: removeAllNextConsults },
+  })
+
+  return response.data
+}
 // "rrule": "RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=TU"
