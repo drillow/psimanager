@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogPortal,
-} from './ui/dialog
+} from './ui/dialog'
 import { Label } from './ui/label'
 import { Switch } from './ui/switch'
 // import { useAddPatient } from '@/service/patient/hooks'
@@ -30,7 +30,9 @@ const formSchema = z.object({
   email: z.string().email('E-mail inválido'),
   firstName: z.string().min(1, { message: 'Nome obrigatório' }),
   lastName: z.string().min(1, { message: 'Sobrenome obrigatório' }),
-  phoneNumber: z.string({ message: 'Telefone obrigatório' }).min(11, 'Telefone inválido'),
+  phoneNumber: z
+    .string({ message: 'Telefone obrigatório' })
+    .min(11, 'Telefone inválido'),
   isWhatsApp: z.boolean().default(false),
   age: z.number().optional(),
 })
@@ -94,11 +96,11 @@ export const AddPatientButton: React.FC<AddPatientButtonProps> = ({
                   <FormField
                     control={control}
                     name="firstName"
-                    render={({ field}) => (
-                      <FormItem className='w-full'>
+                    render={({ field }) => (
+                      <FormItem className="w-full">
                         <FormControl>
                           <CustomInput
-                          label='Nome'
+                            label="Nome"
                             id="name"
                             placeholder="Nome"
                             // className="col-span-3"
@@ -115,10 +117,10 @@ export const AddPatientButton: React.FC<AddPatientButtonProps> = ({
                     control={control}
                     name="lastName"
                     render={({ field }) => (
-                      <FormItem className='w-full'>
+                      <FormItem className="w-full">
                         <FormControl>
                           <CustomInput
-                            label='Sobrenome'
+                            label="Sobrenome"
                             id="lastName"
                             placeholder="Sobrenome"
                             {...field}
@@ -137,10 +139,10 @@ export const AddPatientButton: React.FC<AddPatientButtonProps> = ({
                     control={control}
                     name="email"
                     render={({ field }) => (
-                      <FormItem className='w-full'>
+                      <FormItem className="w-full">
                         <FormControl>
                           <CustomInput
-                            label='Email'
+                            label="Email"
                             id="email"
                             placeholder="umemail@email.com"
                             {...field}
@@ -148,7 +150,6 @@ export const AddPatientButton: React.FC<AddPatientButtonProps> = ({
                         </FormControl>
                         <FormMessage />
                       </FormItem>
-                      
                     )}
                   />
                 </div>
@@ -158,7 +159,7 @@ export const AddPatientButton: React.FC<AddPatientButtonProps> = ({
                     control={control}
                     name="phoneNumber"
                     render={({ field, fieldState: { error } }) => (
-                      <FormItem className='w-full'>
+                      <FormItem className="w-full">
                         <FormControl>
                           <CustomInput
                             id="cellphone"
@@ -168,7 +169,9 @@ export const AddPatientButton: React.FC<AddPatientButtonProps> = ({
                             error={!!error?.message}
                             {...field}
                             onChange={(e) => {
-                              const formattedValue = formatCellphone(e.target.value)
+                              const formattedValue = formatCellphone(
+                                e.target.value,
+                              )
                               field.onChange(formattedValue)
                             }}
                           />
@@ -186,19 +189,17 @@ export const AddPatientButton: React.FC<AddPatientButtonProps> = ({
                     control={control}
                     name="age"
                     render={({ field }) => (
-                      <FormItem className='w-full'>
+                      <FormItem className="w-full">
                         <FormControl>
                           <CustomInput
-                            label='Idade'
+                            label="Idade"
                             id="age"
                             type="number"
                             placeholder="Idade"
                             {...field}
-                            onChange={
-                              (e) => {
-                                field.onChange(Number(e.target.value))
-                              }
-                            }
+                            onChange={(e) => {
+                              field.onChange(Number(e.target.value))
+                            }}
                           />
                         </FormControl>
                         <FormMessage />

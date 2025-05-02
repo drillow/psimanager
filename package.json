@@ -75,6 +75,7 @@
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-import-helpers": "^2.0.1",
@@ -94,6 +95,7 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.1",
     "vite": "^5.4.9",
+    "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-node-polyfills": "^0.22.0"
   }
 }

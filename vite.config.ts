@@ -1,4 +1,5 @@
 import path from 'path'
+import eslint from 'vite-plugin-eslint';
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
@@ -6,6 +7,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 export default defineConfig({
   plugins: [
     react(),  
+    eslint(),
     nodePolyfills({
       include: ['crypto', 'process', 'stream', 'util'],
       globals: { global: true, process: true },
