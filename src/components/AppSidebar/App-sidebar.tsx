@@ -28,6 +28,7 @@ import { Badge } from '../ui/badge'
 import { Settings } from '@/pages/Settings'
 import { PlanWidget } from '../PlanWidget'
 import { cx } from 'class-variance-authority'
+
 import { useSubscriptionStatus } from '@/context/subscriptionStatus'
 
 const applicationItems = [
