@@ -27,26 +27,28 @@ import { useEffect } from 'react'
 import { Badge } from '../ui/badge'
 import { Settings } from '@/pages/Settings'
 import { PlanWidget } from '../PlanWidget'
+import { cx } from 'class-variance-authority'
+import { useSubscriptionStatus } from '@/context/subscriptionStatus'
 
 const applicationItems = [
   {
     title: 'Dashboard',
-    url: '',
+    url: '/',
     icon: LayoutDashboard,
   },
   {
     title: 'Consultas',
-    url: 'weekly-consults',
+    url: '/weekly-consults',
     icon: CalendarDays,
   },
   {
     title: 'Pacientes',
-    url: 'patients',
+    url: '/patients',
     icon: Users,
   },
   {
     title: 'Métricas',
-    url: 'metrics',
+    url: '/metrics',
     icon: ChartColumnBig,
     disabled: true,
     asSoon: true,
@@ -85,6 +87,7 @@ const footerItems = [
 
 export function AppSidebar() {
   const { open, setOpen } = useSidebar()
+  const { status } = useSubscriptionStatus()
 
   const location = useLocation()
 
@@ -121,7 +124,7 @@ export function AppSidebar() {
                       <span>{item.title}</span>
                     </Link> */}
                     {item.disabled ? (
-                      <div className="cursor-pointer text-zinc-500">
+                      <div className="cursor-pointer text-zinc-500 hover:text-zinc-500">
                         <item.icon />
                         <span className="flex items-center gap-2">
                           {item.title}
@@ -131,9 +134,14 @@ export function AppSidebar() {
                         </span>
                       </div>
                     ) : (
-                      <Link to={item.url}>
-                        <item.icon />
-                        <span className="flex items-center gap-2">
+                      <Link to={item.url} className={
+                        cx(
+                          'transition-colors ease-in-out hover:bg-violet-50 hover:text-violet-600', 
+                          location.pathname === item.url && 'text-violet-600'
+                        )}
+                      >
+                        <item.icon/>
+                        <span className={cx(`flex items-center gap-2`)}>
                           {item.title}
                           {item.asSoon && (
                             <Badge variant={'secondary'}>Em breve</Badge>
@@ -155,7 +163,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild disabled>
                     {item.disabled ? (
-                      <div className="cursor-pointer text-zinc-500">
+                      <div className="cursor-pointer text-zinc-500 hover:text-zinc-500">
                         <item.icon />
                         <span className="flex items-center gap-2">
                           {item.title}
@@ -183,9 +191,9 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        {open && <PlanWidget />}
+        {open && status !=='ACTIVE' && <PlanWidget />}
         <Settings>
-          <SidebarMenuButton>
+          <SidebarMenuButton className='hover:text-violet-600 transition-colors ease-in-out'>
             <SettingsIcon />
             <span>Configurações</span>
           </SidebarMenuButton>

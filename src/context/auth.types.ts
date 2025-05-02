@@ -7,6 +7,7 @@ export type TUserData = {
   updatedAt: Date
   profileUrl?: string
   isGoogleAccountLinked: boolean
+  showOnboarding: boolean
 }
 
 export const INITIAL_STATE: TUserData = {
@@ -15,6 +16,7 @@ export const INITIAL_STATE: TUserData = {
   email: '',
   updatedAt: new Date(),
   profileUrl: '',
+  showOnboarding: true,
   isGoogleAccountLinked: false,
 }
 

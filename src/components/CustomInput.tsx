@@ -27,7 +27,7 @@ export const CustomInput: React.FC<CustomInput> = ({
 
   return (
     <div className="flex flex-col items-start gap-2 w-full">
-      <Label htmlFor={id} className="text-right text-sm">
+      <Label htmlFor={id} className="text-right text-sm leading-none">
         {label}
       </Label>
       <div className="relative w-full">

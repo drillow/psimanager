@@ -3,20 +3,31 @@ import { useState } from 'react'
 import { CopyButton } from './CopyButton'
 import { Badge } from './ui/badge'
 import { Link, MapPin } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useToggleConsultStatus } from '@/service/consults/hooks'
+import { QueryKeys } from '@/utils/queryKeys'
+import { format } from 'date-fns'
 
 interface CardProps {
   patient: {
+    id: string
     name: string
     time: string
     isOnline: boolean
     url?: string
     place?: string
   }
-  isCompled?: boolean
+  isCompleted?: boolean
 }
 
-export const Card: React.FC<CardProps> = ({ patient, isCompled = false }) => {
-  const [isCompleted, setIsCompleted] = useState(isCompled)
+export const Card: React.FC<CardProps> = ({ patient, isCompleted = false }) => {
+  const queryClient = useQueryClient()
+
+  const { execute, isLoading } = useToggleConsultStatus(() => {
+    queryClient.invalidateQueries({
+      queryKey: QueryKeys.CONSULTS.NEXT_TREE_DAYS
+    })
+  })
 
   return (
     <div className="p-2 bg-white rounded-lg border border-zinc-200 flex flex-col flex-1 justify-between h-[119px] max-h-[119px]">
@@ -24,7 +35,8 @@ export const Card: React.FC<CardProps> = ({ patient, isCompled = false }) => {
         <div className="flex items-center gap-2">
           <Checkbox
             checked={isCompleted}
-            onCheckedChange={() => setIsCompleted(!isCompleted)}
+            onCheckedChange={() => execute(patient.id)}
+            disabled={isLoading}
           />
           <span
             className={`font-semibold text-sm ${isCompleted ? 'line-through text-zinc-300' : 'text-zinc-700'}`}
@@ -41,7 +53,7 @@ export const Card: React.FC<CardProps> = ({ patient, isCompled = false }) => {
             className={`text-xs ${isCompleted ? 'line-through text-zinc-300' : 'text-violet-400 underline underline-offset-1'}`}
             href={patient.url}
           >
-            Google Meet Link
+            Link da consulta
           </a>
         </div>
       ) : (

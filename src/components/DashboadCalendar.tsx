@@ -58,11 +58,12 @@ export const DashboardCalendar = () => {
                   <Card
                     key={consult.patientName}
                     patient={{
+                      id: consult.id,
                       name: consult.patientName,
                       time: format(
                         toZonedTime(
                           parseISO(consult?.date),
-                          'America/Sao_Paulo',
+                          '',
                         ),
                         'HH:mm',
                       ),
@@ -70,7 +71,7 @@ export const DashboardCalendar = () => {
                       url: consult.url,
                       place: consult.place,
                     }}
-                    isCompled={meetingIsCompleted(todayDate.date)}
+                    isCompleted={consult.completed}
                   />
                 ))}
               {data && data?.consults.today?.length > 4 && (
@@ -109,11 +110,12 @@ export const DashboardCalendar = () => {
                   <Card
                     key={consult.patientName}
                     patient={{
+                      id: consult.id,
                       name: consult.patientName,
                       time: format(
                         toZonedTime(
                           parseISO(consult?.date),
-                          'America/Sao_Paulo',
+                          '',
                         ),
                         'HH:mm',
                       ),
@@ -121,7 +123,7 @@ export const DashboardCalendar = () => {
                       url: consult.url,
                       place: consult.place,
                     }}
-                    isCompled={meetingIsCompleted(todayDate.date)}
+                    isCompleted={consult.completed}
                   />
                 ))}
               {data && data?.consults.tomorrow?.length > 4 && (
@@ -158,6 +160,7 @@ export const DashboardCalendar = () => {
                   <Card
                     key={consult.patientName}
                     patient={{
+                      id: consult.id,
                       name: consult.patientName,
                       time: format(
                         toZonedTime(parseISO(consult?.date), 'UTC'),
@@ -167,7 +170,7 @@ export const DashboardCalendar = () => {
                       url: consult.url,
                       place: consult.place,
                     }}
-                    isCompled={meetingIsCompleted(todayDate.date)}
+                    isCompleted={consult.completed}
                   />
                 ))}
               {data && data?.consults.inTwoDays?.length > 4 && (

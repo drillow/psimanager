@@ -1,15 +1,18 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
+  Consult,
   createConsult,
   getNextTreeDaysConsults,
   getWeekConsults,
   removeConsult,
+  toggleConsultStatus,
+  updateConsult,
 } from './service'
 import { QueryKeys } from '@/utils/queryKeys'
 
 export const useNextTreeDaysConsults = (userId: string, enabled: boolean) => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['NEXT_TREE_DAYS_CONSULTS'],
+    queryKey: QueryKeys.CONSULTS.NEXT_TREE_DAYS,
     queryFn: () => getNextTreeDaysConsults(userId),
     enabled,
   })
@@ -23,7 +26,7 @@ export const useNextTreeDaysConsults = (userId: string, enabled: boolean) => {
 
 export const useGetWeekConsults = (userId: string, weekOffset: number) => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: [QueryKeys.WEEK_CONSULTS, weekOffset],
+    queryKey: QueryKeys.CONSULTS.WEEK(weekOffset),
     queryFn: () => getWeekConsults(userId, weekOffset),
   })
 
@@ -56,6 +59,32 @@ export const useDeleteConsult = (onSuccess: () => void) => {
       consultId: string
       removeAllNextConsults: boolean
     }) => removeConsult(consultId, removeAllNextConsults),
+    onSuccess,
+  })
+
+  return {
+    execute: mutateAsync,
+    isLoading: isPending,
+    isError,
+  }
+}
+
+export const useUpdateConsult = (onSuccess: () => void) => {
+  const { mutateAsync, isPending, isError } = useMutation({
+    mutationFn: ({ consultId, consultPayload }: { consultId: string, consultPayload: Partial<Consult> }) => updateConsult(consultId, consultPayload),
+    onSuccess,
+  })
+
+  return {
+    execute: mutateAsync,
+    isLoading: isPending,
+    isError,
+  }
+}
+
+export const useToggleConsultStatus = (onSuccess: () => void) => {
+  const { mutateAsync, isPending, isError } = useMutation({
+    mutationFn: (consultId: string) => toggleConsultStatus(consultId),
     onSuccess,
   })
 

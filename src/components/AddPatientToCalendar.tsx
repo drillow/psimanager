@@ -1,4 +1,4 @@
-import { CalendarIcon, Link2, MapPin } from 'lucide-react'
+import { Link2, MapPin } from 'lucide-react'
 import { Button } from './ui/button'
 import {
   Dialog,
@@ -11,11 +11,7 @@ import {
 } from './ui/dialog'
 import { Label } from './ui/label'
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group'
-import { TimePicker } from './TimePicker'
 import { Input } from './ui/input'
-import { Calendar } from './ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { cn } from '@/lib/utils'
 import { Switch } from './ui/switch'
 import { Checkbox } from './ui/checkbox'
 import {
@@ -27,12 +23,12 @@ import {
   SelectValue,
 } from './ui/select'
 import { useForm } from 'react-hook-form'
-import { RRule, Weekday } from 'rrule'
+import { datetime, RRule, Weekday } from 'rrule'
 
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
-import { format, formatISO } from 'date-fns'
+import {  formatISO } from 'date-fns'
 import { Combobox } from './Combobox'
 import { useGetSelectListPatient } from '@/service/patient/hooks'
 import { useAuth } from '@/context/auth'
@@ -40,6 +36,10 @@ import { useAddNewConsult } from '@/service/consults/hooks'
 import { useQueryClient } from '@tanstack/react-query'
 import { QueryKeys } from '@/utils/queryKeys'
 import React from 'react'
+import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
+import { cx } from 'class-variance-authority'
+import { CurrencyInput } from './CurrencyInput'
+import { DateTimePicker } from './TesteCalendar'
 
 const formSchema = z.object({
   patientName: z.string({ message: 'Selecione um paciente' }).min(2).max(50),
@@ -47,6 +47,7 @@ const formSchema = z.object({
     date: z.date({ message: 'Obrigatório' }),
   }),
   consultType: z.string(),
+  consultValue: z.string(),
   place: z.string().optional(),
   url: z.string().optional(),
   repeat: z.boolean().default(false),
@@ -72,6 +73,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
 }) => {
   const { user } = useAuth()
   const queryClient = useQueryClient()
+  const { status } = useSubscriptionStatus()
 
   const form = useForm<FormProps>({
     resolver: zodResolver(formSchema),
@@ -85,7 +87,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
 
   const { execute } = useAddNewConsult(() => {
     queryClient.invalidateQueries({
-      queryKey: [QueryKeys.WEEK_CONSULTS],
+      queryKey: QueryKeys.CONSULTS.DEFAULT,
     })
     setIsOpen(false)
   })
@@ -104,10 +106,14 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
       return dayMapping[day]
     })
 
-    console.log(wkst)
+    const year = dataPayload.startDate.date.getFullYear()
+    const month = dataPayload.startDate.date.getMonth()
+    const day = dataPayload.startDate.date.getDate()
+    const hour = dataPayload.startDate.date.getHours()
+    const minutes = dataPayload.startDate.date.getMinutes()
 
     const rrule = new RRule({
-      dtstart: dataPayload.startDate.date,
+      dtstart: datetime(year, month + 1, day, hour, minutes, 0),
       byweekday: wkst ?? null,
       ...(dataPayload.repeat && {
         freq:
@@ -133,9 +139,6 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
     }
 
     await execute(payload)
-    console.log('Payload', payload)
-    console.log(rrule.toString())
-    console.log({ ...dataPayload, rrule: rrule.toString() })
   }
 
   return (
@@ -154,85 +157,60 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
             </DialogHeader>
             {/* <Form {...form}> */}
             <div className="grid gap-6 py-2">
-              <div className="flex flex-col items-start gap-2">
-                <FormField
-                  control={form.control}
-                  name="patientName"
-                  render={({ field: { value, onChange } }) => (
-                    <FormItem className="w-full">
-                      <FormControl>
-                        <Combobox
-                          dataList={data}
-                          selectedValue={value}
-                          onSelectValue={onChange}
-                          isLoading={isLoading}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col items-start gap-2">
-                  <Label className="text-right">Data da consulta</Label>
-                  <FormField
-                    control={form.control}
-                    name="startDate.date"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <Popover modal>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                type="button"
-                                variant={'outline'}
-                                className={cn(
-                                  'w-[240px] pl-3 text-left font-normal',
-                                  !field.value && 'text-muted-foreground',
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, 'PPP')
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                      
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              disabled={(date) => date < new Date()}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+              
+              <FormField
+                control={form.control}
+                name="patientName"
+                render={({ field: { value, onChange } }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Combobox
+                        dataList={data}
+                        selectedValue={value}
+                        onSelectValue={onChange}
+                        isLoading={isLoading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />    
+             
+              <div className='grid grid-cols-2 gap-4'>
                 <FormField
                   control={form.control}
                   name="startDate.date"
                   render={({ field: { value, onChange } }) => (
                     <FormItem>
                       <FormControl>
-
-                      <TimePicker
-                        date={value}
-                        setDate={(date) => onChange(date)}
-                      />
+                        <div className='flex flex-col items-start gap-2'>
+                          <Label htmlFor={"currency"} className="text-right">Data da consulta</Label>
+                          <DateTimePicker
+                            date={value}
+                            setDate={(date) => onChange(date)}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="consultValue"
+                  render={({ field: { value, onChange } }) => (
+                    <FormItem className="w-full">
+                      <FormControl>
+                        <CurrencyInput
+                          currencyLabel='R$'
+                          value={value}
+                          onChange={onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />   
               </div>
 
               <FormField
@@ -243,27 +221,33 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                     <Label htmlFor="username" className="text-right">
                       Tipo de consulta
                     </Label>
-                    <div className="flex items-center gap-2">
-                      <Checkbox
-                        title="Presencial"
-                        checked={field.value === 'IN_PERSON'}
-                        onCheckedChange={() => field.onChange('IN_PERSON')}
-                      />
-                      <span className="text-sm text-zinc-600">Presencial</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Checkbox
-                        title="Online"
-                        checked={field.value === 'ONLINE'}
-                        onCheckedChange={() => field.onChange('ONLINE')}
-                      />
-                      <span className="text-sm text-zinc-600">Online</span>
+                    <div className='flex items-center gap-4'>
+                      <label htmlFor="IN_PERSON" className={cx("flex items-center gap-2 p-2 rounded-lg cursor-pointer", field.value === "IN_PERSON" ? 'border border-zinc-300' : 'bg-zinc-100')}>
+                        <Checkbox
+                          id='IN_PERSON'
+                          title="Presencial"
+                          checked={field.value === 'IN_PERSON'}
+                          onCheckedChange={() => field.onChange('IN_PERSON')}
+                          className={cx('bg-white', field.value === 'IN_PERSON' ? 'border-violet-700' : 'border-zinc-300')}
+                        />
+                        <span className="text-sm text-zinc-600">Presencial</span>
+                      </label>
+                      <label htmlFor="ONLINE" className={cx("flex items-center gap-2 p-2 rounded-lg cursor-pointer", field.value === "ONLINE" ? 'border border-zinc-300' : 'bg-zinc-100')}>
+                        <Checkbox
+                          id='ONLINE'
+                          title="Online"
+                          checked={field.value === 'ONLINE'}
+                          onCheckedChange={() => field.onChange('ONLINE')}
+                          className={cx('bg-white', field.value === 'ONLINE' ? 'border-violet-700' : 'border-zinc-300')}
+                        />
+                        <span className="text-sm text-zinc-600">Online</span>
+                      </label>
                     </div>
                   </div>
                 )}
               />
 
-              {form.watch('consultType') === 'remote' ? (
+              {form.watch('consultType') === 'ONLINE' ? (
                 <FormField
                   control={form.control}
                   name="url"
@@ -276,7 +260,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                       <div className="relative w-full">
                         <Link2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
                         <Input
-                          type="email"
+                          type="url"
                           placeholder="Link"
                           className="pl-10"
                           {...field}
@@ -314,7 +298,8 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                 />
               )}
 
-              <FormField
+              {status === SubscriptionStatus.ACTIVE && (                
+                <FormField
                 control={form.control}
                 name="repeat"
                 render={({ field }) => (
@@ -325,10 +310,11 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
-                    />
+                      />
                   </div>
                 )}
-              />
+                />
+              )}
 
               {form.watch('repeat') && (
                 <div className="flex flex-col items-start gap-2">

@@ -164,10 +164,10 @@ const Services = () => {
         <div className="flex flex-col flex-1 gap-4">
           <div className="flex items-center justify-between">
             <span className={
-                  cx(
-                    "text-sm font-semibold ",
-                    data && format(new Date(), 'dd/MM') === format(addDays(parseISO(data?.startDate), 2), 'dd/MM') ? "text-violet-500" : "text-zinc-400"
-                  )
+              cx(
+                "text-sm font-semibold ",
+                data && format(new Date(), 'dd/MM') === format(addDays(parseISO(data?.startDate), 2), 'dd/MM') ? "text-violet-500" : "text-zinc-400"
+              )
             }>Quarta</span>
             <span className="text-sm text-zinc-400">{data && format(addDays(parseISO(data?.startDate), 2), 'dd/MM')}</span>
           </div>

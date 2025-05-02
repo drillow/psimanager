@@ -35,7 +35,7 @@ export const DeleteConsult: React.FC<DeleteConsultProps> = ({
   const { execute } = useDeleteConsult(() => {
     onSetOpen(false)
     queryClient.invalidateQueries({
-      queryKey: [QueryKeys.WEEK_CONSULTS],
+      queryKey: QueryKeys.CONSULTS.DEFAULT,
     })
   })
 

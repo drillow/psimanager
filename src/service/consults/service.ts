@@ -1,6 +1,6 @@
 import { api } from '../api'
 
-type Consult = {
+export type Consult = {
   id: string
   completed: false
   patientName: string
@@ -51,5 +51,22 @@ export const removeConsult = async (
   })
 
   return response.data
+}
+
+export const updateConsult = async (consultId: string, consultPayload: Partial<Consult>) => {
+  const response = await api.patch(`/api/consult/${consultId}`, consultPayload)
+
+  return response.data
+}
+
+export const toggleConsultStatus = async (consultId: string) => {
+  try {
+    // setTimeout(async () => {
+    const response = await api.patch(`/api/consult/${consultId}/toggle-status`)
+    return response.data
+    // }, 15000)
+  } catch (err) {
+    throw new Error('Error')
+  }
 }
 // "rrule": "RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=TU"

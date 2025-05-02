@@ -7,6 +7,8 @@ export type PatientPayload = {
   email: string
   phoneNumber: string
   isWhatsApp: boolean
+  patientId?: string
+  age?: number
 }
 
 export const getAllPatients = async (userId: string) => {

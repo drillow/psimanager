@@ -11,8 +11,10 @@ import { AuthProvider } from '@/context/auth'
 import { PrivateRouter } from '@/components/PrivateRouter'
 import { Login } from '@/pages/Login'
 import { GoogleConnect } from '@/pages/GoogleConnect'
+import { SubscriptionProvider } from '@/components/SubscriptionProvider'
+import Metrics from '@/pages/Metrics'
 
-// const Services = lazy(async () => await import('@/pages/Services'))
+// const Metrics = lazy(() => import('@/pages/Metrics'))
 
 const router = createBrowserRouter([
   {
@@ -27,7 +29,9 @@ const router = createBrowserRouter([
     path: '/',
     element: (
       <PrivateRouter>
-        <Layout />
+        <SubscriptionProvider>
+          <Layout />
+        </SubscriptionProvider>
       </PrivateRouter>
     ),
     children: [
@@ -51,6 +55,10 @@ const router = createBrowserRouter([
         path: 'billing',
         element: <Billings />,
       },
+      {
+        path: 'metrics',
+        element: <Metrics />,
+      }
     ],
   },
 ])

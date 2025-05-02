@@ -1,7 +1,6 @@
 import { EditPatientButton } from '@/components/EditButtonPatient'
 import { AddPatientButton } from '@/components/AddPatientButton'
 import { PageHeader } from '@/components/PageHeader'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -20,28 +19,27 @@ import { useGetPatient } from '@/service/patient/hooks'
 import { PatientPayload } from '@/service/patient/service'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 
-import { PlusIcon, RocketIcon, X } from 'lucide-react'
+import { MoreHorizontal, Pen, PlusIcon, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { DeletePatient } from '@/components/DeletePatientButton'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
 import { formatCellphone } from '@/utils/masks/phone_mask'
+import { columns, DataTable } from '@/components/PatientTable'
+import { LoadingSpinner } from '@/components/Spinner'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { PatientRow } from '@/components/PatientRow'
+import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
 
 export const Patients = () => {
   const { user } = useAuth()
   const { isLoading, data } = useGetPatient(user.id)
   const [isFirstTime, setIsFirstTime] = useState(true)
+  const { status } = useSubscriptionStatus()
+
   const [filteredList, setFilteredList] = useState([])
   const [filter, setFilter] = useState("")
 
   const [isAddPatientModalOpen, setIsAddPatientModalOpen] = useState(false)
+
 
   // const handleFilter = (value: string) => {
   //   if (value === "") { 
@@ -100,6 +98,7 @@ export const Patients = () => {
           <Button
             type="button"
             onClick={() => setIsAddPatientModalOpen((prevState) => !prevState)}
+            disabled={filteredList.length === 5 && status === SubscriptionStatus.INACTIVE}
           >
             <PlusIcon />
             Adicionar paciente
@@ -113,11 +112,11 @@ export const Patients = () => {
         </div>
         <Table>
           <TableHeader className='bg-gray-50'>
+            <TableHead>ID</TableHead>
             <TableHead>Nome</TableHead>
-            <TableHead>ID do Paciente</TableHead>
             <TableHead>Idade</TableHead>
-            <TableHead>Celular</TableHead>
             <TableHead>Email</TableHead>
+            <TableHead>Celular</TableHead>
             <TableHead className="text-center">WhatsApp</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableHeader>
@@ -149,28 +148,7 @@ export const Patients = () => {
             ) : (
               <>
                 {filteredList?.map((data: PatientPayload) => (
-                  <TableRow key={data.firstName}>
-                    <TableCell className='text-zinc-700 text-sm font-bold antialiased w-[250px]'>{`${data.firstName} ${data.lastName}`}</TableCell>
-                    <TableCell className='text-zinc-500 text-sm font-semibold w-[175px] antialiased'>#12342</TableCell>
-                    <TableCell className='text-zinc-500 text-sm font-semibold antialiased w-[175px]'>23</TableCell>
-                    <TableCell className='text-zinc-500 text-sm font-semibold antialiased w-[275px]'>{formatCellphone(data.phoneNumber)}</TableCell>
-                    <TableCell className='text-zinc-500 text-sm font-semibold antialiased'>{data.email}</TableCell>
-
-                    <TableCell className="text-center">
-                      {data.isWhatsApp ? (
-                        <Badge className="bg-green-600 hover:bg-green-500 rounded-full">
-                          Sim
-                        </Badge>
-                      ) : (
-                        <Badge variant={'destructive'}>Não</Badge>
-                      )}
-                    </TableCell>
-
-                    <TableCell className="text-right">
-                      <EditPatientButton patientData={data} />
-                      <DeletePatient patientId={data.id!} />
-                    </TableCell>
-                  </TableRow>
+                  <PatientRow data={data} key={data.id}/>
                 ))}
               </>
             )}

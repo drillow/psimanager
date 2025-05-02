@@ -6,6 +6,7 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
@@ -52,6 +53,7 @@ export function Combobox({
         </PopoverTrigger>
         <PopoverContent className="p-0 w-[475px]">
           <Command className="w-full">
+            {/* <CommandInput placeholder="Search framework..." className="h-9" /> */}
             <CommandList>
               <CommandEmpty className="flex flex-col items-center text-sm py-4">
                 Nenhum paciente encontrado.
@@ -71,14 +73,14 @@ export function Combobox({
                       setOpen(false)
                     }}
                   >
-                    <Check
+                    {/* <Check
                       className={cn(
                         'mr-2 h-4 w-4',
                         selectedValue === item.value
                           ? 'opacity-100'
                           : 'opacity-0',
                       )}
-                    />
+                    /> */}
                     {item.label}
                   </CommandItem>
                 ))}

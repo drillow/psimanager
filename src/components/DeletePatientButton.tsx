@@ -1,4 +1,4 @@
-import { Trash } from 'lucide-react'
+
 import { Button } from './ui/button'
 import {
   DialogHeader,
@@ -9,17 +9,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from './ui/dialog'
-import { useState } from 'react'
 import { useDeletePatient } from '@/service/patient/hooks'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@/context/auth'
+import { Trash } from 'lucide-react'
+import { QueryKeys } from '@/utils/queryKeys'
 
 interface DeletePatientProps {
   patientId: string
+  open: boolean,
+  setOpen: () => void
 }
 
-export const DeletePatient: React.FC<DeletePatientProps> = ({ patientId }) => {
-  const [open, setOpen] = useState(false)
+export const DeletePatient: React.FC<DeletePatientProps> = ({ patientId, open, setOpen }) => {
+  // const [open, setOpen] = useState(false)
   const { user } = useAuth()
 
   const queryClient = useQueryClient()
@@ -28,18 +31,18 @@ export const DeletePatient: React.FC<DeletePatientProps> = ({ patientId }) => {
     user.id,
     () => {
       queryClient.invalidateQueries({
-        queryKey: ['PATIENT_LIST'],
+        queryKey: QueryKeys.PATIENT.LIST,
       })
-      setOpen(false)
+      setOpen()
     },
   )
 
   return (
-    <Dialog open={open} onOpenChange={setOpen} modal>
+    <Dialog open={open} onOpenChange={setOpen} modal key={"remove-modal"}>
       <DialogTrigger asChild>
-        <Button variant={'ghost'} onClick={() => setOpen(true)}>
-          <Trash className="text-red-500" />
-        </Button>
+        <button type='button' className='p-1 border border-zinc-300 rounded-md'>
+          <Trash className=" w-4 h-4" />
+        </button>
       </DialogTrigger>
       <DialogContent className="max-w-[525px]">
         <DialogHeader>

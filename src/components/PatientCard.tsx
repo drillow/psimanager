@@ -4,6 +4,13 @@ import { format, parseISO } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 import { DeleteConsult } from './DeleteConsult'
 import { useState } from 'react'
+import { Checkbox } from './ui/checkbox'
+import { useToggleConsultStatus } from '@/service/consults/hooks'
+import { useQueryClient } from '@tanstack/react-query'
+import { QueryKeys } from '@/utils/queryKeys'
+import { cx } from 'class-variance-authority'
+import { CopyButton } from './CopyButton'
+import { EditConsultModal } from './EditConsultModal'
 
 interface PatientCardProps {
   patient: {
@@ -14,25 +21,35 @@ interface PatientCardProps {
     url?: string
     id: string
     date: string
-    completed: false
+    completed: boolean
+    consultValue: number
   }
 }
 
 export const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+
+  const queryClient = useQueryClient()
+
+  const { execute, isLoading } = useToggleConsultStatus(() => {
+    queryClient.invalidateQueries({
+      queryKey: QueryKeys.CONSULTS.DEFAULT
+    })
+  })
 
   return (
     <div className="p-2 bg-white rounded-lg border border-zinc-200 flex flex-col gap-4">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-2">
-          {/* <Checkbox checked={false} onCheckedChange={() => null} /> */}
-          <span className={`font-semibold text-sm text-zinc-700`}>
+          <Checkbox checked={patient.completed} onCheckedChange={() => execute(patient.id)} disabled={isLoading}/>
+          <span className={cx('font-semibold text-sm', patient.completed ? 'line-through text-zinc-400' : 'text-zinc-700')}>
             {patient.patientName}
           </span>
         </div>
         <span className="text-xs text-zinc-400">
           {format(
-            toZonedTime(parseISO(patient?.date), 'America/Sao_Paulo'),
+            toZonedTime(parseISO(patient?.date), ''),
             'HH:mm',
           )}
         </span>
@@ -43,10 +60,10 @@ export const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
           <div className="flex items-center gap-2">
             <Link className="w-4 h-4 text-zinc-400" />
             <a
-              className={`text-xs text-violet-400 underline underline-offset-1`}
-              href={patient.url}
+              className={cx(`text-xs  underline underline-offset-1`, patient.completed ? 'text-zinc-400' : 'text-violet-400')}
+              href={patient.completed ? undefined : patient.url}
             >
-              Google Meet Link
+              Link da consulta
             </a>
           </div>
         ) : (
@@ -64,9 +81,12 @@ export const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
           <Badge variant={'secondary'}>Presencial</Badge>
         )}
         <div className="flex items-center gap-2">
-          <Edit className="w-4 h-4 text-zinc-500 cursor-pointer" />
-          {patient.type === 'ONLINE' && (
-            <Copy className={`w-4 h-4 text-violet-400 cursor-pointer`} />
+          {!patient.completed && (
+            <Edit className="w-4 h-4 text-zinc-500 cursor-pointer" onClick={() => setIsEditModalOpen(prevState => !prevState)} />
+          )}
+          {patient.type === 'ONLINE' && patient.url && (
+            <CopyButton disabled={patient.completed} copyText={patient.url}/>
+            // <Copy className={cx(`w-4 h-4`, patient.completed ? 'text-zinc-400' : 'cursor-pointer text-violet-500')} />
           )}
           <DeleteConsult
             consultId={patient.id}
@@ -74,6 +94,11 @@ export const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
             isOpen={isRemoveModalOpen}
             onSetOpen={() => setIsRemoveModalOpen((prevState) => !prevState)}
             consultDate={patient.date}
+          />
+          <EditConsultModal 
+            isOpen={isEditModalOpen}
+            setIsOpen={setIsEditModalOpen}
+            consultData={patient}
           />
         </div>
       </div>

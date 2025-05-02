@@ -1,6 +1,5 @@
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 
 import { WidgetCardLink } from '@/components/WidgetCardLink'
 import {
@@ -8,11 +7,8 @@ import {
   Crown,
   Settings as SettingsIcon,
   ChartColumnBig,
-  Eye,
-  EyeOff,
 } from 'lucide-react'
-import { MainChart } from '@/components/MainChart'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -25,13 +21,34 @@ import { Input } from '@/components/ui/input'
 import { DashboardCalendar } from '@/components/DashboadCalendar'
 import { MenuItens, Settings } from './Settings'
 import WorkingImage from '@/assets/working-2.png'
+import { useAuth } from '@/context/auth'
+import { useSearchParams } from 'react-router-dom'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { handleSubscriptionStatus, useStripe } from '@/service/plan/hooks'
+import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
+
 // import { datetime, RRule } from 'rrule'
 
 export const Home = () => {
+  const { user } = useAuth()
   const [isAmountVisible, setIsAmountVisible] = useState(true)
-
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [showSubConfirmedModal, setShowConfirmedModal] = useState(false)
+  const { status } = useSubscriptionStatus()
+  
   const handleAmountVisibility = () =>
     setIsAmountVisible((prevState) => !prevState)
+
+  const handleCloseConfirmModal = () => {
+    setSearchParams({});
+    setShowConfirmedModal(false)
+  }
+
+  useEffect(() => {
+    if (!!searchParams.get("sub_completed")) {
+      setShowConfirmedModal(true)
+    }
+  }, [])
 
   return (
     <div className="w-full h-screen p-4 flex flex-col gap-4">
@@ -40,18 +57,18 @@ export const Home = () => {
       <div className="flex flex-col gap-4 h-full">
         <div className="flex flex-1 h-full items-start gap-4">
           <DashboardCalendar />
-          <div className="bg-white rounded-xl w-5/12 h-full p-0 border border-zinc-200 relative flex flex-col items-end justify-between overflow-hidden">
-            <h2 className="text-lg font-semibold text-zinc-700 w-full p-4">
+          <div className="bg-white rounded-xl w-5/12 h-full p-0 border border-zinc-200 relative flex flex-col items-center justify-center overflow-hidden">
+            {/* <h2 className="text-lg font-semibold text-zinc-700 w-full p-4">
               Métricas
-            </h2>
+            </h2> */}
             {/* <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-50 bg-white rounded-md p-2 text-zinc-700 font-medium text-sm">
               Em breve uma novidade para te ajudar ainda mais.
 
             </p> */}
-            <div className='bg-white z-50 rounded-md'>
-              <img src={WorkingImage} className='rounded-3xl'/>
+            <div className='bg-white z-50'>
+              <img src={WorkingImage} className=''/>
             </div>
-            {/* <div className="flex flex-col gap-10 blur-lg">
+            {/* <div className="flex flex-col gap-10 w-full h-full p-4">
               <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg font-semibold text-zinc-700">
@@ -126,8 +143,9 @@ export const Home = () => {
               title="Gerenciar plano"
               description="Genrencie seu plano e verifique sua assinatura"
               icon={<Crown className="w-8 h-8" />}
-              hasBadge
+              hasBadge={status !== SubscriptionStatus.ACTIVE}
               badgeText="Plano gratuíto"
+              // toPath={status !== SubscriptionStatus.ACTIVE ? '/metrics' : undefined}
               // toPath="/plan"
             />
           </Settings>
@@ -136,6 +154,7 @@ export const Home = () => {
             title="Métricas"
             description="Veja total de consultas online e presencial, faturamento e outros."
             icon={<ChartColumnBig className="w-8 h-8" />}
+            // toPath={status === SubscriptionStatus.ACTIVE ? '/metrics' : undefined}
             // hasBadge
             // badgeText="Em breve"
             // badgeVariant='secondary'
@@ -150,7 +169,27 @@ export const Home = () => {
           </Settings>
         </div>
       </div>
-      <Dialog>
+      <Dialog open={showSubConfirmedModal} onOpenChange={handleCloseConfirmModal}>
+        <DialogContent>
+          <div className='w-full h-full flex flex-col items-center justify-center p-12 gap-6'>
+            <div className='w-20 h-20'>
+              <DotLottieReact
+                src="https://lottie.host/85449187-00ad-44c4-aa36-9e5ea5e8a630/HOlOlhmjRA.lottie"
+                loop={false}
+                autoplay
+                width={64}
+                height={64}
+                />
+            </div>
+            <div className='flex flex-col gap-2 items-center justify-center'>
+              <h2 className='text-2xl font-semibold text-center'>Uhuu! <br />Seu pagamento confirmado</h2>
+              <span className='text-zinc-500'>Seu plano já está ativo</span>
+              {/* <Button className='mt-4'>Fechar</Button> */}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={false}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Bem vindo!</DialogTitle>

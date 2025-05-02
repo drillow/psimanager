@@ -9,11 +9,12 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { useToast } from '@/hooks/use-toast'
+import { AuthTabs } from '@/pages/Login'
 import { useSignUp } from '@/service/auth/hooks'
-import { formatCellphone } from '@/utils/masks/phone_mask'
+import { formatCellphone, formatCPF, formatCRP } from '@/utils/masks/phone_mask'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Check, Dot, X } from 'lucide-react'
-import { useEffect } from 'react'
+import { ArrowLeft, ArrowRight, Check, Dot, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
@@ -70,7 +71,7 @@ const RequirementItem = ({
   )
 }
 
-const PasswordRequirements = ({ password }: { password: string }) => {
+export const PasswordRequirements = ({ password }: { password: string }) => {
   const showValidation = password.length > 0
 
   return (
@@ -99,7 +100,7 @@ const formSchema = z
       .string({ message: 'Telefone obrigatório' })
       .min(11, 'Telefone inválido'),
     crp: z.string({ message: 'CRP obrigatório' }),
-    cpf: z.string({ message: 'CPF obrigatório' }),
+    cpf: z.string({ message: 'CPF obrigatório' }).min(11, 'CPF inválido'),
     password: z
       .string({ message: 'Senha obrigatória' })
       .min(8, { message: 'Mínimo 8 caracteres' })
@@ -116,14 +117,25 @@ const formSchema = z
 
 type FormProps = z.infer<typeof formSchema>
 
-type SingUpFormProps = {
-  onBackToSingIn: () => void
+enum FormSteps {
+  PERSONAL_INFO,
+  ACCOUNT_INFO
 }
 
-export const SingUpForm: React.FC<SingUpFormProps> = ({ onBackToSingIn }) => {
-  const navigate = useNavigate()
+type SingUpFormType = {
+  setTab: (tab: AuthTabs) => void
+}
+
+export const SingUpForm: React.FC<SingUpFormType> = ({ setTab }) => {
+  const [currentPage, setCurrentPage] = useState(FormSteps.PERSONAL_INFO)
   const { toast } = useToast()
-  const { execute, isLoading, isError } = useSignUp()
+  const { execute, isLoading, isError } = useSignUp(() => {
+    toast({
+      title: 'Sucesso',
+      description: 'Conta criada com sucesso! Você já pode fazer login.',
+    })
+    setTab(AuthTabs.SINGIN)
+  })
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -132,15 +144,14 @@ export const SingUpForm: React.FC<SingUpFormProps> = ({ onBackToSingIn }) => {
   const handleSignup = (formPayload: FormProps) => {
     execute({
       email: formPayload.email,
-      name: formPayload.name,
-      cellphone: formPayload.cellphone,
+      firstName: formPayload.name.split(' ')[0],
+      lastName: formPayload.name.split(' ')[1],
+      phoneNumber: formPayload.cellphone,
       crp: formPayload.crp,
       cpf: formPayload.cpf,
       password: formPayload.password,
     })
   }
-
-  // const handleBack = () => navigate('/login')
 
   useEffect(() => {
     if (isError) {
@@ -158,34 +169,100 @@ export const SingUpForm: React.FC<SingUpFormProps> = ({ onBackToSingIn }) => {
           className="flex flex-col items-center justify-center gap-8"
           onSubmit={form.handleSubmit(handleSignup)}
         >
-          {/* <div className="flex flex-col items-center justify-center gap-2">
-            {/* <div
-              className={`w-24 h-24 bg-violet-600 rounded-md flex items-center justify-center`}
-            >
-              <Hexagon className={`w-20 h-20 text-zinc-50`} />
-            </div> */}
-            {/* <p className="font-semibold text-xl">Criar conta</p>
-          </div> */} 
+          {currentPage === FormSteps.PERSONAL_INFO && (
+             <div className="flex flex-col items-center gap-4 w-full">
+               <FormField
+                control={form.control}
+                name="name"
+                render={({ field, fieldState: { error } }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <CustomInput
+                        id="name"
+                        label="Nome completo"
+                        placeholder="Nome completo"
+                        error={!!error?.message}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="cellphone"
+                render={({ field, fieldState: { error } }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <CustomInput
+                        id="cellphone"
+                        label="Celular"
+                        type="tel"
+                        placeholder="(11) 11111-1111"
+                        error={!!error?.message}
+                        {...field}
+                        onChange={(e) => {
+                          const formattedValue = formatCellphone(e.target.value)
+                          field.onChange(formattedValue)
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
+              <div className="flex items-center gap-4 w-full">
+                <FormField
+                  control={form.control}
+                  name="cpf"
+                  render={({ field, fieldState: { error } }) => (
+                    <FormItem className="w-full">
+                      <FormControl>
+                        <CustomInput
+                          id="cpf"
+                          label="CPF"
+                          placeholder="CPF"
+                          error={!!error?.message}
+                          {...field}
+                          onChange={(e) => {
+                            const formattedValue = formatCPF(e.target.value)
+                            field.onChange(formattedValue)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="crp"
+                  render={({ field, fieldState: { error } }) => (
+                    <FormItem className="w-full">
+                      <FormControl>
+                        <CustomInput
+                          id="crp"
+                          label="CRP"
+                          placeholder="CRP"
+                          error={!!error?.message}
+                          {...field}
+                          onChange={(e) => {
+                            const formattedValue = formatCRP(e.target.value)
+                            field.onChange(formattedValue)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          )}
+          {currentPage === FormSteps.ACCOUNT_INFO && (
           <div className="flex flex-col items-center gap-4 w-full">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field, fieldState: { error } }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <CustomInput
-                      id="name"
-                      label="Nome completo"
-                      placeholder="Nome completo"
-                      error={!!error?.message}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="email"
@@ -204,69 +281,6 @@ export const SingUpForm: React.FC<SingUpFormProps> = ({ onBackToSingIn }) => {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="cellphone"
-              render={({ field, fieldState: { error } }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <CustomInput
-                      id="cellphone"
-                      label="Celular"
-                      type="tel"
-                      placeholder="(11) 11111-1111"
-                      error={!!error?.message}
-                      {...field}
-                      onChange={(e) => {
-                        const formattedValue = formatCellphone(e.target.value)
-                        field.onChange(formattedValue)
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="flex items-center gap-4 w-full">
-              <FormField
-                control={form.control}
-                name="cpf"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem className="w-full">
-                    <FormControl>
-                      <CustomInput
-                        id="cpf"
-                        label="CPF"
-                        placeholder="CPF"
-                        error={!!error?.message}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="crp"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem className="w-full">
-                    <FormControl>
-                      <CustomInput
-                        id="crp"
-                        label="CRP"
-                        placeholder="CRP"
-                        error={!!error?.message}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
             <FormField
               control={form.control}
               name="password"
@@ -283,7 +297,6 @@ export const SingUpForm: React.FC<SingUpFormProps> = ({ onBackToSingIn }) => {
                     />
                   </FormControl>
                   <PasswordRequirements password={field.value || ''} />
-                  {/* <FormMessage /> */}
                 </FormItem>
               )}
             />
@@ -307,20 +320,37 @@ export const SingUpForm: React.FC<SingUpFormProps> = ({ onBackToSingIn }) => {
               )}
             />
           </div>
+          )}
 
           <div className="flex flex-col gap-4 w-full">
-            <Button className="w-full" type="submit" disabled={isLoading}>
-              {isLoading ? <LoadingSpinner /> : 'Registrar'}
-            </Button>
-            {/* <Button
-              variant={'secondary'}
-              className="w-full"
-              type="button"
-              onClick={onBackToSingIn}
-              disabled={isLoading}
-            >
-              Já tem uma conta? Entrar
-            </Button> */}
+            {currentPage === FormSteps.PERSONAL_INFO && (
+              <Button
+                // className="text-violet-600"
+                variant={'secondary'}
+                type="button"
+                onClick={() => setCurrentPage(FormSteps.ACCOUNT_INFO)}
+                disabled={!form.watch('name') || !form.watch('cellphone') || !form.watch('cpf') || !form.watch('crp')}
+              >
+                Próximo
+                <ArrowRight className="w-4 h-4 text-violet-600" />
+              </Button>
+            )}
+            {currentPage === FormSteps.ACCOUNT_INFO && (
+              <div className='flex items-center gap-4 w-full'>
+                <Button
+                  className="w-full"
+                  type="button"
+                  variant={'secondary'}
+                  onClick={() => setCurrentPage(FormSteps.PERSONAL_INFO)}
+                  >
+                    <ArrowLeft className='w-4 h-4 text-violet-600'/>
+                  Voltar
+                </Button>
+                <Button className="w-full" type="submit" disabled={isLoading}>
+                  {isLoading ? <LoadingSpinner /> : 'Registrar'}
+                </Button>
+              </div>
+            )}
           </div>
       </form>
     </Form>

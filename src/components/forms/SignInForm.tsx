@@ -16,6 +16,8 @@ import JWT from 'jsonwebtoken'
 import { z } from 'zod'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '../ui/button'
+import { AxiosError } from 'axios'
+import { handleSubscriptionStatus } from '@/service/plan/hooks'
 
 const formSchema = z.object({
   email: z
@@ -38,6 +40,7 @@ export const SignInForm: React.FC<SignInFormType> = ({
   const cookies = new Cookies()
   const { validateToken, signIn } = useAuth()
   const { execute, isLoading, isError } = useSignIn()
+
   const { toast } = useToast()
 
   const form = useForm<FormProps>({
@@ -46,7 +49,6 @@ export const SignInForm: React.FC<SignInFormType> = ({
   const { control, handleSubmit } = form
 
   const handleLogin = async (formData: FormProps) => {
-    console.log(formData)
     const data = await execute({
       email: formData.email,
       password: formData.password,
@@ -60,22 +62,14 @@ export const SignInForm: React.FC<SignInFormType> = ({
     }
 
     cookies.set(ACCESS_TOKEN_KEY, data.access_token)
+    const userDecoded = JWT.decode(data.access_token) as TUserData
 
-    signIn(JWT.decode(data.access_token) as TUserData)
+    signIn(userDecoded)
 
     if (validateToken()) {
       window.location.href = '/'
     }
   }
-
-  useEffect(() => {
-    if (isError === true) {
-      toast({
-        title: 'Error',
-        description: 'dsads',
-      })
-    }
-  }, [isError, toast])
 
   return (
     <Form {...form}>

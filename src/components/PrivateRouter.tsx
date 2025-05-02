@@ -2,7 +2,6 @@
 import { useAuth } from '@/context/auth'
 import { EPaths } from '@/types'
 import { Navigate } from 'react-router-dom'
-// import { EPaths } from 'types'
 
 export const PrivateRouter = ({ children }: { children: JSX.Element }) => {
   const { validateToken } = useAuth()
