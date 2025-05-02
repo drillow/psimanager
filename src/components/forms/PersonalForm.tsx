@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import { useForm } from "react-hook-form"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
@@ -11,7 +11,6 @@ import { useQueryClient } from "@tanstack/react-query"
 import { QueryKeys } from "@/utils/queryKeys"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Personal } from "@/service/person/service"
 import { LoadingSpinner } from "../Spinner"
 import { formatCPF, formatCRP } from "@/utils/masks/phone_mask"
 

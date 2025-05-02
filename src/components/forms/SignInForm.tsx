@@ -1,5 +1,3 @@
-import { Hexagon } from 'lucide-react'
-import { useEffect } from 'react'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import { CustomInput } from '../CustomInput'
 import { LoadingSpinner } from '../Spinner'
@@ -7,7 +5,6 @@ import { LoadingSpinner } from '../Spinner'
 import Cookies from 'universal-cookie'
 import { useAuth } from '@/context/auth'
 import { useSignIn } from '@/service/auth/hooks'
-import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ACCESS_TOKEN_KEY } from '@/utils/constants'
@@ -16,8 +13,6 @@ import JWT from 'jsonwebtoken'
 import { z } from 'zod'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '../ui/button'
-import { AxiosError } from 'axios'
-import { handleSubscriptionStatus } from '@/service/plan/hooks'
 
 const formSchema = z.object({
   email: z

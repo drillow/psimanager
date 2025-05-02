@@ -1,7 +1,5 @@
-import { EditPatientButton } from '@/components/EditButtonPatient'
 import { AddPatientButton } from '@/components/AddPatientButton'
 import { PageHeader } from '@/components/PageHeader'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -19,20 +17,14 @@ import { useGetPatient } from '@/service/patient/hooks'
 import { PatientPayload } from '@/service/patient/service'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 
-import { MoreHorizontal, Pen, PlusIcon, Trash2 } from 'lucide-react'
+import { PlusIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { DeletePatient } from '@/components/DeletePatientButton'
-import { formatCellphone } from '@/utils/masks/phone_mask'
-import { columns, DataTable } from '@/components/PatientTable'
-import { LoadingSpinner } from '@/components/Spinner'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { PatientRow } from '@/components/PatientRow'
 import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
 
 export const Patients = () => {
   const { user } = useAuth()
   const { isLoading, data } = useGetPatient(user.id)
-  const [isFirstTime, setIsFirstTime] = useState(true)
   const { status } = useSubscriptionStatus()
 
   const [filteredList, setFilteredList] = useState([])

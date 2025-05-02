@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { apiWithoutHeader } from '../auth.api'
 
 export const signIn = async (payload: {

@@ -21,24 +21,18 @@ import { Input } from '@/components/ui/input'
 import { DashboardCalendar } from '@/components/DashboadCalendar'
 import { MenuItens, Settings } from './Settings'
 import WorkingImage from '@/assets/working-2.png'
-import { useAuth } from '@/context/auth'
+// import { useAuth } from '@/context/auth'
 import { useSearchParams } from 'react-router-dom'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { handleSubscriptionStatus, useStripe } from '@/service/plan/hooks'
 import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
 
 // import { datetime, RRule } from 'rrule'
 
 export const Home = () => {
-  const { user } = useAuth()
-  const [isAmountVisible, setIsAmountVisible] = useState(true)
   const [searchParams, setSearchParams] = useSearchParams()
   const [showSubConfirmedModal, setShowConfirmedModal] = useState(false)
   const { status } = useSubscriptionStatus()
   
-  const handleAmountVisibility = () =>
-    setIsAmountVisible((prevState) => !prevState)
-
   const handleCloseConfirmModal = () => {
     setSearchParams({});
     setShowConfirmedModal(false)
@@ -56,7 +50,7 @@ export const Home = () => {
 
       <div className="flex flex-col gap-4 h-full">
         <div className="flex flex-1 h-full items-start gap-4">
-          <DashboardCalendar />
+            <DashboardCalendar />
           <div className="bg-white rounded-xl w-5/12 h-full p-0 border border-zinc-200 relative flex flex-col items-center justify-center overflow-hidden">
             {/* <h2 className="text-lg font-semibold text-zinc-700 w-full p-4">
               Métricas

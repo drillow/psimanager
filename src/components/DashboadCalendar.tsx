@@ -1,7 +1,6 @@
 import {
   calculateNextDateByNumberOfDaysAfter,
   getFirstFourItems,
-  meetingIsCompleted,
 } from '@/utils/functions'
 import { format, parseISO } from 'date-fns'
 import { Link } from 'react-router-dom'

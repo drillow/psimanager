@@ -16,7 +16,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowLeft, ArrowRight, Check, Dot, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 type PasswordRequirement = {
@@ -118,8 +117,8 @@ const formSchema = z
 type FormProps = z.infer<typeof formSchema>
 
 enum FormSteps {
-  PERSONAL_INFO,
-  ACCOUNT_INFO
+  PERSONAL_INFO = "PERSONAL_INFO",
+  ACCOUNT_INFO = "ACCOUNT_INFO"
 }
 
 type SingUpFormType = {

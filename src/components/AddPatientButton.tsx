@@ -8,13 +8,12 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogPortal,
-} from './ui/dialog'
-import { Input } from './ui/input'
+} from './ui/dialog
 import { Label } from './ui/label'
 import { Switch } from './ui/switch'
 // import { useAddPatient } from '@/service/patient/hooks'
 // import { useAuth } from '@/context/auth'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useAddPatient } from '@/service/patient/hooks'
 import { useAuth } from '@/context/auth'
 import { PatientPayload } from '@/service/patient/service'

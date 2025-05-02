@@ -6,11 +6,10 @@ import { ScrollDayColumn } from "@/components/ScrollDayColumn"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useSidebar } from "@/components/ui/sidebar"
-import { Toggle } from "@/components/ui/toggle"
 import { useAuth } from "@/context/auth"
 import { useGetWeekConsults } from "@/service/consults/hooks"
 import { cx } from "class-variance-authority"
-import { format, parseISO, addDays, setWeek } from "date-fns"
+import { format, parseISO, addDays } from "date-fns"
 import { ChevronLeft, ChevronRight, PlusIcon } from "lucide-react"
 
 import { useEffect, useState } from "react"
@@ -38,18 +37,10 @@ const Services = () => {
   const [isAddConsultModalOpen, setIsAddConsultModalOpen] = useState(false)
   const [weekOffset, setWeekOffset] = useState(0)
   const [patinents, setPatients] = useState<{ [key: PropertyKey]: any[]  }>()
-  const [selectedFilter, setSelectedFilter] = useState<FilterOptions | null>(null)
+  const [selectedFilter] = useState<FilterOptions | null>(null)
   const { setOpen } = useSidebar()
   const { user } = useAuth()
   const { data, isLoading } = useGetWeekConsults(user.id, weekOffset)
-
-  const toggleFilter = (filterOption: FilterOptions) => {
-    if (selectedFilter === filterOption) {
-      return setSelectedFilter(null)
-    }
-
-    return setSelectedFilter(filterOption)
-  }
 
   const filterPatients = (data: MockDataProps, selectedFilter: FilterOptions | null) => {
     if (selectedFilter === null) {

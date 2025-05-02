@@ -1,4 +1,4 @@
-import { Copy, Edit, Link, MapPin } from 'lucide-react'
+import { Edit, Link, MapPin } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { format, parseISO } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'

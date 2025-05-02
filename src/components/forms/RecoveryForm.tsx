@@ -1,5 +1,4 @@
 import { useRecoveryPassword } from '@/service/auth/hooks'
-import { Hexagon } from 'lucide-react'
 import { CustomInput } from '../CustomInput'
 import { Button } from '../ui/button'
 import { LoadingSpinner } from '../Spinner'

@@ -1,12 +1,11 @@
 import { Checkbox } from './ui/checkbox'
-import { useState } from 'react'
+
 import { CopyButton } from './CopyButton'
 import { Badge } from './ui/badge'
 import { Link, MapPin } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useToggleConsultStatus } from '@/service/consults/hooks'
 import { QueryKeys } from '@/utils/queryKeys'
-import { format } from 'date-fns'
 
 interface CardProps {
   patient: {
