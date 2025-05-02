@@ -137,7 +137,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
 
     const payload = {
       patientId: dataPayload.patientName,
-      startDate: formatISO(dataPayload.startDate.date),
+      startDate: formatISO(toZonedTime(dataPayload.startDate.date, 'UTC')),
       type: dataPayload.consultType,
       userId: user.id,
       consultValue: dataPayload.consultValue,
