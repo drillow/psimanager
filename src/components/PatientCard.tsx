@@ -49,7 +49,7 @@ export const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
         </div>
         <span className="text-xs text-zinc-400">
           {format(
-            toZonedTime(parseISO(patient?.date), ''),
+            toZonedTime(parseISO(patient?.date), 'UTC'),
             'HH:mm',
           )}
         </span>

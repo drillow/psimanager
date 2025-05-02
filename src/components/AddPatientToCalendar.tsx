@@ -23,12 +23,12 @@ import {
   SelectValue,
 } from './ui/select'
 import { useForm } from 'react-hook-form'
-import { datetime, RRule, Weekday } from 'rrule'
+import { datetime, RRule, rrulestr, Weekday } from 'rrule'
 
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
-import {  formatISO } from 'date-fns'
+import {  format, formatISO, parseISO, startOfDay } from 'date-fns'
 import { Combobox } from './Combobox'
 import { useGetSelectListPatient } from '@/service/patient/hooks'
 import { useAuth } from '@/context/auth'
@@ -40,6 +40,7 @@ import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptio
 import { cx } from 'class-variance-authority'
 import { CurrencyInput } from './CurrencyInput'
 import { DateTimePicker } from './TesteCalendar'
+import { toZonedTime } from 'date-fns-tz'
 
 const formSchema = z.object({
   patientName: z.string({ message: 'Selecione um paciente' }).min(2).max(50),
@@ -112,8 +113,11 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
     const hour = dataPayload.startDate.date.getHours()
     const minutes = dataPayload.startDate.date.getMinutes()
 
+    console.log(new Date(Date.UTC(year, month, day, hour, minutes, 0)))
+
     const rrule = new RRule({
-      dtstart: datetime(year, month + 1, day, hour, minutes, 0),
+      dtstart: new Date(Date.UTC(year, month, day, hour, minutes, 0)),
+      tzid: 'America/Sao_Paulo',
       byweekday: wkst ?? null,
       ...(dataPayload.repeat && {
         freq:
@@ -133,10 +137,19 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
       startDate: formatISO(dataPayload.startDate.date),
       type: dataPayload.consultType,
       userId: user.id,
+      consultValue: dataPayload.consultValue,
       ...(dataPayload.repeat && { rrule: rrule.toString() }),
       ...(dataPayload.place && { place: dataPayload.place }),
       ...(dataPayload.url && { url: dataPayload.url }),
     }
+    console.log(rrule.toString())
+    const rule = new RRule(rrulestr(rrule.toString()).origOptions)
+    const allDates = rule.all()
+    console.log(allDates)
+    allDates.map(date => {
+      console.log(toZonedTime(date, 'UTC'))
+    })
+    // console.log(allDates.map(date => {}))
 
     await execute(payload)
   }
