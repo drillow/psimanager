@@ -117,8 +117,8 @@ const formSchema = z
 type FormProps = z.infer<typeof formSchema>
 
 enum FormSteps {
-  PERSONAL_INFO = "PERSONAL_INFO",
-  ACCOUNT_INFO = "ACCOUNT_INFO"
+  PERSONAL_INFO = 'PERSONAL_INFO',
+  ACCOUNT_INFO = 'ACCOUNT_INFO',
 }
 
 type SingUpFormType = {
@@ -165,44 +165,68 @@ export const SingUpForm: React.FC<SingUpFormType> = ({ setTab }) => {
   return (
     <Form {...form}>
       <form
-          className="flex flex-col items-center justify-center gap-8"
-          onSubmit={form.handleSubmit(handleSignup)}
-        >
-          {currentPage === FormSteps.PERSONAL_INFO && (
-             <div className="flex flex-col items-center gap-4 w-full">
-               <FormField
-                control={form.control}
-                name="name"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem className="w-full">
-                    <FormControl>
-                      <CustomInput
-                        id="name"
-                        label="Nome completo"
-                        placeholder="Nome completo"
-                        error={!!error?.message}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        className="flex flex-col items-center justify-center gap-8"
+        onSubmit={form.handleSubmit(handleSignup)}
+      >
+        {currentPage === FormSteps.PERSONAL_INFO && (
+          <div className="flex flex-col items-center gap-4 w-full">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field, fieldState: { error } }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <CustomInput
+                      id="name"
+                      label="Nome completo"
+                      placeholder="Nome completo"
+                      error={!!error?.message}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="cellphone"
+              render={({ field, fieldState: { error } }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <CustomInput
+                      id="cellphone"
+                      label="Celular"
+                      type="tel"
+                      placeholder="(11) 11111-1111"
+                      error={!!error?.message}
+                      {...field}
+                      onChange={(e) => {
+                        const formattedValue = formatCellphone(e.target.value)
+                        field.onChange(formattedValue)
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex items-center gap-4 w-full">
               <FormField
                 control={form.control}
-                name="cellphone"
+                name="cpf"
                 render={({ field, fieldState: { error } }) => (
                   <FormItem className="w-full">
                     <FormControl>
                       <CustomInput
-                        id="cellphone"
-                        label="Celular"
-                        type="tel"
-                        placeholder="(11) 11111-1111"
+                        id="cpf"
+                        label="CPF"
+                        placeholder="CPF"
                         error={!!error?.message}
                         {...field}
                         onChange={(e) => {
-                          const formattedValue = formatCellphone(e.target.value)
+                          const formattedValue = formatCPF(e.target.value)
                           field.onChange(formattedValue)
                         }}
                       />
@@ -211,56 +235,32 @@ export const SingUpForm: React.FC<SingUpFormType> = ({ setTab }) => {
                   </FormItem>
                 )}
               />
-
-              <div className="flex items-center gap-4 w-full">
-                <FormField
-                  control={form.control}
-                  name="cpf"
-                  render={({ field, fieldState: { error } }) => (
-                    <FormItem className="w-full">
-                      <FormControl>
-                        <CustomInput
-                          id="cpf"
-                          label="CPF"
-                          placeholder="CPF"
-                          error={!!error?.message}
-                          {...field}
-                          onChange={(e) => {
-                            const formattedValue = formatCPF(e.target.value)
-                            field.onChange(formattedValue)
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="crp"
-                  render={({ field, fieldState: { error } }) => (
-                    <FormItem className="w-full">
-                      <FormControl>
-                        <CustomInput
-                          id="crp"
-                          label="CRP"
-                          placeholder="CRP"
-                          error={!!error?.message}
-                          {...field}
-                          onChange={(e) => {
-                            const formattedValue = formatCRP(e.target.value)
-                            field.onChange(formattedValue)
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name="crp"
+                render={({ field, fieldState: { error } }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <CustomInput
+                        id="crp"
+                        label="CRP"
+                        placeholder="CRP"
+                        error={!!error?.message}
+                        {...field}
+                        onChange={(e) => {
+                          const formattedValue = formatCRP(e.target.value)
+                          field.onChange(formattedValue)
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-          )}
-          {currentPage === FormSteps.ACCOUNT_INFO && (
+          </div>
+        )}
+        {currentPage === FormSteps.ACCOUNT_INFO && (
           <div className="flex flex-col items-center gap-4 w-full">
             <FormField
               control={form.control}
@@ -319,38 +319,43 @@ export const SingUpForm: React.FC<SingUpFormType> = ({ setTab }) => {
               )}
             />
           </div>
-          )}
+        )}
 
-          <div className="flex flex-col gap-4 w-full">
-            {currentPage === FormSteps.PERSONAL_INFO && (
+        <div className="flex flex-col gap-4 w-full">
+          {currentPage === FormSteps.PERSONAL_INFO && (
+            <Button
+              // className="text-violet-600"
+              variant={'secondary'}
+              type="button"
+              onClick={() => setCurrentPage(FormSteps.ACCOUNT_INFO)}
+              disabled={
+                !form.watch('name') ||
+                !form.watch('cellphone') ||
+                !form.watch('cpf') ||
+                !form.watch('crp')
+              }
+            >
+              Próximo
+              <ArrowRight className="w-4 h-4 text-violet-600" />
+            </Button>
+          )}
+          {currentPage === FormSteps.ACCOUNT_INFO && (
+            <div className="flex items-center gap-4 w-full">
               <Button
-                // className="text-violet-600"
-                variant={'secondary'}
+                className="w-full"
                 type="button"
-                onClick={() => setCurrentPage(FormSteps.ACCOUNT_INFO)}
-                disabled={!form.watch('name') || !form.watch('cellphone') || !form.watch('cpf') || !form.watch('crp')}
+                variant={'secondary'}
+                onClick={() => setCurrentPage(FormSteps.PERSONAL_INFO)}
               >
-                Próximo
-                <ArrowRight className="w-4 h-4 text-violet-600" />
+                <ArrowLeft className="w-4 h-4 text-violet-600" />
+                Voltar
               </Button>
-            )}
-            {currentPage === FormSteps.ACCOUNT_INFO && (
-              <div className='flex items-center gap-4 w-full'>
-                <Button
-                  className="w-full"
-                  type="button"
-                  variant={'secondary'}
-                  onClick={() => setCurrentPage(FormSteps.PERSONAL_INFO)}
-                  >
-                    <ArrowLeft className='w-4 h-4 text-violet-600'/>
-                  Voltar
-                </Button>
-                <Button className="w-full" type="submit" disabled={isLoading}>
-                  {isLoading ? <LoadingSpinner /> : 'Registrar'}
-                </Button>
-              </div>
-            )}
-          </div>
+              <Button className="w-full" type="submit" disabled={isLoading}>
+                {isLoading ? <LoadingSpinner /> : 'Registrar'}
+              </Button>
+            </div>
+          )}
+        </div>
       </form>
     </Form>
   )

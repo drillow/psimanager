@@ -1,4 +1,4 @@
-import {  Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import { CustomInput } from '../CustomInput'
 import { Button } from '../ui/button'
 import { Label } from '../ui/label'
@@ -15,17 +15,16 @@ import { useChangePassword } from '@/service/auth/hooks'
 import { LoadingSpinner } from '../Spinner'
 import { useToast } from '@/hooks/use-toast'
 
-const formSchema = z
-  .object({
-    oldPassword: z.string().min(8, { message: 'Mínimo 8 caracteres' }),
-    newPassword: z
+const formSchema = z.object({
+  oldPassword: z.string().min(8, { message: 'Mínimo 8 caracteres' }),
+  newPassword: z
     .string({ message: 'Senha obrigatória' })
-    .min(8, { message: 'Mínimo 8 caracteres' }) 
+    .min(8, { message: 'Mínimo 8 caracteres' })
     .regex(/[A-Z]/, { message: 'Deve conter pelo menos uma letra maiúscula' })
     .regex(/[!@#$%^&*(),.?":{}|<>]/, {
       message: 'Deve conter pelo menos um caractere especial',
-    })
-  })
+    }),
+})
 
 type FormProps = z.infer<typeof formSchema>
 
@@ -37,14 +36,14 @@ export const UserInfoForm = () => {
   const form = useForm<FormProps>({
     resolver: zodResolver(formSchema),
   })
-  
+
   const { execute, isLoading } = useChangePassword(user.id, () => {
     toast({
       title: 'Error ao alterar a senha',
-      description: 'Ocorreu um error ao alterar a senha, tente novamente em alguns minutos.',
+      description:
+        'Ocorreu um error ao alterar a senha, tente novamente em alguns minutos.',
     })
   })
-
 
   const handleSubmitForm = async (data: FormProps) => await execute(data)
 
@@ -82,20 +81,18 @@ export const UserInfoForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmitForm)} className='w-full'>
+      <form onSubmit={form.handleSubmit(handleSubmitForm)} className="w-full">
         <div className="w-full p-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col">
-              <h2 className="font-bold text-black text-lg">
-                Dados da conta
-              </h2>
+              <h2 className="font-bold text-black text-lg">Dados da conta</h2>
               <p className="text-xs text-zinc-500">
                 Gerencie dados de acesso e suas contas contectadas
               </p>
             </div>
 
             {/* <Separator orientation="horizontal" /> */}
-            <div className='border border-b border-dashed border-b-zinc-200' />
+            <div className="border border-b border-dashed border-b-zinc-200" />
 
             <div className="flex flex-col gap-4 pb-4">
               <div className="flex flex-col gap-6">
@@ -123,7 +120,6 @@ export const UserInfoForm = () => {
                             {...field}
                           />
                         </FormControl>
-                        
                       </FormItem>
                     )}
                   />
@@ -142,8 +138,8 @@ export const UserInfoForm = () => {
                             {...field}
                           />
                         </FormControl>
-                        <div className='pt-1'>
-                          <PasswordRequirements password={field.value || ''}/>
+                        <div className="pt-1">
+                          <PasswordRequirements password={field.value || ''} />
                         </div>
                       </FormItem>
                     )}
@@ -153,7 +149,7 @@ export const UserInfoForm = () => {
             </div>
 
             {/* <Separator className='border-dashed'/> */}
-            <div className='border border-b border-dashed border-b-zinc-200' />
+            <div className="border border-b border-dashed border-b-zinc-200" />
 
             <div className="flex flex-col gap-4 pb-4 pt-2">
               <div className="flex flex-col">
@@ -173,15 +169,17 @@ export const UserInfoForm = () => {
                       Conta Google
                     </span>
                     <span className="font-normal text-xs text-zinc-500">
-                      Conecte sua conta para gerar automaticamente
-                      salas de video-chamadas.
+                      Conecte sua conta para gerar automaticamente salas de
+                      video-chamadas.
                     </span>
                   </div>
                 </div>
                 <Button
                   type="button"
                   variant={'outline'}
-                  onClick={connectedGoogle ? () => null : () => handleGoogleLogin()}
+                  onClick={
+                    connectedGoogle ? () => null : () => handleGoogleLogin()
+                  }
                   className="border-green-500 text-green-500 hover:text-green-500 hover:bg-transparent hover:cursor-default"
                 >
                   {connectedGoogle ? 'Conectado' : 'Conectar'}

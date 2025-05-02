@@ -60,10 +60,7 @@ export const DashboardCalendar = () => {
                       id: consult.id,
                       name: consult.patientName,
                       time: format(
-                        toZonedTime(
-                          parseISO(consult?.date),
-                          '',
-                        ),
+                        toZonedTime(parseISO(consult?.date), ''),
                         'HH:mm',
                       ),
                       isOnline: consult.type === 'ONLINE',
@@ -112,10 +109,7 @@ export const DashboardCalendar = () => {
                       id: consult.id,
                       name: consult.patientName,
                       time: format(
-                        toZonedTime(
-                          parseISO(consult?.date),
-                          '',
-                        ),
+                        toZonedTime(parseISO(consult?.date), ''),
                         'HH:mm',
                       ),
                       isOnline: consult.type === 'ONLINE',

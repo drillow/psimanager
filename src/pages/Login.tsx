@@ -31,8 +31,13 @@ export const Login: React.FC = () => {
               <h1 className="font-bold text-3xl text-violet-600">Drillow</h1>
             </div>
           </div>
-          <Tabs defaultValue={AuthTabs.SINGIN} className='w-[400px] flex flex-col gap-4' onValueChange={(value) => setTab(value as AuthTabs)} value={tab} >
-            <TabsList className='grid w-full grid-cols-2'>
+          <Tabs
+            defaultValue={AuthTabs.SINGIN}
+            className="w-[400px] flex flex-col gap-4"
+            onValueChange={(value) => setTab(value as AuthTabs)}
+            value={tab}
+          >
+            <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value={AuthTabs.SINGIN}>Entrar</TabsTrigger>
               <TabsTrigger value={AuthTabs.SINGUP}>Criar conta</TabsTrigger>
             </TabsList>
@@ -40,15 +45,17 @@ export const Login: React.FC = () => {
               {recoveryPasswordForm ? (
                 <RecoveryForm onBackToLogin={handleShowRecoveryPasswordForm} />
               ) : (
-                <SignInForm onRecoveryPassword={handleShowRecoveryPasswordForm} />
+                <SignInForm
+                  onRecoveryPassword={handleShowRecoveryPasswordForm}
+                />
               )}
             </TabsContent>
             <TabsContent value={AuthTabs.SINGUP}>
-              <SingUpForm setTab={setTab}/>
+              <SingUpForm setTab={setTab} />
             </TabsContent>
           </Tabs>
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center z-50">
-            <p className='text-sm text-zinc-500'>©2025 Drillow, Inc.</p>
+            <p className="text-sm text-zinc-500">©2025 Drillow, Inc.</p>
           </div>
         </div>
       </div>

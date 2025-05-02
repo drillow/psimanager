@@ -58,7 +58,7 @@ const router = createBrowserRouter([
       {
         path: 'metrics',
         element: <Metrics />,
-      }
+      },
     ],
   },
 ])

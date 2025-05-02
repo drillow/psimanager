@@ -24,7 +24,7 @@ export const Card: React.FC<CardProps> = ({ patient, isCompleted = false }) => {
 
   const { execute, isLoading } = useToggleConsultStatus(() => {
     queryClient.invalidateQueries({
-      queryKey: QueryKeys.CONSULTS.NEXT_TREE_DAYS
+      queryKey: QueryKeys.CONSULTS.NEXT_TREE_DAYS,
     })
   })
 

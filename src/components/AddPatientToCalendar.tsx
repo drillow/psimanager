@@ -36,7 +36,10 @@ import { useAddNewConsult } from '@/service/consults/hooks'
 import { useQueryClient } from '@tanstack/react-query'
 import { QueryKeys } from '@/utils/queryKeys'
 import React from 'react'
-import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
+import {
+  SubscriptionStatus,
+  useSubscriptionStatus,
+} from '@/context/subscriptionStatus'
 import { cx } from 'class-variance-authority'
 import { CurrencyInput } from './CurrencyInput'
 import { DateTimePicker } from './TesteCalendar'
@@ -146,8 +149,8 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
     const rule = new RRule(rrulestr(rrule.toString()).origOptions)
     const allDates = rule.all()
     console.log(allDates)
-    allDates.map(date => {
-      console.log(toZonedTime(date, 'UTC'))
+    allDates.map((date) => {
+      return console.log(toZonedTime(date, 'UTC'))
     })
     // console.log(allDates.map(date => {}))
 
@@ -170,7 +173,6 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
             </DialogHeader>
             {/* <Form {...form}> */}
             <div className="grid gap-6 py-2">
-              
               <FormField
                 control={form.control}
                 name="patientName"
@@ -187,17 +189,19 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                     <FormMessage />
                   </FormItem>
                 )}
-              />    
-             
-              <div className='grid grid-cols-2 gap-4'>
+              />
+
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="startDate.date"
                   render={({ field: { value, onChange } }) => (
                     <FormItem>
                       <FormControl>
-                        <div className='flex flex-col items-start gap-2'>
-                          <Label htmlFor={"currency"} className="text-right">Data da consulta</Label>
+                        <div className="flex flex-col items-start gap-2">
+                          <Label htmlFor={'currency'} className="text-right">
+                            Data da consulta
+                          </Label>
                           <DateTimePicker
                             date={value}
                             setDate={(date) => onChange(date)}
@@ -215,7 +219,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                     <FormItem className="w-full">
                       <FormControl>
                         <CurrencyInput
-                          currencyLabel='R$'
+                          currencyLabel="R$"
                           value={value}
                           onChange={onChange}
                         />
@@ -223,7 +227,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                       <FormMessage />
                     </FormItem>
                   )}
-                />   
+                />
               </div>
 
               <FormField
@@ -234,24 +238,52 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                     <Label htmlFor="username" className="text-right">
                       Tipo de consulta
                     </Label>
-                    <div className='flex items-center gap-4'>
-                      <label htmlFor="IN_PERSON" className={cx("flex items-center gap-2 p-2 rounded-lg cursor-pointer", field.value === "IN_PERSON" ? 'border border-zinc-300' : 'bg-zinc-100')}>
+                    <div className="flex items-center gap-4">
+                      <label
+                        htmlFor="IN_PERSON"
+                        className={cx(
+                          'flex items-center gap-2 p-2 rounded-lg cursor-pointer',
+                          field.value === 'IN_PERSON'
+                            ? 'border border-zinc-300'
+                            : 'bg-zinc-100',
+                        )}
+                      >
                         <Checkbox
-                          id='IN_PERSON'
+                          id="IN_PERSON"
                           title="Presencial"
                           checked={field.value === 'IN_PERSON'}
                           onCheckedChange={() => field.onChange('IN_PERSON')}
-                          className={cx('bg-white', field.value === 'IN_PERSON' ? 'border-violet-700' : 'border-zinc-300')}
+                          className={cx(
+                            'bg-white',
+                            field.value === 'IN_PERSON'
+                              ? 'border-violet-700'
+                              : 'border-zinc-300',
+                          )}
                         />
-                        <span className="text-sm text-zinc-600">Presencial</span>
+                        <span className="text-sm text-zinc-600">
+                          Presencial
+                        </span>
                       </label>
-                      <label htmlFor="ONLINE" className={cx("flex items-center gap-2 p-2 rounded-lg cursor-pointer", field.value === "ONLINE" ? 'border border-zinc-300' : 'bg-zinc-100')}>
+                      <label
+                        htmlFor="ONLINE"
+                        className={cx(
+                          'flex items-center gap-2 p-2 rounded-lg cursor-pointer',
+                          field.value === 'ONLINE'
+                            ? 'border border-zinc-300'
+                            : 'bg-zinc-100',
+                        )}
+                      >
                         <Checkbox
-                          id='ONLINE'
+                          id="ONLINE"
                           title="Online"
                           checked={field.value === 'ONLINE'}
                           onCheckedChange={() => field.onChange('ONLINE')}
-                          className={cx('bg-white', field.value === 'ONLINE' ? 'border-violet-700' : 'border-zinc-300')}
+                          className={cx(
+                            'bg-white',
+                            field.value === 'ONLINE'
+                              ? 'border-violet-700'
+                              : 'border-zinc-300',
+                          )}
                         />
                         <span className="text-sm text-zinc-600">Online</span>
                       </label>
@@ -311,21 +343,21 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                 />
               )}
 
-              {status === SubscriptionStatus.ACTIVE && (                
+              {status === SubscriptionStatus.ACTIVE && (
                 <FormField
-                control={form.control}
-                name="repeat"
-                render={({ field }) => (
-                  <div className="flex flex-col items-start gap-2">
-                    <Label htmlFor="" className="text-right">
-                      Repetir consulta
-                    </Label>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
+                  control={form.control}
+                  name="repeat"
+                  render={({ field }) => (
+                    <div className="flex flex-col items-start gap-2">
+                      <Label htmlFor="" className="text-right">
+                        Repetir consulta
+                      </Label>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
                       />
-                  </div>
-                )}
+                    </div>
+                  )}
                 />
               )}
 

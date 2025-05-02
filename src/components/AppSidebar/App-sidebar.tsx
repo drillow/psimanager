@@ -135,13 +135,14 @@ export function AppSidebar() {
                         </span>
                       </div>
                     ) : (
-                      <Link to={item.url} className={
-                        cx(
-                          'transition-colors ease-in-out hover:bg-violet-50 hover:text-violet-600', 
-                          location.pathname === item.url && 'text-violet-600'
+                      <Link
+                        to={item.url}
+                        className={cx(
+                          'transition-colors ease-in-out hover:bg-violet-50 hover:text-violet-600',
+                          location.pathname === item.url && 'text-violet-600',
                         )}
                       >
-                        <item.icon/>
+                        <item.icon />
                         <span className={cx(`flex items-center gap-2`)}>
                           {item.title}
                           {item.asSoon && (
@@ -192,9 +193,9 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        {open && status !=='ACTIVE' && <PlanWidget />}
+        {open && status !== 'ACTIVE' && <PlanWidget />}
         <Settings>
-          <SidebarMenuButton className='hover:text-violet-600 transition-colors ease-in-out'>
+          <SidebarMenuButton className="hover:text-violet-600 transition-colors ease-in-out">
             <SettingsIcon />
             <span>Configurações</span>
           </SidebarMenuButton>

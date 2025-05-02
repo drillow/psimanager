@@ -68,7 +68,10 @@ export const SignInForm: React.FC<SignInFormType> = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(handleLogin)} className="w-full flex items-center justify-center">
+      <form
+        onSubmit={handleSubmit(handleLogin)}
+        className="w-full flex items-center justify-center"
+      >
         <div className="flex flex-col items-center justify-center gap-4 w-[400px]">
           {/* <div className="flex flex-col items-center justify-center gap-2">
             <div className="flex items-center gap-2">

@@ -1,25 +1,33 @@
-import { useForm } from "react-hook-form"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form"
-import { Label } from "./ui/label"
-import { Button } from "./ui/button"
-import { format, formatISO, parseISO } from "date-fns"
-import { Link2, MapPin } from "lucide-react"
-import { Checkbox } from "./ui/checkbox"
-import { Input } from "./ui/input"
-import { CustomInput } from "./CustomInput"
-import { useEffect, useState } from "react"
-import { useUpdateConsult } from "@/service/consults/hooks"
-import { LoadingSpinner } from "./Spinner"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useQueryClient } from "@tanstack/react-query"
-import { QueryKeys } from "@/utils/queryKeys"
-import { useToast } from "@/hooks/use-toast"
-import { cx } from "class-variance-authority"
-import { DateTimePicker } from "./TesteCalendar"
-import { CurrencyInput } from "./CurrencyInput"
-import { toZonedTime } from "date-fns-tz"
+import { useForm } from 'react-hook-form'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog'
+import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
+import { Label } from './ui/label'
+import { Button } from './ui/button'
+import { format, formatISO, parseISO } from 'date-fns'
+import { Link2, MapPin } from 'lucide-react'
+import { Checkbox } from './ui/checkbox'
+import { Input } from './ui/input'
+import { CustomInput } from './CustomInput'
+import { useEffect, useState } from 'react'
+import { useUpdateConsult } from '@/service/consults/hooks'
+import { LoadingSpinner } from './Spinner'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { QueryKeys } from '@/utils/queryKeys'
+import { useToast } from '@/hooks/use-toast'
+import { cx } from 'class-variance-authority'
+import { DateTimePicker } from './TesteCalendar'
+import { CurrencyInput } from './CurrencyInput'
+import { toZonedTime } from 'date-fns-tz'
 
 interface PatientCardProps {
   patientName: string
@@ -35,7 +43,7 @@ interface PatientCardProps {
 
 type EditPatientModalProps = {
   isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void 
+  setIsOpen: (isOpen: boolean) => void
   consultData: PatientCardProps
 }
 
@@ -51,7 +59,11 @@ const formSchema = z.object({
 
 type FormProps = z.infer<typeof formSchema>
 
-export const EditConsultModal: React.FC<EditPatientModalProps> = ({ isOpen, setIsOpen, consultData }) => {
+export const EditConsultModal: React.FC<EditPatientModalProps> = ({
+  isOpen,
+  setIsOpen,
+  consultData,
+}) => {
   const [changeAll, setChangeAll] = useState(false)
   const { toast } = useToast()
   const queryClient = useQueryClient()
@@ -61,7 +73,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({ isOpen, setI
   })
 
   const { execute, isLoading, isError } = useUpdateConsult(() => {
-     queryClient.invalidateQueries({
+    queryClient.invalidateQueries({
       queryKey: QueryKeys.CONSULTS.DEFAULT,
     })
     setIsOpen(false)
@@ -72,7 +84,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({ isOpen, setI
       ...data,
       type: data.consultType,
       startDate: formatISO(data.startDate.date),
-      updateAllNextEvents: changeAll
+      updateAllNextEvents: changeAll,
     }
 
     await execute({ consultId: consultData.id, consultPayload: payload })
@@ -100,7 +112,11 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({ isOpen, setI
             <DialogHeader>
               <DialogTitle>Editar consulta</DialogTitle>
               <DialogDescription>
-                Alterar dados da consulta de {consultData.patientName} no dia {format(toZonedTime(parseISO(consultData.date), 'UTC'), "dd/MM/yyyy 'às' HH:mm")}
+                Alterar dados da consulta de {consultData.patientName} no dia{' '}
+                {format(
+                  toZonedTime(parseISO(consultData.date), 'UTC'),
+                  "dd/MM/yyyy 'às' HH:mm",
+                )}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-6 py-2">
@@ -119,7 +135,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({ isOpen, setI
                   render={({ field: { value, onChange } }) => (
                     <FormItem>
                       <FormControl>
-                        <div className='flex flex-col items-start gap-2'>
+                        <div className="flex flex-col items-start gap-2">
                           <Label className="text-right">Data da consulta</Label>
                           <DateTimePicker
                             date={value}
@@ -138,7 +154,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({ isOpen, setI
                     <FormItem className="w-full">
                       <FormControl>
                         <CurrencyInput
-                          currencyLabel='R$'
+                          currencyLabel="R$"
                           value={value}
                           onChange={onChange}
                         />
@@ -146,7 +162,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({ isOpen, setI
                       <FormMessage />
                     </FormItem>
                   )}
-                />   
+                />
               </div>
 
               <FormField
@@ -158,24 +174,52 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({ isOpen, setI
                     <Label htmlFor="username" className="text-right">
                       Tipo de consulta
                     </Label>
-                    <div className='flex items-center gap-4'>
-                      <label htmlFor="IN_PERSON" className={cx("flex items-center gap-2 p-2 rounded-lg cursor-pointer", field.value === "IN_PERSON" ? 'border border-zinc-300' : 'bg-zinc-100')}>
+                    <div className="flex items-center gap-4">
+                      <label
+                        htmlFor="IN_PERSON"
+                        className={cx(
+                          'flex items-center gap-2 p-2 rounded-lg cursor-pointer',
+                          field.value === 'IN_PERSON'
+                            ? 'border border-zinc-300'
+                            : 'bg-zinc-100',
+                        )}
+                      >
                         <Checkbox
-                          id='IN_PERSON'
+                          id="IN_PERSON"
                           title="Presencial"
                           checked={field.value === 'IN_PERSON'}
                           onCheckedChange={() => field.onChange('IN_PERSON')}
-                          className={cx('bg-white', field.value === 'IN_PERSON' ? 'border-violet-700' : 'border-zinc-300')}
+                          className={cx(
+                            'bg-white',
+                            field.value === 'IN_PERSON'
+                              ? 'border-violet-700'
+                              : 'border-zinc-300',
+                          )}
                         />
-                        <span className="text-sm text-zinc-600">Presencial</span>
+                        <span className="text-sm text-zinc-600">
+                          Presencial
+                        </span>
                       </label>
-                      <label htmlFor="ONLINE" className={cx("flex items-center gap-2 p-2 rounded-lg cursor-pointer", field.value === "ONLINE" ? 'border border-zinc-300' : 'bg-zinc-100')}>
+                      <label
+                        htmlFor="ONLINE"
+                        className={cx(
+                          'flex items-center gap-2 p-2 rounded-lg cursor-pointer',
+                          field.value === 'ONLINE'
+                            ? 'border border-zinc-300'
+                            : 'bg-zinc-100',
+                        )}
+                      >
                         <Checkbox
-                          id='ONLINE'
+                          id="ONLINE"
                           title="Online"
                           checked={field.value === 'ONLINE'}
                           onCheckedChange={() => field.onChange('ONLINE')}
-                          className={cx('bg-white', field.value === 'ONLINE' ? 'border-violet-700' : 'border-zinc-300')}
+                          className={cx(
+                            'bg-white',
+                            field.value === 'ONLINE'
+                              ? 'border-violet-700'
+                              : 'border-zinc-300',
+                          )}
                         />
                         <span className="text-sm text-zinc-600">Online</span>
                       </label>
@@ -243,12 +287,20 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({ isOpen, setI
                   checked={changeAll}
                   onCheckedChange={() => setChangeAll(!changeAll)}
                 />
-                <label className="text-sm text-zinc-600" htmlFor="changeAll">Quero alterar todas as próximas consultas desse paciente também.</label>
+                <label className="text-sm text-zinc-600" htmlFor="changeAll">
+                  Quero alterar todas as próximas consultas desse paciente
+                  também.
+                </label>
               </div>
             </div>
             <DialogFooter>
               <DialogTrigger asChild>
-                <Button variant={'outline'} className="w-3/12" type="button" disabled={isLoading}>
+                <Button
+                  variant={'outline'}
+                  className="w-3/12"
+                  type="button"
+                  disabled={isLoading}
+                >
                   Cancelar
                 </Button>
               </DialogTrigger>

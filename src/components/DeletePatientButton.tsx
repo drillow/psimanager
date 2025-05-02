@@ -1,4 +1,3 @@
-
 import { Button } from './ui/button'
 import {
   DialogHeader,
@@ -17,11 +16,15 @@ import { QueryKeys } from '@/utils/queryKeys'
 
 interface DeletePatientProps {
   patientId: string
-  open: boolean,
+  open: boolean
   setOpen: () => void
 }
 
-export const DeletePatient: React.FC<DeletePatientProps> = ({ patientId, open, setOpen }) => {
+export const DeletePatient: React.FC<DeletePatientProps> = ({
+  patientId,
+  open,
+  setOpen,
+}) => {
   // const [open, setOpen] = useState(false)
   const { user } = useAuth()
 
@@ -38,9 +41,9 @@ export const DeletePatient: React.FC<DeletePatientProps> = ({ patientId, open, s
   )
 
   return (
-    <Dialog open={open} onOpenChange={setOpen} modal key={"remove-modal"}>
+    <Dialog open={open} onOpenChange={setOpen} modal key={'remove-modal'}>
       <DialogTrigger asChild>
-        <button type='button' className='p-1 border border-zinc-300 rounded-md'>
+        <button type="button" className="p-1 border border-zinc-300 rounded-md">
           <Trash className=" w-4 h-4" />
         </button>
       </DialogTrigger>

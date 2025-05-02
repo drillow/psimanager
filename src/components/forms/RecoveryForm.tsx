@@ -55,7 +55,6 @@ export const RecoveryForm: React.FC<RecoveryFormType> = ({ onBackToLogin }) => {
     <Form {...form}>
       <form onSubmit={handleSubmit(handleRecoveryPassword)} className="">
         <div className="flex flex-col items-center justify-center gap-4 w-full">
-
           <FormField
             control={control}
             name="email"
