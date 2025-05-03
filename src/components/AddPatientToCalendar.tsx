@@ -145,13 +145,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
       ...(dataPayload.place && { place: dataPayload.place }),
       ...(dataPayload.url && { url: dataPayload.url }),
     }
-    console.log(rrule.toString())
-    const rule = new RRule(rrulestr(rrule.toString()).origOptions)
-    const allDates = rule.all()
-    console.log(allDates)
-    allDates.map((date) => {
-      return console.log(toZonedTime(date, 'UTC'))
-    })
+
     // console.log(allDates.map(date => {}))
 
     await execute(payload)

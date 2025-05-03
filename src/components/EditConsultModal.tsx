@@ -99,8 +99,6 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
     }
   }, [isError])
 
-  console.log(consultData)
-
   return (
     <Form {...form}>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
