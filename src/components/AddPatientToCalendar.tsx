@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from './ui/select'
 import { useForm } from 'react-hook-form'
-import { RRule, rrulestr, Weekday } from 'rrule'
+import { RRule, Weekday } from 'rrule'
 
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -43,7 +43,6 @@ import {
 import { cx } from 'class-variance-authority'
 import { CurrencyInput } from './CurrencyInput'
 import { DateTimePicker } from './TesteCalendar'
-import { toZonedTime } from 'date-fns-tz'
 
 const formSchema = z.object({
   patientName: z.string({ message: 'Selecione um paciente' }).min(2).max(50),
