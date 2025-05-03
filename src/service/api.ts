@@ -8,7 +8,7 @@ const accessTokenCookie = cookies.get(ACCESS_TOKEN_KEY)
 
 const api = axios.create({
   // baseURL: `http://localhost:8080`,
-  baseURL: 'https://api-core.up.railway.app',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
     [ACCESS_TOKEN_KEY]: accessTokenCookie,

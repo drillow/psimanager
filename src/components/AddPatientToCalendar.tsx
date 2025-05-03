@@ -116,8 +116,6 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
     const hour = dataPayload.startDate.date.getHours()
     const minutes = dataPayload.startDate.date.getMinutes()
 
-    console.log(new Date(Date.UTC(year, month, day, hour, minutes, 0)))
-
     const rrule = new RRule({
       dtstart: new Date(Date.UTC(year, month, day, hour, minutes, 0)),
       tzid: 'America/Sao_Paulo',
@@ -137,7 +135,9 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
 
     const payload = {
       patientId: dataPayload.patientName,
-      startDate: formatISO(toZonedTime(dataPayload.startDate.date, 'UTC')),
+      startDate: formatISO(
+        new Date(Date.UTC(year, month, day, hour, minutes, 0)),
+      ),
       type: dataPayload.consultType,
       userId: user.id,
       consultValue: dataPayload.consultValue,
