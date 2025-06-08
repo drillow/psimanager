@@ -18,8 +18,7 @@ export const PlanWidget = () => {
           Plano Gratuito
         </h2>
         <span className="text-xs text-zinc-400">
-          Seu plano <strong>gratuíto</strong> permite adicionar até{' '}
-          <strong>5</strong> pacientes.
+          Seu plano <strong>gratuíto</strong> permite adicionar até <strong>5</strong> pacientes.
         </span>
       </div>
       {!isLoading && <Progress value={(data?.length * 100) / 5} />}
@@ -28,7 +27,11 @@ export const PlanWidget = () => {
         <span className="text-xs text-zinc-400">5</span>
       </div>
 
-      <Button disabled={isLoadingSub} onClick={() => createSubscriptionStripeCheckout(user.id)} className='mt-2 flex items-center gap-2'>
+      <Button
+        disabled={isLoadingSub}
+        onClick={() => createSubscriptionStripeCheckout(user.id)}
+        className="mt-2 flex items-center gap-2"
+      >
         <Sparkles />
         Assinar
       </Button>

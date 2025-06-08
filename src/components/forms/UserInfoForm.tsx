@@ -40,8 +40,7 @@ export const UserInfoForm = () => {
   const { execute, isLoading } = useChangePassword(user.id, () => {
     toast({
       title: 'Error ao alterar a senha',
-      description:
-        'Ocorreu um error ao alterar a senha, tente novamente em alguns minutos.',
+      description: 'Ocorreu um error ao alterar a senha, tente novamente em alguns minutos.',
     })
   })
 
@@ -97,12 +96,7 @@ export const UserInfoForm = () => {
             <div className="flex flex-col gap-4 pb-4">
               <div className="flex flex-col gap-6">
                 <div className="grid grid-cols-2 gap-4">
-                  <CustomInput
-                    leftIcon={Mail}
-                    label="Email"
-                    disabled
-                    value={user.email}
-                  />
+                  <CustomInput leftIcon={Mail} label="Email" disabled value={user.email} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
@@ -154,9 +148,7 @@ export const UserInfoForm = () => {
             <div className="flex flex-col gap-4 pb-4 pt-2">
               <div className="flex flex-col">
                 <Label className="text-base">Contas integradas</Label>
-                <span className="text-xs text-zinc-500">
-                  Conecte sua conta a outros serviços.
-                </span>
+                <span className="text-xs text-zinc-500">Conecte sua conta a outros serviços.</span>
               </div>
 
               <div className="border border-zinc-300 rounded-md p-2 bg-white flex items-center justify-between">
@@ -165,21 +157,16 @@ export const UserInfoForm = () => {
                     <img src={GoogleLogo} alt="Google Logo" />
                   </div>
                   <div className="flex flex-col items-start">
-                    <span className="text-sm font-semibold text-black">
-                      Conta Google
-                    </span>
+                    <span className="text-sm font-semibold text-black">Conta Google</span>
                     <span className="font-normal text-xs text-zinc-500">
-                      Conecte sua conta para gerar automaticamente salas de
-                      video-chamadas.
+                      Conecte sua conta para gerar automaticamente salas de video-chamadas.
                     </span>
                   </div>
                 </div>
                 <Button
                   type="button"
                   variant={'outline'}
-                  onClick={
-                    connectedGoogle ? () => null : () => handleGoogleLogin()
-                  }
+                  onClick={connectedGoogle ? () => null : () => handleGoogleLogin()}
                   className="border-green-500 text-green-500 hover:text-green-500 hover:bg-transparent hover:cursor-default"
                 >
                   {connectedGoogle ? 'Conectado' : 'Conectar'}

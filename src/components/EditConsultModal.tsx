@@ -103,27 +103,17 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
     <Form {...form}>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-[525px]">
-          <form
-            onSubmit={form.handleSubmit(handleUpdateConsult)}
-            className="flex flex-col gap-4"
-          >
+          <form onSubmit={form.handleSubmit(handleUpdateConsult)} className="flex flex-col gap-4">
             <DialogHeader>
               <DialogTitle>Editar consulta</DialogTitle>
               <DialogDescription>
                 Alterar dados da consulta de {consultData.patientName} no dia{' '}
-                {format(
-                  toZonedTime(parseISO(consultData.date), 'UTC'),
-                  "dd/MM/yyyy 'às' HH:mm",
-                )}
+                {format(toZonedTime(parseISO(consultData.date), 'UTC'), "dd/MM/yyyy 'às' HH:mm")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-6 py-2">
               <div className="flex flex-col items-start gap-2">
-                <CustomInput
-                  label="Paciente"
-                  value={consultData.patientName}
-                  disabled
-                />
+                <CustomInput label="Paciente" value={consultData.patientName} disabled />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
@@ -135,10 +125,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
                       <FormControl>
                         <div className="flex flex-col items-start gap-2">
                           <Label className="text-right">Data da consulta</Label>
-                          <DateTimePicker
-                            date={value}
-                            setDate={(date) => onChange(date)}
-                          />
+                          <DateTimePicker date={value} setDate={(date) => onChange(date)} />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -151,11 +138,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
                   render={({ field: { value, onChange } }) => (
                     <FormItem className="w-full">
                       <FormControl>
-                        <CurrencyInput
-                          currencyLabel="R$"
-                          value={value}
-                          onChange={onChange}
-                        />
+                        <CurrencyInput currencyLabel="R$" value={value} onChange={onChange} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -177,9 +160,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
                         htmlFor="IN_PERSON"
                         className={cx(
                           'flex items-center gap-2 p-2 rounded-lg cursor-pointer',
-                          field.value === 'IN_PERSON'
-                            ? 'border border-zinc-300'
-                            : 'bg-zinc-100',
+                          field.value === 'IN_PERSON' ? 'border border-zinc-300' : 'bg-zinc-100',
                         )}
                       >
                         <Checkbox
@@ -189,22 +170,16 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
                           onCheckedChange={() => field.onChange('IN_PERSON')}
                           className={cx(
                             'bg-white',
-                            field.value === 'IN_PERSON'
-                              ? 'border-violet-700'
-                              : 'border-zinc-300',
+                            field.value === 'IN_PERSON' ? 'border-violet-700' : 'border-zinc-300',
                           )}
                         />
-                        <span className="text-sm text-zinc-600">
-                          Presencial
-                        </span>
+                        <span className="text-sm text-zinc-600">Presencial</span>
                       </label>
                       <label
                         htmlFor="ONLINE"
                         className={cx(
                           'flex items-center gap-2 p-2 rounded-lg cursor-pointer',
-                          field.value === 'ONLINE'
-                            ? 'border border-zinc-300'
-                            : 'bg-zinc-100',
+                          field.value === 'ONLINE' ? 'border border-zinc-300' : 'bg-zinc-100',
                         )}
                       >
                         <Checkbox
@@ -214,9 +189,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
                           onCheckedChange={() => field.onChange('ONLINE')}
                           className={cx(
                             'bg-white',
-                            field.value === 'ONLINE'
-                              ? 'border-violet-700'
-                              : 'border-zinc-300',
+                            field.value === 'ONLINE' ? 'border-violet-700' : 'border-zinc-300',
                           )}
                         />
                         <span className="text-sm text-zinc-600">Online</span>
@@ -239,19 +212,12 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
 
                       <div className="relative w-full">
                         <Link2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-                        <Input
-                          type="url"
-                          placeholder="Link"
-                          className="pl-10"
-                          {...field}
-                        />
+                        <Input type="url" placeholder="Link" className="pl-10" {...field} />
                       </div>
                       <span className={'text-xs text-zinc-400'}>
-                        Com a conta do Google <strong>conectada</strong>, o link
-                        será gerado automaticamente ao salvar a consulta. Caso
-                        queira adicionar link de{' '}
-                        <strong>outra plataforma</strong> basta digitar no campo
-                        acima.
+                        Com a conta do Google <strong>conectada</strong>, o link será gerado
+                        automaticamente ao salvar a consulta. Caso queira adicionar link de{' '}
+                        <strong>outra plataforma</strong> basta digitar no campo acima.
                       </span>
                     </div>
                   )}
@@ -268,11 +234,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
                       </Label>
                       <div className="relative w-full">
                         <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-                        <Input
-                          placeholder="Clinica ou Endereço"
-                          className="pl-10"
-                          {...field}
-                        />
+                        <Input placeholder="Clinica ou Endereço" className="pl-10" {...field} />
                       </div>
                     </div>
                   )}
@@ -286,19 +248,13 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
                   onCheckedChange={() => setChangeAll(!changeAll)}
                 />
                 <label className="text-sm text-zinc-600" htmlFor="changeAll">
-                  Quero alterar todas as próximas consultas desse paciente
-                  também.
+                  Quero alterar todas as próximas consultas desse paciente também.
                 </label>
               </div>
             </div>
             <DialogFooter>
               <DialogTrigger asChild>
-                <Button
-                  variant={'outline'}
-                  className="w-3/12"
-                  type="button"
-                  disabled={isLoading}
-                >
+                <Button variant={'outline'} className="w-3/12" type="button" disabled={isLoading}>
                   Cancelar
                 </Button>
               </DialogTrigger>

@@ -1,6 +1,14 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { getPersonData, getProfileImage, Personal, removeProfilePhoto, saveProfileImage, updatePersonData, updateProfileImage } from "./service"
-import { QueryKeys } from "@/utils/queryKeys"
+import { useMutation, useQuery } from '@tanstack/react-query'
+import {
+  getPersonData,
+  getProfileImage,
+  Personal,
+  removeProfilePhoto,
+  saveProfileImage,
+  updatePersonData,
+  updateProfileImage,
+} from './service'
+import { QueryKeys } from '@/utils/queryKeys'
 
 export const useGetPersonData = (userId: string) => {
   const { data, isLoading, isError } = useQuery({
@@ -17,64 +25,64 @@ export const useGetPersonData = (userId: string) => {
 export const useUpdatePersonData = (userId: string, onSuccess: () => void) => {
   const { mutateAsync, isPending, isError } = useMutation({
     mutationFn: (data: Partial<Personal>) => updatePersonData(userId, data),
-    onSuccess
+    onSuccess,
   })
 
   return {
     execute: mutateAsync,
     isLoading: isPending,
-    isError
+    isError,
   }
 }
 
 export const useRemoveProfilePhoto = (userId: string, onSuccess: () => void) => {
   const { mutateAsync, isPending, isError } = useMutation({
     mutationFn: (fileName: string) => removeProfilePhoto(fileName, userId),
-    onSuccess
+    onSuccess,
   })
 
   return {
     execute: mutateAsync,
     isLoading: isPending,
-    isError
+    isError,
   }
 }
 
 export const useGetProfileImage = (userId: string) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: QueryKeys.USER.PROFILE_IMAGE,
-    queryFn: async () => await getProfileImage(userId)
+    queryFn: async () => await getProfileImage(userId),
   })
 
   return {
-    data, 
+    data,
     isLoading,
-    isError
+    isError,
   }
 }
 
 export const useUploadImage = (userId: string, onSuccess?: () => void) => {
   const { mutateAsync, isPending, isError } = useMutation({
     mutationFn: async (file: File) => await saveProfileImage(userId, file),
-    onSuccess
+    onSuccess,
   })
 
   return {
     execute: mutateAsync,
     isLoading: isPending,
-    isError
+    isError,
   }
 }
 
 export const useUpdateImage = (userId: string, onSuccess?: () => void) => {
   const { mutateAsync, isPending, isError } = useMutation({
     mutationFn: async (file: File) => await updateProfileImage(userId, file),
-    onSuccess
+    onSuccess,
   })
 
   return {
     execute: mutateAsync,
     isLoading: isPending,
-    isError
+    isError,
   }
 }

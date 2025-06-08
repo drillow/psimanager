@@ -36,16 +36,12 @@ export const EditPatientButton: React.FC<EditPatientButtonProps> = ({
 
   const queryClient = useQueryClient()
 
-  const { execute, isLoading } = useEditPatient(
-    user.id,
-    patientData.id!,
-    () => {
-      queryClient.invalidateQueries({
-        queryKey: QueryKeys.PATIENT.LIST,
-      })
-      setOpen(false)
-    },
-  )
+  const { execute, isLoading } = useEditPatient(user.id, patientData.id!, () => {
+    queryClient.invalidateQueries({
+      queryKey: QueryKeys.PATIENT.LIST,
+    })
+    setOpen(false)
+  })
 
   const form = useForm<PatientPayload>({
     defaultValues: {
@@ -73,15 +69,11 @@ export const EditPatientButton: React.FC<EditPatientButtonProps> = ({
       </DialogTrigger>
       <DialogContent className="max-w-[525px]">
         <Form {...form}>
-          <form
-            onSubmit={handleSubmit(handlePayload)}
-            className="grid gap-4 py-2"
-          >
+          <form onSubmit={handleSubmit(handlePayload)} className="grid gap-4 py-2">
             <DialogHeader>
               <DialogTitle>Adicionar paciente</DialogTitle>
               <DialogDescription>
-                Make changes to your profile here. Click save when you&apos;re
-                done.
+                Make changes to your profile here. Click save when you&apos;re done.
               </DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4">
@@ -162,9 +154,7 @@ export const EditPatientButton: React.FC<EditPatientButtonProps> = ({
                           error={!!error?.message}
                           {...field}
                           onChange={(e) => {
-                            const formattedValue = formatCellphone(
-                              e.target.value,
-                            )
+                            const formattedValue = formatCellphone(e.target.value)
                             field.onChange(formattedValue)
                           }}
                         />
@@ -192,9 +182,7 @@ export const EditPatientButton: React.FC<EditPatientButtonProps> = ({
                           {...field}
                           value={field.value || ''}
                           onChange={(e) => {
-                            const value = e.target.value
-                              ? Number(e.target.value)
-                              : 0
+                            const value = e.target.value ? Number(e.target.value) : 0
                             field.onChange(value)
                           }}
                         />

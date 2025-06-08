@@ -15,12 +15,8 @@ import { useToast } from '@/hooks/use-toast'
 import { Button } from '../ui/button'
 
 const formSchema = z.object({
-  email: z
-    .string({ message: 'E-mail obrigatório' })
-    .email({ message: 'E-mail inválido' }),
-  password: z
-    .string({ message: 'Senha obrigatória' })
-    .min(4, { message: 'Mínimo 4 caracteres' }),
+  email: z.string({ message: 'E-mail obrigatório' }).email({ message: 'E-mail inválido' }),
+  password: z.string({ message: 'Senha obrigatória' }).min(4, { message: 'Mínimo 4 caracteres' }),
 })
 
 type FormProps = z.infer<typeof formSchema>
@@ -29,9 +25,7 @@ type SignInFormType = {
   onRecoveryPassword: () => void
 }
 
-export const SignInForm: React.FC<SignInFormType> = ({
-  onRecoveryPassword,
-}) => {
+export const SignInForm: React.FC<SignInFormType> = ({ onRecoveryPassword }) => {
   const cookies = new Cookies()
   const { validateToken, signIn } = useAuth()
   const { execute, isLoading, isError } = useSignIn()

@@ -18,9 +18,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
     <div className="w-full flex items-center justify-between">
       <div className="flex items-baseline gap-2">
         {hasToggleSidebar && <SidebarTrigger />}
-        <h1 className="text-2xl font-semibold text-zinc-700 rounded">
-          {pageTitle}
-        </h1>
+        <h1 className="text-2xl font-semibold text-zinc-700 rounded">{pageTitle}</h1>
         {showCurrentDay && (
           <span className="text-xl font-semibold text-zinc-400 ml-2">
             {format(new Date(), "'Hoje é' eeee, dd 'de' MMMM 'de' yyyy")}

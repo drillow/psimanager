@@ -8,11 +8,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useState } from 'react'
 import { Label } from './ui/label'
 
@@ -23,12 +19,7 @@ interface ComboboxProps {
   isLoading: boolean
 }
 
-export function Combobox({
-  dataList,
-  selectedValue,
-  onSelectValue,
-  isLoading,
-}: ComboboxProps) {
+export function Combobox({ dataList, selectedValue, onSelectValue, isLoading }: ComboboxProps) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -65,9 +56,7 @@ export function Combobox({
                     key={item.value}
                     value={item.value}
                     onSelect={(currentValue) => {
-                      onSelectValue(
-                        currentValue === selectedValue ? '' : currentValue,
-                      )
+                      onSelectValue(currentValue === selectedValue ? '' : currentValue)
                       setOpen(false)
                     }}
                   >

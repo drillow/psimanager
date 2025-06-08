@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { useAuth } from '@/context/auth'
-import { Settings } from '@/pages/Settings'
+import { Settings } from '@/components/Settings'
 import { LogOut, SettingsIcon } from 'lucide-react'
 import { SidebarMenuButton } from './ui/sidebar'
 import { useGetProfileImage } from '@/service/person/hooks'
@@ -22,11 +22,13 @@ export const UserMenu = () => {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar className="w-8 h-8 rounded-md flex items-center justify-center">
-          {!isLoading && data?.profileUrl ? 
-            <AvatarImage src={data.profileUrl} alt={data?.profileUrl} /> 
-          :
-            <AvatarFallback className='h-16 w-16 rounded-xl'>{user.name.split(' ')[0].charAt(0)}</AvatarFallback>
-          }
+          {!isLoading && data?.profileUrl ? (
+            <AvatarImage src={data.profileUrl} alt={data?.profileUrl} />
+          ) : (
+            <AvatarFallback className="h-16 w-16 rounded-xl">
+              {user.name.split(' ')[0].charAt(0)}
+            </AvatarFallback>
+          )}
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mr-4">

@@ -43,9 +43,7 @@ export const CustomInput: React.FC<CustomInput> = ({
             LeftIcon ? `pl-10` : ``,
             type === 'password' ? `pr-10` : ``,
           )}
-          type={
-            type === 'password' ? (showPassword ? 'text' : 'password') : type
-          }
+          type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
           {...props}
         />
 
@@ -69,10 +67,7 @@ export const CustomInput: React.FC<CustomInput> = ({
       {helperText && (
         <div className="w-full text-xs text-zinc-400 flex items-center justify-between">
           {type === 'password' && <FormMessage className="w-full" />}
-          <span
-            className="cursor-pointer w-full text-end"
-            onClick={onClickHelperText}
-          >
+          <span className="cursor-pointer w-full text-end" onClick={onClickHelperText}>
             {helperText}
           </span>
         </div>

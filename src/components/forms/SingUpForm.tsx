@@ -1,15 +1,9 @@
 import { CustomInput } from '@/components/CustomInput'
 import { LoadingSpinner } from '@/components/Spinner'
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { useToast } from '@/hooks/use-toast'
-import { AuthTabs } from '@/pages/Login'
+import { AuthTabs } from '@/pages/Auth/Login'
 import { useSignUp } from '@/service/auth/hooks'
 import { formatCellphone, formatCPF, formatCRP } from '@/utils/masks/phone_mask'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -63,9 +57,7 @@ const RequirementItem = ({
       ) : (
         <X className="w-4 h-4 text-red-500" />
       )}
-      <span className={isValid ? 'text-green-500' : 'text-red-500'}>
-        {text}
-      </span>
+      <span className={isValid ? 'text-green-500' : 'text-red-500'}>{text}</span>
     </div>
   )
 }
@@ -89,15 +81,9 @@ export const PasswordRequirements = ({ password }: { password: string }) => {
 
 const formSchema = z
   .object({
-    name: z
-      .string({ message: 'Nome obrigatório' })
-      .min(3, { message: 'Minímo 3 caractéres' }),
-    email: z
-      .string({ message: 'E-mail obrigatório' })
-      .email({ message: 'E-mail inválido' }),
-    cellphone: z
-      .string({ message: 'Telefone obrigatório' })
-      .min(11, 'Telefone inválido'),
+    name: z.string({ message: 'Nome obrigatório' }).min(3, { message: 'Minímo 3 caractéres' }),
+    email: z.string({ message: 'E-mail obrigatório' }).email({ message: 'E-mail inválido' }),
+    cellphone: z.string({ message: 'Telefone obrigatório' }).min(11, 'Telefone inválido'),
     crp: z.string({ message: 'CRP obrigatório' }),
     cpf: z.string({ message: 'CPF obrigatório' }).min(11, 'CPF inválido'),
     password: z
@@ -156,8 +142,7 @@ export const SingUpForm: React.FC<SingUpFormType> = ({ setTab }) => {
     if (isError) {
       toast({
         title: 'Error',
-        description:
-          'Não foi possível criar a sua conta! Por favor tente novamente mais tarde.',
+        description: 'Não foi possível criar a sua conta! Por favor tente novamente mais tarde.',
       })
     }
   }, [isError])

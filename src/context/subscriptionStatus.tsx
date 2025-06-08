@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
 export enum SubscriptionStatus {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE"
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
 }
 
 interface SubscriptionStatusContext {
@@ -11,5 +11,5 @@ interface SubscriptionStatusContext {
 }
 export const useSubscriptionStatus = create<SubscriptionStatusContext>((set) => ({
   status: SubscriptionStatus.INACTIVE,
-  changeStatus: (status: string) => set(() => ({ status: status })),
+  changeStatus: (status: string) => set(() => ({ status })),
 }))

@@ -24,9 +24,7 @@ export const NotificationDropdown = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm font-bold">Uma nova notificação</span>
-              <p className="text-xs">
-                Sua consulta com Felipe Vieira acaba de ser confirmada
-              </p>
+              <p className="text-xs">Sua consulta com Felipe Vieira acaba de ser confirmada</p>
             </div>
           </div>
           <Separator />
@@ -36,9 +34,7 @@ export const NotificationDropdown = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm font-bold">Uma nova notificação</span>
-              <p className="text-xs">
-                Sua consulta com Felipe Vieira acaba de ser confirmada
-              </p>
+              <p className="text-xs">Sua consulta com Felipe Vieira acaba de ser confirmada</p>
             </div>
           </div>
           <Separator />
@@ -48,9 +44,7 @@ export const NotificationDropdown = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm font-bold">Uma nova notificação</span>
-              <p className="text-xs">
-                Sua consulta com Felipe Vieira acaba de ser confirmada
-              </p>
+              <p className="text-xs">Sua consulta com Felipe Vieira acaba de ser confirmada</p>
             </div>
           </div>
           <Separator />
@@ -60,9 +54,7 @@ export const NotificationDropdown = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm font-bold">Uma nova notificação</span>
-              <p className="text-xs">
-                Sua consulta com Felipe Vieira acaba de ser confirmada
-              </p>
+              <p className="text-xs">Sua consulta com Felipe Vieira acaba de ser confirmada</p>
             </div>
           </div>
           <Separator />

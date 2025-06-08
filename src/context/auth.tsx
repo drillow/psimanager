@@ -13,9 +13,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const cookies = new Cookies()
   const token = cookies.get(ACCESS_TOKEN_KEY)
 
-  const payload: TUserData = token
-    ? (JWT.decode(token) as TUserData)
-    : INITIAL_STATE
+  const payload: TUserData = token ? (JWT.decode(token) as TUserData) : INITIAL_STATE
   const [userData, setUserData] = useState<TUserData>(payload)
 
   const signOut = () => {
@@ -34,10 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     })
     const dateNow = new Date()
 
-    if (
-      !decodedToken ||
-      decodedToken?.payload?.exp * 1000 < dateNow.getTime()
-    ) {
+    if (!decodedToken || decodedToken?.payload?.exp * 1000 < dateNow.getTime()) {
       cookies.remove(ACCESS_TOKEN_KEY)
       return false
     }
@@ -46,9 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const token = cookies.get(ACCESS_TOKEN_KEY)
-    const payload: TUserData = token
-      ? (JWT.decode(token) as TUserData)
-      : INITIAL_STATE
+    const payload: TUserData = token ? (JWT.decode(token) as TUserData) : INITIAL_STATE
     setUserData(payload)
   }, []) // Run once on mount
 

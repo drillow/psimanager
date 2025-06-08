@@ -17,19 +17,14 @@ export const getAllPatients = async (userId: string) => {
   return response.data
 }
 
-export const saveNewPatient = async (
-  userId: string,
-  payload: PatientPayload,
-) => {
+export const saveNewPatient = async (userId: string, payload: PatientPayload) => {
   const response = await api.post(`/api/patient/create/${userId}`, payload)
 
   return response.data.data
 }
 
 export const deletePatient = async (userId: string, patientId: string) => {
-  const response = await api.delete(
-    `/api/patient/${userId}/patient/${patientId}`,
-  )
+  const response = await api.delete(`/api/patient/${userId}/patient/${patientId}`)
 
   return response.data
 }
@@ -40,15 +35,8 @@ export const getSelectListPatient = async (userId: string) => {
   return response.data
 }
 
-export const editPatient = async (
-  userId: string,
-  patientId: string,
-  payload: PatientPayload,
-) => {
-  const response = await api.put(
-    `/api/patient/${userId}/patient/${patientId}`,
-    payload,
-  )
+export const editPatient = async (userId: string, patientId: string, payload: PatientPayload) => {
+  const response = await api.put(`/api/patient/${userId}/patient/${patientId}`, payload)
 
   return response.data
 }

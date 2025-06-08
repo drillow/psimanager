@@ -2,12 +2,7 @@ import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 
 import { WidgetCardLink } from '@/components/WidgetCardLink'
-import {
-  UserPlus2,
-  Crown,
-  Settings as SettingsIcon,
-  ChartColumnBig,
-} from 'lucide-react'
+import { UserPlus2, Crown, Settings as SettingsIcon, ChartColumnBig } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import {
   Dialog,
@@ -19,11 +14,11 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { DashboardCalendar } from '@/components/DashboadCalendar'
-import { MenuItens, Settings } from './Settings'
+import { MenuItens, Settings } from '../../components/Settings'
 import WorkingImage from '@/assets/working-2.png'
 // import { useAuth } from '@/context/auth'
 import { useSearchParams } from 'react-router-dom'
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
 
 // import { datetime, RRule } from 'rrule'
@@ -32,14 +27,14 @@ export const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [showSubConfirmedModal, setShowConfirmedModal] = useState(false)
   const { status } = useSubscriptionStatus()
-  
+
   const handleCloseConfirmModal = () => {
-    setSearchParams({});
+    setSearchParams({})
     setShowConfirmedModal(false)
   }
 
   useEffect(() => {
-    if (!!searchParams.get("sub_completed")) {
+    if (searchParams.get('sub_completed')) {
       setShowConfirmedModal(true)
     }
   }, [])
@@ -50,19 +45,29 @@ export const Home = () => {
 
       <div className="flex flex-col gap-4 h-full">
         <div className="flex flex-1 h-full items-start gap-4">
-            <DashboardCalendar />
-          <div className="bg-white rounded-xl w-5/12 h-full p-0 border border-zinc-200 relative flex flex-col items-center justify-center overflow-hidden">
-            {/* <h2 className="text-lg font-semibold text-zinc-700 w-full p-4">
+          <DashboardCalendar />
+          <div className="flex flex-col gap-4 w-5/12 h-full ">
+            {/* <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 bg-white rounded-lg flex-1 h-full border border-zinc-200">
+                <h1>Felipe</h1>
+              </div>
+              <div>
+                <h1>Felipe</h1>
+              </div>
+            </div> */}
+
+            <div className="bg-white rounded-xl p-0 border h-full border-zinc-200 relative flex flex-col items-center justify-center overflow-hidden">
+              {/* <h2 className="text-lg font-semibold text-zinc-700 w-full p-4">
               Métricas
             </h2> */}
-            {/* <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-50 bg-white rounded-md p-2 text-zinc-700 font-medium text-sm">
+              {/* <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-50 bg-white rounded-md p-2 text-zinc-700 font-medium text-sm">
               Em breve uma novidade para te ajudar ainda mais.
 
             </p> */}
-            <div className='bg-white z-50'>
-              <img src={WorkingImage} className=''/>
-            </div>
-            {/* <div className="flex flex-col gap-10 w-full h-full p-4">
+              <div className="bg-white z-50">
+                <img src={WorkingImage} className="" />
+              </div>
+              {/* <div className="flex flex-col gap-10 w-full h-full p-4">
               <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-2">
                   <h2 className="text-lg font-semibold text-zinc-700">
@@ -123,6 +128,7 @@ export const Home = () => {
                 </div>
               </div>
             </div> */}
+            </div>
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4">
@@ -165,19 +171,22 @@ export const Home = () => {
       </div>
       <Dialog open={showSubConfirmedModal} onOpenChange={handleCloseConfirmModal}>
         <DialogContent>
-          <div className='w-full h-full flex flex-col items-center justify-center p-12 gap-6'>
-            <div className='w-20 h-20'>
+          <div className="w-full h-full flex flex-col items-center justify-center p-12 gap-6">
+            <div className="w-20 h-20">
               <DotLottieReact
                 src="https://lottie.host/85449187-00ad-44c4-aa36-9e5ea5e8a630/HOlOlhmjRA.lottie"
                 loop={false}
                 autoplay
                 width={64}
                 height={64}
-                />
+              />
             </div>
-            <div className='flex flex-col gap-2 items-center justify-center'>
-              <h2 className='text-2xl font-semibold text-center'>Uhuu! <br />Seu pagamento confirmado</h2>
-              <span className='text-zinc-500'>Seu plano já está ativo</span>
+            <div className="flex flex-col gap-2 items-center justify-center">
+              <h2 className="text-2xl font-semibold text-center">
+                Uhuu! <br />
+                Seu pagamento confirmado
+              </h2>
+              <span className="text-zinc-500">Seu plano já está ativo</span>
               {/* <Button className='mt-4'>Fechar</Button> */}
             </div>
           </div>
@@ -208,12 +217,7 @@ export const Home = () => {
                 <Label htmlFor="email" className="text-right">
                   E-mail
                 </Label>
-                <Input
-                  id="email"
-                  value=""
-                  placeholder="umemail@email.com"
-                  disabled
-                />
+                <Input id="email" value="" placeholder="umemail@email.com" disabled />
               </div>
 
               <div className="flex flex-col items-start gap-2 w-full">

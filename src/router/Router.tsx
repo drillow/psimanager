@@ -1,18 +1,18 @@
 import Layout from '@/components/layout/Layout'
-import { Billings } from '@/pages/Billings'
-import { Home } from '@/pages/Home'
-import { Patients } from '@/pages/Patients'
-import { Plans } from '@/pages/Plans'
-import Services from '@/pages/Services'
+import { Billings } from '@/pages/Billings/Billings'
+import { Home } from '@/pages/Dashboard/Home'
+import { Patients } from '@/pages/Patients/Patients'
+
+import Services from '@/pages/Consults/Services'
 import { setDefaultOptions } from 'date-fns'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ptBR } from 'date-fns/locale'
 import { AuthProvider } from '@/context/auth'
 import { PrivateRouter } from '@/components/PrivateRouter'
-import { Login } from '@/pages/Login'
-import { GoogleConnect } from '@/pages/GoogleConnect'
+import { Login } from '@/pages/Auth/Login'
+import { GoogleConnect } from '@/pages/GoogleConnectCallback/GoogleConnect'
 import { SubscriptionProvider } from '@/components/SubscriptionProvider'
-import Metrics from '@/pages/Metrics'
+import Metrics from '@/pages/Metrics/Metrics'
 
 // const Metrics = lazy(() => import('@/pages/Metrics'))
 
@@ -46,10 +46,6 @@ const router = createBrowserRouter([
       {
         path: 'patients',
         element: <Patients />,
-      },
-      {
-        path: 'plan',
-        element: <Plans />,
       },
       {
         path: 'billing',

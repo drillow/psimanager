@@ -23,12 +23,11 @@ import {
   SelectValue,
 } from './ui/select'
 import { useForm } from 'react-hook-form'
-import { RRule, Weekday } from 'rrule'
 
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
-import { formatISO } from 'date-fns'
+
 import { Combobox } from './Combobox'
 import { useGetSelectListPatient } from '@/service/patient/hooks'
 import { useAuth } from '@/context/auth'
@@ -36,13 +35,11 @@ import { useAddNewConsult } from '@/service/consults/hooks'
 import { useQueryClient } from '@tanstack/react-query'
 import { QueryKeys } from '@/utils/queryKeys'
 import React from 'react'
-import {
-  SubscriptionStatus,
-  useSubscriptionStatus,
-} from '@/context/subscriptionStatus'
+import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
 import { cx } from 'class-variance-authority'
 import { CurrencyInput } from './CurrencyInput'
 import { DateTimePicker } from './TesteCalendar'
+import { toast } from 'sonner'
 
 const formSchema = z.object({
   patientName: z.string({ message: 'Selecione um paciente' }).min(2).max(50),
@@ -56,8 +53,7 @@ const formSchema = z.object({
   repeat: z.boolean().default(false),
   frequency: z
     .object({
-      times: z.string().min(1),
-      interval: z.union([z.literal('week'), z.literal('month')]).optional(),
+      interval: z.union([z.literal('WEEK'), z.literal('MONTH')]).optional(),
       days: z.array(z.any()).optional(),
     })
     .optional(),
@@ -68,6 +64,23 @@ type FormProps = z.infer<typeof formSchema>
 type AddPatientToCalendarProps = {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
+}
+
+type Interval = 'WEEK' | 'MONTH'
+
+export type ConsultType = 'ONLINE' | 'IN_PERSON'
+
+type Payload = {
+  userId: string
+  patientId: string
+  startDate: string
+  type: string
+  consultValue: string
+  hasRecurrence: boolean
+  place?: string
+  url?: string
+  interval?: Interval
+  days?: number[]
 }
 
 export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
@@ -88,64 +101,50 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
 
   const { data, isLoading } = useGetSelectListPatient(user.id)
 
-  const { execute } = useAddNewConsult(() => {
-    queryClient.invalidateQueries({
-      queryKey: QueryKeys.CONSULTS.DEFAULT,
-    })
-    setIsOpen(false)
+  const { execute } = useAddNewConsult({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: QueryKeys.CONSULTS.DEFAULT,
+      })
+      setIsOpen(false)
+    },
+    onError: (message) => {
+      if (message === 'Consult already exists for this time') {
+        return toast.error('Já existe uma consulta agendada para este horário.')
+      }
+
+      toast.error('Ocorreu um erro ao adicionar a consulta. Tente novamente mais tarde.')
+    },
   })
 
   const handleSubmitForm = async (dataPayload: FormProps) => {
-    const wkst = dataPayload?.frequency?.days?.map((day) => {
-      const dayMapping: Record<string, Weekday> = {
-        MO: RRule.MO,
-        TU: RRule.TU,
-        WE: RRule.WE,
-        TH: RRule.TH,
-        FR: RRule.FR,
-        SA: RRule.SA,
-        SU: RRule.SU,
+    const { date } = dataPayload.startDate
+
+    const wkstNumber = dataPayload?.frequency?.days?.map((day) => {
+      const dayMapping: Record<string, number> = {
+        SU: 0,
+        MO: 1,
+        TU: 2,
+        WE: 3,
+        TH: 4,
+        FR: 5,
+        SA: 6,
       }
       return dayMapping[day]
     })
 
-    const year = dataPayload.startDate.date.getFullYear()
-    const month = dataPayload.startDate.date.getMonth()
-    const day = dataPayload.startDate.date.getDate()
-    const hour = dataPayload.startDate.date.getHours()
-    const minutes = dataPayload.startDate.date.getMinutes()
-
-    const rrule = new RRule({
-      dtstart: new Date(Date.UTC(year, month, day, hour, minutes, 0)),
-      tzid: 'America/Sao_Paulo',
-      byweekday: wkst ?? null,
-      ...(dataPayload.repeat && {
-        freq:
-          dataPayload.frequency?.interval === 'month'
-            ? RRule.MONTHLY
-            : RRule.WEEKLY,
-      }),
-      until: new Date(
-        new Date(dataPayload.startDate.date).setMonth(
-          dataPayload.startDate.date.getMonth() + 6,
-        ),
-      ),
-    })
-
     const payload = {
-      patientId: dataPayload.patientName,
-      startDate: formatISO(
-        new Date(Date.UTC(year, month, day, hour, minutes, 0)),
-      ),
-      type: dataPayload.consultType,
       userId: user.id,
+      patientId: dataPayload.patientName,
       consultValue: dataPayload.consultValue,
-      ...(dataPayload.repeat && { rrule: rrule.toString() }),
+      type: dataPayload.consultType,
+      hasRecurrence: dataPayload.repeat,
+      interval: dataPayload.frequency?.interval,
+      startDate: date.toISOString().replace(/\.\d+/, ''),
+      days: wkstNumber,
       ...(dataPayload.place && { place: dataPayload.place }),
       ...(dataPayload.url && { url: dataPayload.url }),
-    }
-
-    // console.log(allDates.map(date => {}))
+    } as Payload
 
     await execute(payload)
   }
@@ -154,15 +153,10 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
     <Form {...form}>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-[525px]">
-          <form
-            onSubmit={form.handleSubmit(handleSubmitForm)}
-            className="flex flex-col gap-4"
-          >
+          <form onSubmit={form.handleSubmit(handleSubmitForm)} className="flex flex-col gap-4">
             <DialogHeader>
               <DialogTitle>Adicionar consulta</DialogTitle>
-              <DialogDescription>
-                Selecione o dia, hora e tipo de consulta
-              </DialogDescription>
+              <DialogDescription>Selecione o dia, hora e tipo de consulta</DialogDescription>
             </DialogHeader>
             {/* <Form {...form}> */}
             <div className="grid gap-6 py-2">
@@ -195,10 +189,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                           <Label htmlFor={'currency'} className="text-right">
                             Data da consulta
                           </Label>
-                          <DateTimePicker
-                            date={value}
-                            setDate={(date) => onChange(date)}
-                          />
+                          <DateTimePicker date={value} setDate={(date) => onChange(date)} />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -211,11 +202,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                   render={({ field: { value, onChange } }) => (
                     <FormItem className="w-full">
                       <FormControl>
-                        <CurrencyInput
-                          currencyLabel="R$"
-                          value={value}
-                          onChange={onChange}
-                        />
+                        <CurrencyInput currencyLabel="R$" value={value} onChange={onChange} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -236,9 +223,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                         htmlFor="IN_PERSON"
                         className={cx(
                           'flex items-center gap-2 p-2 rounded-lg cursor-pointer',
-                          field.value === 'IN_PERSON'
-                            ? 'border border-zinc-300'
-                            : 'bg-zinc-100',
+                          field.value === 'IN_PERSON' ? 'border border-zinc-300' : 'bg-zinc-100',
                         )}
                       >
                         <Checkbox
@@ -248,22 +233,16 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                           onCheckedChange={() => field.onChange('IN_PERSON')}
                           className={cx(
                             'bg-white',
-                            field.value === 'IN_PERSON'
-                              ? 'border-violet-700'
-                              : 'border-zinc-300',
+                            field.value === 'IN_PERSON' ? 'border-violet-700' : 'border-zinc-300',
                           )}
                         />
-                        <span className="text-sm text-zinc-600">
-                          Presencial
-                        </span>
+                        <span className="text-sm text-zinc-600">Presencial</span>
                       </label>
                       <label
                         htmlFor="ONLINE"
                         className={cx(
                           'flex items-center gap-2 p-2 rounded-lg cursor-pointer',
-                          field.value === 'ONLINE'
-                            ? 'border border-zinc-300'
-                            : 'bg-zinc-100',
+                          field.value === 'ONLINE' ? 'border border-zinc-300' : 'bg-zinc-100',
                         )}
                       >
                         <Checkbox
@@ -273,9 +252,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                           onCheckedChange={() => field.onChange('ONLINE')}
                           className={cx(
                             'bg-white',
-                            field.value === 'ONLINE'
-                              ? 'border-violet-700'
-                              : 'border-zinc-300',
+                            field.value === 'ONLINE' ? 'border-violet-700' : 'border-zinc-300',
                           )}
                         />
                         <span className="text-sm text-zinc-600">Online</span>
@@ -297,19 +274,12 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
 
                       <div className="relative w-full">
                         <Link2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-                        <Input
-                          type="url"
-                          placeholder="Link"
-                          className="pl-10"
-                          {...field}
-                        />
+                        <Input type="url" placeholder="Link" className="pl-10" {...field} />
                       </div>
                       <span className={'text-xs text-zinc-400'}>
-                        Com a conta do Google <strong>conectada</strong>, o link
-                        será gerado automaticamente ao salvar a consulta. Caso
-                        queira adicionar link de{' '}
-                        <strong>outra plataforma</strong> basta digitar no campo
-                        acima.
+                        Com a conta do Google <strong>conectada</strong>, o link será gerado
+                        automaticamente ao salvar a consulta. Caso queira adicionar link de{' '}
+                        <strong>outra plataforma</strong> basta digitar no campo acima.
                       </span>
                     </div>
                   )}
@@ -325,11 +295,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                       </Label>
                       <div className="relative w-full">
                         <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-                        <Input
-                          placeholder="Clinica ou Endereço"
-                          className="pl-10"
-                          {...field}
-                        />
+                        <Input placeholder="Clinica ou Endereço" className="pl-10" {...field} />
                       </div>
                     </div>
                   )}
@@ -345,10 +311,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                       <Label htmlFor="" className="text-right">
                         Repetir consulta
                       </Label>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
                     </div>
                   )}
                 />
@@ -362,36 +325,16 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                       <span className="text-sm text-zinc-600 w-12">A cada</span>
                       <FormField
                         control={form.control}
-                        name="frequency.times"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                type="number"
-                                className="w-20"
-                                min={0}
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
                         name="frequency.interval"
                         render={({ field: { name, onChange, value } }) => (
-                          <Select
-                            name={name}
-                            onValueChange={onChange}
-                            defaultValue={value}
-                          >
+                          <Select name={name} onValueChange={onChange} defaultValue={value}>
                             <SelectTrigger className="w-24">
-                              <SelectValue placeholder="Tempo" />
+                              <SelectValue placeholder="Tempo" defaultValue={'WEEK'} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectGroup>
-                                <SelectItem value="week">Semana</SelectItem>
-                                <SelectItem value="month">Mês</SelectItem>
+                                <SelectItem value="WEEK">Semana</SelectItem>
+                                <SelectItem value="MONTH">Mês</SelectItem>
                               </SelectGroup>
                             </SelectContent>
                           </Select>

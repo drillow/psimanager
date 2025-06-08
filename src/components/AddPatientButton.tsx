@@ -30,9 +30,7 @@ const formSchema = z.object({
   email: z.string().email('E-mail inválido'),
   firstName: z.string().min(1, { message: 'Nome obrigatório' }),
   lastName: z.string().min(1, { message: 'Sobrenome obrigatório' }),
-  phoneNumber: z
-    .string({ message: 'Telefone obrigatório' })
-    .min(11, 'Telefone inválido'),
+  phoneNumber: z.string({ message: 'Telefone obrigatório' }).min(11, 'Telefone inválido'),
   isWhatsApp: z.boolean().default(false),
   age: z.number().optional(),
 })
@@ -44,10 +42,7 @@ type AddPatientButtonProps = {
   setIsOpen: (isOpen: boolean) => void
 }
 
-export const AddPatientButton: React.FC<AddPatientButtonProps> = ({
-  isOpen,
-  setIsOpen,
-}) => {
+export const AddPatientButton: React.FC<AddPatientButtonProps> = ({ isOpen, setIsOpen }) => {
   const queryClient = useQueryClient()
   const { user } = useAuth()
 
@@ -80,15 +75,11 @@ export const AddPatientButton: React.FC<AddPatientButtonProps> = ({
       <DialogPortal>
         <DialogContent className="max-w-[525px]">
           <Form {...form}>
-            <form
-              onSubmit={handleSubmit(handlePayload)}
-              className="grid gap-4 py-2"
-            >
+            <form onSubmit={handleSubmit(handlePayload)} className="grid gap-4 py-2">
               <DialogHeader>
                 <DialogTitle>Adicionar paciente</DialogTitle>
                 <DialogDescription>
-                  Make changes to your profile here. Click save when you&apos;re
-                  done.
+                  Make changes to your profile here. Click save when you&apos;re done.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid grid-cols-2 gap-4">
@@ -169,9 +160,7 @@ export const AddPatientButton: React.FC<AddPatientButtonProps> = ({
                             error={!!error?.message}
                             {...field}
                             onChange={(e) => {
-                              const formattedValue = formatCellphone(
-                                e.target.value,
-                              )
+                              const formattedValue = formatCellphone(e.target.value)
                               field.onChange(formattedValue)
                             }}
                           />

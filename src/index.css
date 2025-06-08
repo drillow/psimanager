@@ -59,9 +59,27 @@
   }
 }
 
+.animated-card {
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.1s ease-in-out;
+
+  &:hover {
+    z-index: 1;
+    cursor: pointer;
+    border-color: oklch(49.1% 0.27 292.581);
+    transform: scale(1.03);
+    box-shadow:
+      0 8px 24px rgba(40, 40, 80, 0.12),
+      0 1.5px 4px rgba(40, 40, 80, 0.08);
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
   }
   body {
     @apply bg-background text-foreground;

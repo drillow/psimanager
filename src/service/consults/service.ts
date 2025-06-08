@@ -19,19 +19,14 @@ type Response = {
   }
 }
 
-export const getNextTreeDaysConsults = async (
-  userId: string,
-): Promise<Response> => {
-  // const response = await api.get(`/api/consult/dashboard-consults/${userId}`, {
+export const getNextTreeDaysConsults = async (userId: string): Promise<Response> => {
   const response = await api.get(`/api/consult/dashboard-consults/${userId}`)
 
   return response.data.data
 }
 
 export const getWeekConsults = async (userId: string, weekOffset: number) => {
-  const response = await api.get(
-    `/api/consult/list/${userId}/week?weekOffset=${weekOffset}`,
-  )
+  const response = await api.get(`/api/consult/list/${userId}/week?weekOffset=${weekOffset}`)
 
   return response.data.data
 }
@@ -42,10 +37,7 @@ export const createConsult = async (payload: unknown) => {
   return response.data
 }
 
-export const removeConsult = async (
-  consultId: string,
-  removeAllNextConsults: boolean = false,
-) => {
+export const removeConsult = async (consultId: string, removeAllNextConsults: boolean = false) => {
   const response = await api.delete(`/api/consult/${consultId}`, {
     data: { deleteAllNextEvents: removeAllNextConsults },
   })

@@ -20,25 +20,18 @@ interface DeletePatientProps {
   setOpen: () => void
 }
 
-export const DeletePatient: React.FC<DeletePatientProps> = ({
-  patientId,
-  open,
-  setOpen,
-}) => {
+export const DeletePatient: React.FC<DeletePatientProps> = ({ patientId, open, setOpen }) => {
   // const [open, setOpen] = useState(false)
   const { user } = useAuth()
 
   const queryClient = useQueryClient()
 
-  const { execute, isLoading: isLoadingDeletePatient } = useDeletePatient(
-    user.id,
-    () => {
-      queryClient.invalidateQueries({
-        queryKey: QueryKeys.PATIENT.LIST,
-      })
-      setOpen()
-    },
-  )
+  const { execute, isLoading: isLoadingDeletePatient } = useDeletePatient(user.id, () => {
+    queryClient.invalidateQueries({
+      queryKey: QueryKeys.PATIENT.LIST,
+    })
+    setOpen()
+  })
 
   return (
     <Dialog open={open} onOpenChange={setOpen} modal key={'remove-modal'}>
@@ -51,8 +44,7 @@ export const DeletePatient: React.FC<DeletePatientProps> = ({
         <DialogHeader>
           <DialogTitle>Remover paciente</DialogTitle>
           <DialogDescription>
-            Ao deletar o paciente, todas as futuras consultas serão removidas do
-            calendário
+            Ao deletar o paciente, todas as futuras consultas serão removidas do calendário
           </DialogDescription>
         </DialogHeader>
 

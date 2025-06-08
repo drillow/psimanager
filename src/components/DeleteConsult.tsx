@@ -1,12 +1,6 @@
 import { Trash } from 'lucide-react'
 import { Button } from './ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from './ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
 import { useDeleteConsult } from '@/service/consults/hooks'
 import { Checkbox } from './ui/checkbox'
 import { useState } from 'react'
@@ -58,9 +52,7 @@ export const DeleteConsult: React.FC<DeleteConsultProps> = ({
             <Checkbox
               id="terms"
               checked={removeAllNextConsults}
-              onCheckedChange={() =>
-                setRemoveAllNextConsults((prevState) => !prevState)
-              }
+              onCheckedChange={() => setRemoveAllNextConsults((prevState) => !prevState)}
             />
             <label
               htmlFor="terms"

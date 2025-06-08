@@ -5,9 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Toaster } from '@/components/ui/toaster'
 
 import { useState } from 'react'
-import { Hexagon } from 'lucide-react'
-import { SingUpForm } from '@/components/forms/SingUpForm'
 
+import { SingUpForm } from '@/components/forms/SingUpForm'
+import DrillowIcon from '@/assets/drillow-icon.svg'
 export enum AuthTabs {
   SINGIN = 'singin',
   SINGUP = 'singup',
@@ -17,9 +17,8 @@ export const Login: React.FC = () => {
   const [tab, setTab] = useState(AuthTabs.SINGIN)
   const [recoveryPasswordForm, setRecoveryPasswordForm] = useState(false)
 
-  const handleShowRecoveryPasswordForm = () =>
-    setRecoveryPasswordForm((prevState) => !prevState)
-  // bg-[url(/src/assets/Helix.jpg)]
+  const handleShowRecoveryPasswordForm = () => setRecoveryPasswordForm((prevState) => !prevState)
+
   return (
     <>
       <Toaster />
@@ -27,7 +26,8 @@ export const Login: React.FC = () => {
         <div className="w-full h-full flex flex-col items-center justify-center rounded-3xl shadow-2xl bg-white gap-8 relative">
           <div className={`flex flex-col items-center justify-center gap-2`}>
             <div className="flex items-center gap-2">
-              <Hexagon className={`w-10 h-10 text-violet-600`} />
+              <img src={DrillowIcon} alt="Drillow Icon" className="w-10 h-10" />
+
               <h1 className="font-bold text-3xl text-violet-600">Drillow</h1>
             </div>
           </div>
@@ -45,9 +45,7 @@ export const Login: React.FC = () => {
               {recoveryPasswordForm ? (
                 <RecoveryForm onBackToLogin={handleShowRecoveryPasswordForm} />
               ) : (
-                <SignInForm
-                  onRecoveryPassword={handleShowRecoveryPasswordForm}
-                />
+                <SignInForm onRecoveryPassword={handleShowRecoveryPasswordForm} />
               )}
             </TabsContent>
             <TabsContent value={AuthTabs.SINGUP}>

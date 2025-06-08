@@ -14,21 +14,19 @@ import {
 } from '../ui/sidebar'
 import {
   CalendarDays,
-  // Settings,
   Users,
   LayoutDashboard,
   Headphones,
-  Hexagon,
   DollarSign,
   ChartColumnBig,
   SettingsIcon,
 } from 'lucide-react'
 import { useEffect } from 'react'
 import { Badge } from '../ui/badge'
-import { Settings } from '@/pages/Settings'
+import { Settings } from '@/components/Settings'
 import { PlanWidget } from '../PlanWidget'
 import { cx } from 'class-variance-authority'
-
+import DrillowIcon from '@/assets/drillow-icon.svg'
 import { useSubscriptionStatus } from '@/context/subscriptionStatus'
 
 const applicationItems = [
@@ -102,14 +100,13 @@ export function AppSidebar() {
     <Sidebar className="bg-white" collapsible="icon">
       <SidebarHeader className="flex flex-row w-full items-center">
         <div className={`w-8 h-8 flex items-center justify-center`}>
-          <Hexagon
+          <img
+            src={DrillowIcon}
+            alt="Drillow"
             className={`${open ? 'w-6 h-6' : 'w-5 h-5'} text-violet-600`}
           />
         </div>
-        {open && (
-          <h1 className="font-bold text-2xl text-violet-600">Drillow</h1>
-          // <h1 className="font-bold text-2xl text-violet-600">MyPsi</h1>
-        )}
+        {open && <h1 className="font-extrabold text-2xl text-violet-600">Drillow</h1>}
       </SidebarHeader>
       {/* <Separator /> */}
       <SidebarContent>
@@ -129,9 +126,7 @@ export function AppSidebar() {
                         <item.icon />
                         <span className="flex items-center gap-2">
                           {item.title}
-                          {item.asSoon && (
-                            <Badge variant={'secondary'}>Em breve</Badge>
-                          )}
+                          {item.asSoon && <Badge variant={'secondary'}>Em breve</Badge>}
                         </span>
                       </div>
                     ) : (
@@ -145,9 +140,7 @@ export function AppSidebar() {
                         <item.icon />
                         <span className={cx(`flex items-center gap-2`)}>
                           {item.title}
-                          {item.asSoon && (
-                            <Badge variant={'secondary'}>Em breve</Badge>
-                          )}
+                          {item.asSoon && <Badge variant={'secondary'}>Em breve</Badge>}
                         </span>
                       </Link>
                     )}
@@ -169,9 +162,7 @@ export function AppSidebar() {
                         <item.icon />
                         <span className="flex items-center gap-2">
                           {item.title}
-                          {item.asSoon && (
-                            <Badge variant={'secondary'}>Em breve</Badge>
-                          )}
+                          {item.asSoon && <Badge variant={'secondary'}>Em breve</Badge>}
                         </span>
                       </div>
                     ) : (
@@ -179,9 +170,7 @@ export function AppSidebar() {
                         <item.icon />
                         <span className="flex items-center gap-2">
                           {item.title}
-                          {item.asSoon && (
-                            <Badge variant={'secondary'}>Em breve</Badge>
-                          )}
+                          {item.asSoon && <Badge variant={'secondary'}>Em breve</Badge>}
                         </span>
                       </Link>
                     )}

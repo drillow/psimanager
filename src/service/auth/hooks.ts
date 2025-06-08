@@ -10,30 +10,30 @@ export const useSignIn = () => {
     mutationFn: signIn,
     retry: 0,
     onError: (error: AxiosError<{ message: AuthErrorMesssage }>) => {
-      switch(error?.response?.data.message) {
+      switch (error?.response?.data.message) {
         case AuthErrorMesssage.INVALID_PASSWORD:
           toast({
             title: 'Senha incorreta',
-            description: 'Senha inválida ou incorreta, verifique e tente novamente.'
+            description: 'Senha inválida ou incorreta, verifique e tente novamente.',
           })
-          break;
+          break
         case AuthErrorMesssage.USER_NOT_FOUND:
           toast({
             title: 'Usuário inválido',
-            description: 'Usuário inválido ou não existe. Verifique e tente novamente'
+            description: 'Usuário inválido ou não existe. Verifique e tente novamente',
           })
           break
         default:
           break
       }
-    }
+    },
   })
 
   return {
     execute: mutateAsync,
     isLoading: isPending,
     isError,
-    error
+    error,
   }
 }
 
@@ -62,16 +62,21 @@ export const useRecoveryPassword = () => {
   }
 }
 
-
 export const useChangePassword = (userId: string, onError: () => void) => {
   const { mutateAsync, isPending, isError } = useMutation({
-    mutationFn: async ({ newPassword, oldPassword }: { newPassword: string, oldPassword: string }) => await changePassword({ userId, newPassword, oldPassword }),
-    onError
+    mutationFn: async ({
+      newPassword,
+      oldPassword,
+    }: {
+      newPassword: string
+      oldPassword: string
+    }) => await changePassword({ userId, newPassword, oldPassword }),
+    onError,
   })
 
   return {
     execute: mutateAsync,
     isLoading: isPending,
-    isError
+    isError,
   }
 }

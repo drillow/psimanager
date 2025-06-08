@@ -22,17 +22,11 @@ import { LoadingSpinner } from '../Spinner'
 import { formatCPF, formatCRP } from '@/utils/masks/phone_mask'
 
 const formSchema = z.object({
-  firstName: z
-    .string({ message: 'Nome obrigatório' })
-    .min(3, { message: 'Minímo 3 caractéres' }),
-  lastName: z
-    .string({ message: 'Nome obrigatório' })
-    .min(3, { message: 'Minímo 3 caractéres' }),
+  firstName: z.string({ message: 'Nome obrigatório' }).min(3, { message: 'Minímo 3 caractéres' }),
+  lastName: z.string({ message: 'Nome obrigatório' }).min(3, { message: 'Minímo 3 caractéres' }),
   cpf: z.string({ message: 'CRP obrigatório' }),
   crp: z.string({ message: 'CPF obrigatório' }).min(11, 'CPF inválido'),
-  phoneNumber: z
-    .string({ message: 'Telefone obrigatório' })
-    .min(11, 'Telefone inválido'),
+  phoneNumber: z.string({ message: 'Telefone obrigatório' }).min(11, 'Telefone inválido'),
 })
 
 type FormProps = z.infer<typeof formSchema>
@@ -41,8 +35,7 @@ export const PersonalForm: React.FC = () => {
   const inputFileRef = useRef<HTMLInputElement | null>(null)
   const { user } = useAuth()
   const { data: personData } = useGetPersonData(user.id)
-  const { data: profileImage, isLoading: isLoadingProfileImage } =
-    useGetProfileImage(user.id)
+  const { data: profileImage, isLoading: isLoadingProfileImage } = useGetProfileImage(user.id)
 
   const queryClient = useQueryClient()
 
@@ -50,14 +43,22 @@ export const PersonalForm: React.FC = () => {
     resolver: zodResolver(formSchema),
   })
 
-  const { execute: updatePersonData, isLoading: isLoadingPersonData } =
-    useUpdatePersonData(user.id, () => {
+  const { execute: updatePersonData, isLoading: isLoadingPersonData } = useUpdatePersonData(
+    user.id,
+    () => {
       queryClient.invalidateQueries({
         queryKey: QueryKeys.USER.PERSON,
       })
-    })
+    },
+  )
 
-  const { execute, isLoading: isLoadingRemoveImage } = useRemoveProfilePhoto(
+  const { execute, isLoading: isLoadingRemoveImage } = useRemoveProfilePhoto(user.id, () => {
+    queryClient.invalidateQueries({
+      queryKey: QueryKeys.USER.PROFILE_IMAGE,
+    })
+  })
+
+  const { execute: executeProfileImage, isLoading: isLoadingSaveImage } = useUploadImage(
     user.id,
     () => {
       queryClient.invalidateQueries({
@@ -66,29 +67,21 @@ export const PersonalForm: React.FC = () => {
     },
   )
 
-  const { execute: executeProfileImage, isLoading: isLoadingSaveImage } =
-    useUploadImage(user.id, () => {
+  const { execute: executeUpdateProfileImage, isLoading: isLoadingUpdateImage } = useUpdateImage(
+    user.id,
+    () => {
       queryClient.invalidateQueries({
         queryKey: QueryKeys.USER.PROFILE_IMAGE,
       })
-    })
-
-  const {
-    execute: executeUpdateProfileImage,
-    isLoading: isLoadingUpdateImage,
-  } = useUpdateImage(user.id, () => {
-    queryClient.invalidateQueries({
-      queryKey: QueryKeys.USER.PROFILE_IMAGE,
-    })
-  })
+    },
+  )
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const handleRemovePhoto = async () => await execute(profileImage?.profileUrl!)
 
   const handleClickButton = () => inputFileRef?.current?.click()
 
-  const handleSubmitForm = async (data: FormProps) =>
-    await updatePersonData(data)
+  const handleSubmitForm = async (data: FormProps) => await updatePersonData(data)
 
   return (
     <Form {...form}>
@@ -97,9 +90,7 @@ export const PersonalForm: React.FC = () => {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col">
               <h2 className="font-bold text-black text-lg">Dados pessoais</h2>
-              <p className="text-xs text-zinc-500">
-                Modifique seus dados pessoais
-              </p>
+              <p className="text-xs text-zinc-500">Modifique seus dados pessoais</p>
             </div>
 
             <div className="border border-b border-dashed border-b-zinc-200" />
@@ -119,19 +110,13 @@ export const PersonalForm: React.FC = () => {
 
                   <div className="flex flex-col gap-1">
                     <Label className="text-left text-black">Foto perfil</Label>
-                    <span className="text-xs text-zinc-400">
-                      PNG, JPEG até 1.5mb
-                    </span>
+                    <span className="text-xs text-zinc-400">PNG, JPEG até 1.5mb</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
                     onClick={handleClickButton}
-                    disabled={
-                      isLoadingSaveImage ||
-                      isLoadingUpdateImage ||
-                      isLoadingRemoveImage
-                    }
+                    disabled={isLoadingSaveImage || isLoadingUpdateImage || isLoadingRemoveImage}
                   >
                     Alterar foto de perfil
                   </Button>

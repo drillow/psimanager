@@ -46,15 +46,10 @@ type MainChartProps = {
   isHiddenValues?: boolean
 }
 
-export const MainChart: React.FC<MainChartProps> = ({
-  isHiddenValues = false,
-}) => {
+export const MainChart: React.FC<MainChartProps> = ({ isHiddenValues = false }) => {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-      <BarChart
-        accessibilityLayer
-        data={isHiddenValues ? emptyChart : chartData}
-      >
+      <BarChart accessibilityLayer data={isHiddenValues ? emptyChart : chartData}>
         <CartesianGrid vertical={false} />
         <ChartTooltip content={<ChartTooltipContent />} />
         <XAxis

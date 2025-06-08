@@ -1,13 +1,19 @@
-import React from "react"
-import { format } from "date-fns"
-import { CalendarIcon, Clock } from "lucide-react"
+import React from 'react'
+import { format } from 'date-fns'
+import { CalendarIcon, Clock } from 'lucide-react'
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface DateTimePickerProps {
   date: Date | undefined
@@ -16,24 +22,32 @@ interface DateTimePickerProps {
 }
 
 export function DateTimePicker({ date, setDate, className }: DateTimePickerProps) {
-  const [selectedTab, setSelectedTab] = React.useState<"date" | "time">("date")
+  const [selectedTab, setSelectedTab] = React.useState<'date' | 'time'>('date')
 
   // Store hour and minute as local state, derived from props initially
-  const [hour, setHour] = React.useState(() => (date ? date.getHours().toString().padStart(2, "0") : "00"))
-  const [minute, setMinute] = React.useState(() => (date ? date.getMinutes().toString().padStart(2, "0") : "00"))
+  const [hour, setHour] = React.useState(() =>
+    date ? date.getHours().toString().padStart(2, '0') : '00',
+  )
+  const [minute, setMinute] = React.useState(() =>
+    date ? date.getMinutes().toString().padStart(2, '0') : '00',
+  )
 
   // Update local hour/minute when date prop changes
   React.useEffect(() => {
     if (date) {
-      setHour(date.getHours().toString().padStart(2, "0"))
-      setMinute(date.getMinutes().toString().padStart(2, "0"))
+      setHour(date.getHours().toString().padStart(2, '0'))
+      setMinute(date.getMinutes().toString().padStart(2, '0'))
     }
   }, [date])
 
   const handleSelect = (selectedDate: Date | undefined) => {
     if (selectedDate) {
       const newDate = new Date(date || new Date())
-      newDate.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate())
+      newDate.setFullYear(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate(),
+      )
 
       // Keep the current time or set to default
       const hours = date ? date.getHours() : Number.parseInt(hour)
@@ -42,7 +56,7 @@ export function DateTimePicker({ date, setDate, className }: DateTimePickerProps
       newDate.setMinutes(minutes)
       newDate.setSeconds(0)
       setDate(newDate)
-      setSelectedTab("time")
+      setSelectedTab('time')
     } else {
       setDate(undefined)
     }
@@ -60,24 +74,31 @@ export function DateTimePicker({ date, setDate, className }: DateTimePickerProps
   }
 
   // Generate hours (00-23)
-  const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0"))
+  const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'))
 
   // Generate minutes (00-59)
-  const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, "0"))
+  const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'))
 
   return (
     <Popover modal>
       <PopoverTrigger asChild>
         <Button
-          variant={"outline"}
-          className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground", className)}
+          variant={'outline'}
+          className={cn(
+            'w-full justify-start text-left font-normal',
+            !date && 'text-muted-foreground',
+            className,
+          )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPp") : <span>Selecione o dia e horário</span>}
+          {date ? format(date, 'PPp') : <span>Selecione o dia e horário</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value as "date" | "time")}>
+        <Tabs
+          value={selectedTab}
+          onValueChange={(value) => setSelectedTab(value as 'date' | 'time')}
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="date">
               <CalendarIcon className="mr-2 h-4 w-4" />
@@ -89,7 +110,7 @@ export function DateTimePicker({ date, setDate, className }: DateTimePickerProps
             </TabsTrigger>
           </TabsList>
           <TabsContent value="date" className="p-0">
-            <Calendar mode="single" selected={date} onSelect={handleSelect} initialFocus/>
+            <Calendar mode="single" selected={date} onSelect={handleSelect} initialFocus />
           </TabsContent>
           <TabsContent value="time" className="p-4">
             <div className="flex items-center space-x-2">

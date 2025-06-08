@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Stripe, loadStripe } from "@stripe/stripe-js";
-import { getFinancialPortal, getSubscriptionStatus, makeSubscription } from "./service";
-import { useQuery } from "@tanstack/react-query";
-import { QueryKeys } from "@/utils/queryKeys";
-import { useSubscriptionStatus } from "@/context/subscriptionStatus";
+import { useEffect, useState } from 'react'
+import { Stripe, loadStripe } from '@stripe/stripe-js'
+import { getFinancialPortal, getSubscriptionStatus, makeSubscription } from './service'
+import { useQuery } from '@tanstack/react-query'
+import { QueryKeys } from '@/utils/queryKeys'
+import { useSubscriptionStatus } from '@/context/subscriptionStatus'
 
 export function useStripe() {
   const [isLoading, setIsLoading] = useState(false)
@@ -11,7 +11,7 @@ export function useStripe() {
 
   useEffect(() => {
     async function loadStripeAsync() {
-      const stripeInstance = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+      const stripeInstance = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
       setStripe(stripeInstance)
     }
 
@@ -26,11 +26,10 @@ export function useStripe() {
       const data = await makeSubscription(userId)
       setIsLoading(false)
       await stripe.redirectToCheckout({ sessionId: data.sessionId })
-    } catch(err){
+    } catch (err) {
       console.log(err)
     }
   }
-
 
   async function handleCreateStripePortal(userId: string) {
     setIsLoading(true)
@@ -47,10 +46,10 @@ export function useStripe() {
   }
 }
 
-export const  handleSubscriptionStatus = (userId: string)  => {
+export const useSubscriptionStatusQuery = (userId: string) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: QueryKeys.SUBSCRIPTION.STATUS,
-    queryFn: async () => await getSubscriptionStatus(userId)
+    queryFn: async () => await getSubscriptionStatus(userId),
   })
 
   const { changeStatus } = useSubscriptionStatus()
@@ -59,12 +58,11 @@ export const  handleSubscriptionStatus = (userId: string)  => {
     if (data) {
       changeStatus(data.status)
     }
-  }, [])
-
+  }, [data, changeStatus])
 
   return {
     data,
-    isLoading, 
-    isError
+    isLoading,
+    isError,
   }
 }

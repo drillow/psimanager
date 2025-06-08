@@ -78,12 +78,7 @@ export const RecoveryForm: React.FC<RecoveryFormType> = ({ onBackToLogin }) => {
             {isLoading ? <LoadingSpinner /> : 'Recuperar conta'}
           </Button>
 
-          <Button
-            className="w-full"
-            variant="secondary"
-            type="button"
-            onClick={onBackToLogin}
-          >
+          <Button className="w-full" variant="secondary" type="button" onClick={onBackToLogin}>
             Voltar
           </Button>
         </div>

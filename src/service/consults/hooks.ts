@@ -9,6 +9,7 @@ import {
   updateConsult,
 } from './service'
 import { QueryKeys } from '@/utils/queryKeys'
+import { AxiosError } from 'axios'
 
 export const useNextTreeDaysConsults = (userId: string, enabled: boolean) => {
   const { data, isLoading, isError } = useQuery({
@@ -37,10 +38,19 @@ export const useGetWeekConsults = (userId: string, weekOffset: number) => {
   }
 }
 
-export const useAddNewConsult = (onSuccess: () => void) => {
+export const useAddNewConsult = ({
+  onSuccess,
+  onError,
+}: {
+  onSuccess: () => void
+  onError: (message: string) => void
+}) => {
   const { mutateAsync, isPending, isError } = useMutation({
     mutationFn: (payload: unknown) => createConsult(payload),
     onSuccess,
+    onError: (e: AxiosError<{ message: string }>) => {
+      onError(e.response?.data.message || 'Erro ao criar consulta')
+    },
   })
 
   return {
@@ -71,7 +81,13 @@ export const useDeleteConsult = (onSuccess: () => void) => {
 
 export const useUpdateConsult = (onSuccess: () => void) => {
   const { mutateAsync, isPending, isError } = useMutation({
-    mutationFn: ({ consultId, consultPayload }: { consultId: string, consultPayload: Partial<Consult> }) => updateConsult(consultId, consultPayload),
+    mutationFn: ({
+      consultId,
+      consultPayload,
+    }: {
+      consultId: string
+      consultPayload: Partial<Consult>
+    }) => updateConsult(consultId, consultPayload),
     onSuccess,
   })
 
