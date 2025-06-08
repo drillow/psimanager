@@ -1,3 +1,4 @@
+import React from 'react'
 import { Link2, MapPin } from 'lucide-react'
 import { Button } from './ui/button'
 import {
@@ -34,8 +35,6 @@ import { useAuth } from '@/context/auth'
 import { useAddNewConsult } from '@/service/consults/hooks'
 import { useQueryClient } from '@tanstack/react-query'
 import { QueryKeys } from '@/utils/queryKeys'
-import React from 'react'
-import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
 import { cx } from 'class-variance-authority'
 import { CurrencyInput } from './CurrencyInput'
 import { DateTimePicker } from './TesteCalendar'
@@ -89,7 +88,6 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
 }) => {
   const { user } = useAuth()
   const queryClient = useQueryClient()
-  const { status } = useSubscriptionStatus()
 
   const form = useForm<FormProps>({
     resolver: zodResolver(formSchema),
