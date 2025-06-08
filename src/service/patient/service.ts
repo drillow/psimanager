@@ -4,7 +4,7 @@ export type PatientPayload = {
   id?: string
   firstName: string
   lastName: string
-  email: string
+  email?: string
   phoneNumber: string
   isWhatsApp: boolean
   patientId?: string
