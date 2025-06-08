@@ -302,20 +302,20 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                 />
               )}
 
-              {status === SubscriptionStatus.ACTIVE && (
-                <FormField
-                  control={form.control}
-                  name="repeat"
-                  render={({ field }) => (
-                    <div className="flex flex-col items-start gap-2">
-                      <Label htmlFor="" className="text-right">
-                        Repetir consulta
-                      </Label>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
-                    </div>
-                  )}
-                />
-              )}
+              {/* {status === SubscriptionStatus.ACTIVE && ( */}
+              <FormField
+                control={form.control}
+                name="repeat"
+                render={({ field }) => (
+                  <div className="flex flex-col items-start gap-2">
+                    <Label htmlFor="" className="text-right">
+                      Repetir consulta
+                    </Label>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </div>
+                )}
+              />
+              {/* )} */}
 
               {form.watch('repeat') && (
                 <div className="flex flex-col items-start gap-2">
