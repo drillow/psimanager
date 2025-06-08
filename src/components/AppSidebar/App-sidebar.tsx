@@ -62,21 +62,9 @@ const financeItems = [
     disabled: true,
     asSoon: true,
   },
-  // {
-  //   title: 'Plano',
-  //   url: 'plan',
-  //   icon: Crown,
-  //   disabled: false,
-  //   asSoon: false,
-  // },
 ]
 
 const footerItems = [
-  // {
-  //   title: 'Configurações',
-  //   url: 'settings',
-  //   icon: Settings,
-  // },
   {
     title: 'Ajuda e Suporte',
     url: 'help-support',

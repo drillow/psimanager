@@ -1,71 +1,27 @@
 import { AddPatientToCalendar } from '@/components/AddPatientToCalendar'
-import { EmptyColumn } from '@/components/EmptyColumn'
+
 import { PageHeader } from '@/components/PageHeader'
-import { PatientCard, PatientType } from '@/components/ConsultCard'
-import { ScrollDayColumn } from '@/components/ScrollDayColumn'
+
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+
 import { useSidebar } from '@/components/ui/sidebar'
 import { useAuth } from '@/context/auth'
 import { useGetWeekConsults } from '@/service/consults/hooks'
-import { cx } from 'class-variance-authority'
-import { format, parseISO, addDays } from 'date-fns'
+
 import { ChevronLeft, ChevronRight, PlusIcon } from 'lucide-react'
 
 import { useEffect, useState } from 'react'
-import { Toggle } from '@/components/ui/toggle'
 
 import { CalendarEvent, WeekCalendar } from '@/components/WeekCalendar'
-
-enum FilterOptions {
-  ONLINE,
-  IN_PERSON,
-}
-
-enum WeekDays {
-  SEG = 'MO',
-  TER = 'TU',
-  QUA = 'WE',
-  QUI = 'TH',
-  SEX = 'FR',
-  SAB = 'SA',
-  DOM = 'SU',
-}
-
-type MockDataProps = {
-  [key: string]: { name: string; time: string; type: 'ONLINE' | 'IN_PERSON' }[]
-}
 
 const Services = () => {
   const [isAddConsultModalOpen, setIsAddConsultModalOpen] = useState(false)
   const [weekOffset, setWeekOffset] = useState(0)
   const [patinents, setPatients] = useState<CalendarEvent[]>([])
-  const [selectedFilter] = useState<FilterOptions | null>(null)
+
   const { setOpen } = useSidebar()
   const { user } = useAuth()
-  const { data, isLoading } = useGetWeekConsults(user.id, weekOffset)
-
-  const filterPatients = (data: MockDataProps, selectedFilter: FilterOptions | null) => {
-    if (selectedFilter === null) {
-      return data
-    }
-
-    const filteredData: MockDataProps = {}
-
-    if (selectedFilter === FilterOptions.ONLINE) {
-      for (const key in data) {
-        filteredData[key] = data[key].filter((patient) => patient.type === 'ONLINE')
-      }
-
-      return filteredData
-    }
-
-    for (const key in data) {
-      filteredData[key] = data[key].filter((patient) => patient.type === 'IN_PERSON')
-    }
-
-    return filteredData
-  }
+  const { data } = useGetWeekConsults(user.id, weekOffset)
 
   useEffect(() => {
     if (data) {
@@ -76,15 +32,6 @@ const Services = () => {
   useEffect(() => {
     setOpen(false)
   }, [])
-
-  // useEffect(() => {
-  //   if (patinents) {
-  //     const filteredPatients = filterPatients(data?.consults, selectedFilter)
-  //     setPatients(filteredPatients)
-  //   }
-  // }, [selectedFilter])
-
-  const today = new Date()
 
   return (
     <div className="w-full h-screen p-4 flex flex-col gap-4">
@@ -103,10 +50,6 @@ const Services = () => {
               Hoje
             </Button>
           </div>
-          {/* <div className="flex items-center gap-2">
-            <Toggle variant={"outline"} value={FilterOptions.ONLINE} pressed={selectedFilter === FilterOptions.ONLINE} onPressedChange={() => toggleFilter(FilterOptions.ONLINE)}>Online</Toggle>
-            <Toggle variant={"outline"} value={FilterOptions.IN_PERSON} pressed={selectedFilter === FilterOptions.IN_PERSON} onPressedChange={() => toggleFilter(FilterOptions.IN_PERSON)}>Presencial</Toggle>
-          </div> */}
         </div>
 
         <Button type="button" onClick={() => setIsAddConsultModalOpen(true)}>
@@ -115,12 +58,18 @@ const Services = () => {
         </Button>
       </div>
 
+      {/* {isLoading && (
+        <div className="flex items-center justify-center h-full absolute z-50 center-x center-y w-full ">
+          <LoadingSpinner className="text-purple-500" />
+          <span>Carregando...</span>
+        </div>
+      )} */}
+
       <WeekCalendar weekOffset={weekOffset} events={patinents} />
 
       {isAddConsultModalOpen && (
         <AddPatientToCalendar isOpen={isAddConsultModalOpen} setIsOpen={setIsAddConsultModalOpen} />
       )}
-      {/* {} */}
     </div>
   )
 }

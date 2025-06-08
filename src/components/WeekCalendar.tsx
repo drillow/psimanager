@@ -1,4 +1,5 @@
-import { MapPin, Video, User } from 'lucide-react'
+import { MapPin, Video } from 'lucide-react'
+import { Checkbox } from './ui/checkbox'
 
 export interface CalendarEvent {
   id: string
@@ -79,8 +80,8 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
     const startPosition = (startHour * 60 + startMinute) / 60
 
     return {
-      top: `calc(${startPosition * 5}rem + 6px)`,
-      height: `calc(${durationInHours * 5}rem - 12px)`,
+      top: `calc(${startPosition * 5}rem + 4px)`,
+      height: `calc(${durationInHours * 5}rem - 9px)`,
     }
   }
 
@@ -105,7 +106,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
 
   const getEventColor = (event: CalendarEvent) => {
     if (event.completed) {
-      return 'bg-gray-400'
+      return 'bg-gray-200'
     }
     return event.type === 'IN_PERSON' ? 'bg-purple-100' : 'bg-green-100'
   }
@@ -177,7 +178,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
                     return (
                       <div
                         key={event.id}
-                        className={`absolute left-1 right-1 ${eventColor} text-blue-600 rounded-md p-2 text-xs font-medium shadow-sm cursor-pointer z-10 ${
+                        className={`absolute left-1 right-1 ${eventColor} text-purple-600 rounded-md p-2 text-xs font-medium shadow-sm cursor-pointer z-10 ${
                           isRecurring ? 'border-2 border-white border-dashed' : ''
                         } ${event.completed ? 'opacity-60' : ''}`}
                         style={{
@@ -186,12 +187,26 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
                           minHeight: '3rem',
                         }}
                       >
-                        <div className="flex items-center gap-1 mb-1">
-                          <User className="h-3 w-3" />
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Checkbox />
+                            <span
+                              className={`font-semibold text-sm ${event.completed ? 'line-through text-zinc-500' : 'text-zinc-700'}`}
+                            >
+                              {event.patientName}
+                            </span>
+                          </div>
+                          <span className="text-xs text-zinc-400">
+                            {formatEventTime(event.date)}
+                          </span>
+                        </div>
+                        {/* <div className="flex items-center gap-1 mb-1">
+                          <Checkbox />
                           <span className="truncate font-semibold">{event.patientName}</span>
                           {isRecurring && <span className="ml-1">🔄</span>}
                           {event.completed && <span className="ml-1">✓</span>}
-                        </div>
+                          <div className="text-xs opacity-90">{formatEventTime(event.date)}</div>
+                        </div> */}
 
                         <div className="flex items-center gap-1 mb-1">
                           {event.type === 'IN_PERSON' ? (
@@ -201,8 +216,6 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
                           )}
                           <span className="text-xs truncate">{event.place}</span>
                         </div>
-
-                        <div className="text-xs opacity-90">{formatEventTime(event.date)}</div>
                       </div>
                     )
                   })}
