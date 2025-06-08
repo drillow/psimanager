@@ -27,7 +27,7 @@ import { CustomInput } from './CustomInput'
 import { QueryKeys } from '@/utils/queryKeys'
 
 const formSchema = z.object({
-  email: z.string().email('E-mail inválido'),
+  email: z.string().email('E-mail inválido').optional(),
   firstName: z.string().min(1, { message: 'Nome obrigatório' }),
   lastName: z.string().min(1, { message: 'Sobrenome obrigatório' }),
   phoneNumber: z.string({ message: 'Telefone obrigatório' }).min(11, 'Telefone inválido'),

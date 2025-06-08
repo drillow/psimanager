@@ -49,6 +49,10 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
 
   const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
 
+  const parseName = (name: string) => {
+    return name.split(' ').slice(0, 2).join(' ')
+  }
+
   const getWeekDates = (offset: number) => {
     const week = []
     const today = new Date()
@@ -193,7 +197,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
                             <span
                               className={`font-semibold text-sm ${event.completed ? 'line-through text-zinc-500' : 'text-zinc-700'}`}
                             >
-                              {event.patientName}
+                              {parseName(event.patientName)}
                             </span>
                           </div>
                           <span className="text-xs text-zinc-400">
