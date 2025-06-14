@@ -38,7 +38,7 @@ export const Card: React.FC<CardProps> = ({ patient, isCompleted = false }) => {
             disabled={isLoading}
           />
           <span
-            className={`font-semibold text-sm ${isCompleted ? 'line-through text-zinc-300' : 'text-zinc-700'}`}
+            className={`capitalize font-semibold text-sm ${isCompleted ? 'line-through text-zinc-300' : 'text-zinc-700'}`}
           >
             {patient.name}
           </span>

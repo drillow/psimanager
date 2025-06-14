@@ -1,6 +1,6 @@
 import { formatCellphone } from '@/utils/masks/phone_mask'
-import { DeletePatient } from './DeletePatientButton'
-import { EditPatientButton } from './EditButtonPatient'
+import { DeletePatient } from '../pages/Patients/_components/DeletePatientButton'
+import { EditPatientButton } from '../pages/Patients/_components/EditButtonPatient'
 import { Badge } from './ui/badge'
 import { TableCell, TableRow } from './ui/table'
 import { PatientPayload } from '@/service/patient/service'
@@ -28,7 +28,7 @@ export const PatientRow: React.FC<PatientRowProps> = ({ data }) => {
         {data.age}
       </TableCell>
       <TableCell className="text-zinc-500 text-sm font-semibold antialiased">
-        {data.email}
+        {data?.email || 'N/A'}
       </TableCell>
       <TableCell className="text-zinc-500 text-sm font-semibold antialiased w-[275px]">
         {formatCellphone(data.phoneNumber)}

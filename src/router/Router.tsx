@@ -1,7 +1,7 @@
 import Layout from '@/components/layout/Layout'
 import { Billings } from '@/pages/Billings/Billings'
 import { Home } from '@/pages/Dashboard/Home'
-import { Patients } from '@/pages/Patients/Patients'
+import { PatientsPage } from '@/pages/Patients/Patients'
 
 import Services from '@/pages/Consults/Services'
 import { setDefaultOptions } from 'date-fns'
@@ -45,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'patients',
-        element: <Patients />,
+        element: <PatientsPage />,
       },
       {
         path: 'billing',

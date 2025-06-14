@@ -5,6 +5,7 @@ import {
   getNextTreeDaysConsults,
   getWeekConsults,
   removeConsult,
+  saveAnotations,
   toggleConsultStatus,
   updateConsult,
 } from './service'
@@ -100,10 +101,24 @@ export const useUpdateConsult = (onSuccess: () => void) => {
 
 export const useToggleConsultStatus = (onSuccess: () => void) => {
   const { mutateAsync, isPending, isError } = useMutation({
-    mutationFn: (consultId: string) => toggleConsultStatus(consultId),
+    mutationFn: ({ consultId, notes }: { consultId: string; notes?: string }) =>
+      toggleConsultStatus(consultId, notes),
     onSuccess,
   })
 
+  return {
+    execute: mutateAsync,
+    isLoading: isPending,
+    isError,
+  }
+}
+
+export const useSaveNotes = (onSuccess: () => void) => {
+  const { mutateAsync, isPending, isError } = useMutation({
+    mutationFn: ({ consultId, notes }: { consultId: string; notes: string }) =>
+      saveAnotations(consultId, notes),
+    onSuccess,
+  })
   return {
     execute: mutateAsync,
     isLoading: isPending,

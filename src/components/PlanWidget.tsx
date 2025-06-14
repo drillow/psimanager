@@ -7,7 +7,7 @@ import { useStripe } from '@/service/plan/hooks'
 
 export const PlanWidget = () => {
   const { user } = useAuth()
-  const { data, isLoading } = useGetPatient(user.id)
+  const { data, isLoading } = useGetPatient(user.id, 1)
   const { createSubscriptionStripeCheckout, isLoading: isLoadingSub } = useStripe()
 
   return (

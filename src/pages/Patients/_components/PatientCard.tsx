@@ -1,16 +1,22 @@
-import { PatientPayload } from '@/service/patient/service'
-import { Avatar, AvatarFallback } from './ui/avatar'
+import { Avatar, AvatarFallback } from '../../../components/ui/avatar'
 import { ChevronRight, Mail, Phone } from 'lucide-react'
-import { Separator } from './ui/separator'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet'
+import { Separator } from '../../../components/ui/separator'
+
+import { InfoPatient } from '@/pages/Patients/_components/InfoPatient'
+import { Patients } from '@/pages/Patients/_components/TableColumns'
+import { useState } from 'react'
 
 type PatientCardProps = {
-  data: PatientPayload
+  data: Patients
 }
 
 export const PatientCard: React.FC<PatientCardProps> = ({ data }) => {
+  const [openInfoModal, setOpenInfoModal] = useState(false)
+
+  const handleOpenInfoModal = () => setOpenInfoModal((prevState) => !prevState)
+
   return (
-    <Sheet>
+    <div>
       <div key={data.id} className="border border-zinc-200 rounded-lg p-4 flex flex-col gap-4">
         <div className="flex items-center gap-4">
           <Avatar className="w-12 h-12 rounded-full flex items-center justify-center ">
@@ -32,20 +38,17 @@ export const PatientCard: React.FC<PatientCardProps> = ({ data }) => {
             <Phone className="w-h h-4" />
             {data.phoneNumber}
           </span>
-          <SheetTrigger asChild>
-            <button className="flex items-center gap-1 text-sm font-normal text-violet-600">
-              Ver mais
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </SheetTrigger>
+
+          <button
+            className="flex items-center gap-1 text-sm font-normal text-violet-600"
+            onClick={handleOpenInfoModal}
+          >
+            Ver mais
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
-      <SheetContent className="min-w-[475px]">
-        <SheetHeader>
-          <SheetTitle>Informação do paciente</SheetTitle>
-        </SheetHeader>
-        <p>{data.email}</p>
-      </SheetContent>
-    </Sheet>
+      <InfoPatient open={openInfoModal} onOpenChange={handleOpenInfoModal} patientData={data} />
+    </div>
   )
 }

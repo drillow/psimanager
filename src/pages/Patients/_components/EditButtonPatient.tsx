@@ -1,4 +1,4 @@
-import { Button } from './ui/button'
+import { Button } from '../../../components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -7,27 +7,27 @@ import {
   DialogTrigger,
   DialogFooter,
   DialogDescription,
-} from './ui/dialog'
-import { Label } from './ui/label'
+} from '../../../components/ui/dialog'
+import { Label } from '../../../components/ui/label'
 import { useForm } from 'react-hook-form'
-import { Switch } from './ui/switch'
+import { Switch } from '../../../components/ui/switch'
 import { PatientPayload } from '@/service/patient/service'
-import { PencilIcon } from 'lucide-react'
+
 import { useEditPatient } from '@/service/patient/hooks'
 import { useAuth } from '@/context/auth'
 import { useQueryClient } from '@tanstack/react-query'
-import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
-import { CustomInput } from './CustomInput'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '../../../components/ui/form'
+import { CustomInput } from '../../../components/CustomInput'
 import { formatCellphone } from '@/utils/masks/phone_mask'
 import { QueryKeys } from '@/utils/queryKeys'
 
-interface EditPatientButtonProps {
+interface EditPatientModalProps {
   patientData: PatientPayload
   open: boolean
   setOpen: (data?: boolean) => void
 }
 
-export const EditPatientButton: React.FC<EditPatientButtonProps> = ({
+export const EditPatientModal: React.FC<EditPatientModalProps> = ({
   patientData,
   open = false,
   setOpen,
@@ -61,12 +61,12 @@ export const EditPatientButton: React.FC<EditPatientButtonProps> = ({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen} modal key={patientData.id!}>
-      <DialogTrigger asChild>
+    <Dialog open={open} onOpenChange={setOpen} modal key={patientData.id}>
+      {/* <DialogTrigger asChild>
         <button type="button" className="p-1 border border-zinc-300 rounded-md">
           <PencilIcon className="w-4 h-4" />
         </button>
-      </DialogTrigger>
+      </DialogTrigger> */}
       <DialogContent className="max-w-[525px]">
         <Form {...form}>
           <form onSubmit={handleSubmit(handlePayload)} className="grid gap-4 py-2">
@@ -84,13 +84,7 @@ export const EditPatientButton: React.FC<EditPatientButtonProps> = ({
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormControl>
-                        <CustomInput
-                          label="Nome"
-                          id="name"
-                          placeholder="Nome"
-                          // className="col-span-3"
-                          {...field}
-                        />
+                        <CustomInput label="Nome" id="name" placeholder="Nome" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

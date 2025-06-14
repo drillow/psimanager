@@ -1,4 +1,4 @@
-import { AddPatientToCalendar } from '@/components/AddPatientToCalendar'
+import { AddPatientToCalendar } from '@/pages/Consults/_components/AddPatientToCalendar'
 
 import { PageHeader } from '@/components/PageHeader'
 
@@ -12,7 +12,7 @@ import { ChevronLeft, ChevronRight, PlusIcon } from 'lucide-react'
 
 import { useEffect, useState } from 'react'
 
-import { CalendarEvent, WeekCalendar } from '@/components/WeekCalendar'
+import { CalendarEvent, WeekCalendar } from '@/pages/Consults/_components/WeekCalendar'
 
 const Services = () => {
   const [isAddConsultModalOpen, setIsAddConsultModalOpen] = useState(false)

@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom'
 import { Card } from '@/components/Card'
 import { Ellipsis } from 'lucide-react'
 import { EmptyColumn } from '@/components/EmptyColumn'
-import { Separator } from './ui/separator'
-import { Button } from './ui/button'
+import { Separator } from '../../../components/ui/separator'
+import { Button } from '../../../components/ui/button'
 import { useNextTreeDaysConsults } from '@/service/consults/hooks'
 import { useAuth } from '@/context/auth'
 import { ACCESS_TOKEN_KEY } from '@/utils/constants'
 
-import { Skeleton } from './ui/skeleton'
+import { Skeleton } from '../../../components/ui/skeleton'
 import Cookies from 'universal-cookie'
 import { ptBR } from 'date-fns/locale'
 
@@ -20,6 +20,10 @@ export const DashboardCalendar = () => {
   const { data, isLoading } = useNextTreeDaysConsults(user.id, !!cookies.get(ACCESS_TOKEN_KEY))
 
   const token = cookies.get(ACCESS_TOKEN_KEY)
+
+  const parseName = (name: string) => {
+    return name.split(' ').slice(0, 2).join(' ')
+  }
 
   if (!token) {
     return <p>Loading...</p>
@@ -51,7 +55,7 @@ export const DashboardCalendar = () => {
                     key={consult.patientName}
                     patient={{
                       id: consult.id,
-                      name: consult.patientName,
+                      name: parseName(consult.patientName).toLowerCase(),
                       time: format(consult?.date, 'HH:mm', { locale: ptBR }),
                       isOnline: consult.type === 'ONLINE',
                       url: consult.url,
@@ -95,7 +99,7 @@ export const DashboardCalendar = () => {
                     key={consult.patientName}
                     patient={{
                       id: consult.id,
-                      name: consult.patientName,
+                      name: parseName(consult.patientName).toLowerCase(),
                       time: format(consult?.date, 'HH:mm', {
                         locale: ptBR,
                       }),
@@ -139,7 +143,7 @@ export const DashboardCalendar = () => {
                     key={consult.patientName}
                     patient={{
                       id: consult.id,
-                      name: consult.patientName,
+                      name: parseName(consult.patientName).toLowerCase(),
                       time: format(consult?.date, 'HH:mm', {
                         locale: ptBR,
                       }),

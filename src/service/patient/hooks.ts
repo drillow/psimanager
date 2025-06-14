@@ -8,10 +8,10 @@ import {
   saveNewPatient,
 } from './service'
 
-export const useGetPatient = (userId: string) => {
+export const useGetPatient = (userId: string, page: number) => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['PATIENT_LIST'],
-    queryFn: () => getAllPatients(userId),
+    queryKey: ['PATIENT_LIST', page],
+    queryFn: () => getAllPatients(userId, page),
   })
 
   return {

@@ -51,14 +51,13 @@ export const updateConsult = async (consultId: string, consultPayload: Partial<C
   return response.data
 }
 
-export const toggleConsultStatus = async (consultId: string) => {
-  try {
-    // setTimeout(async () => {
-    const response = await api.patch(`/api/consult/${consultId}/toggle-status`)
-    return response.data
-    // }, 15000)
-  } catch (err) {
-    throw new Error('Error')
-  }
+export const toggleConsultStatus = async (consultId: string, notes?: string) => {
+  const response = await api.patch(`/api/consult/${consultId}/toggle-status`, { notes })
+  return response.data
+}
+
+export const saveAnotations = async (consultId: string, notes: string) => {
+  const response = await api.patch(`/api/consult/${consultId}/notes`, { notes })
+  return response.data
 }
 // "rrule": "RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=TU"

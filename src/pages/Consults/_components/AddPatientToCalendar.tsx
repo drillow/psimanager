@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link2, MapPin } from 'lucide-react'
-import { Button } from './ui/button'
+import { Button } from '../../../components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -9,12 +9,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog'
-import { Label } from './ui/label'
-import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group'
-import { Input } from './ui/input'
-import { Switch } from './ui/switch'
-import { Checkbox } from './ui/checkbox'
+} from '../../../components/ui/dialog'
+import { Label } from '../../../components/ui/label'
+import { ToggleGroup, ToggleGroupItem } from '../../../components/ui/toggle-group'
+import { Input } from '../../../components/ui/input'
+import { Switch } from '../../../components/ui/switch'
+import { Checkbox } from '../../../components/ui/checkbox'
 import {
   Select,
   SelectContent,
@@ -22,22 +22,22 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select'
+} from '../../../components/ui/select'
 import { useForm } from 'react-hook-form'
 
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '../../../components/ui/form'
 
-import { Combobox } from './Combobox'
+import { Combobox } from '../../../components/Combobox'
 import { useGetSelectListPatient } from '@/service/patient/hooks'
 import { useAuth } from '@/context/auth'
 import { useAddNewConsult } from '@/service/consults/hooks'
 import { useQueryClient } from '@tanstack/react-query'
 import { QueryKeys } from '@/utils/queryKeys'
 import { cx } from 'class-variance-authority'
-import { CurrencyInput } from './CurrencyInput'
-import { DateTimePicker } from './TesteCalendar'
+import { CurrencyInput } from '../../../components/CurrencyInput'
+import { DateTimePicker } from '../../../components/TesteCalendar'
 import { toast } from 'sonner'
 
 const formSchema = z.object({
@@ -47,6 +47,7 @@ const formSchema = z.object({
   }),
   consultType: z.string(),
   consultValue: z.string(),
+  consultDuration: z.string(),
   place: z.string().optional(),
   url: z.string().optional(),
   repeat: z.boolean().default(false),
@@ -76,6 +77,7 @@ type Payload = {
   type: string
   consultValue: string
   hasRecurrence: boolean
+  consultDuration: number
   place?: string
   url?: string
   interval?: Interval
@@ -140,6 +142,7 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
       interval: dataPayload.frequency?.interval,
       startDate: date.toISOString().replace(/\.\d+/, ''),
       days: wkstNumber,
+      consultDuration: Number(dataPayload.consultDuration),
       ...(dataPayload.place && { place: dataPayload.place }),
       ...(dataPayload.url && { url: dataPayload.url }),
     } as Payload
@@ -196,17 +199,45 @@ export const AddPatientToCalendar: React.FC<AddPatientToCalendarProps> = ({
                 />
                 <FormField
                   control={form.control}
-                  name="consultValue"
-                  render={({ field: { value, onChange } }) => (
-                    <FormItem className="w-full">
-                      <FormControl>
-                        <CurrencyInput currencyLabel="R$" value={value} onChange={onChange} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                  name="consultDuration"
+                  render={({ field: { value, onChange, name } }) => (
+                    <div className="flex flex-col items-start gap-2">
+                      <Label htmlFor={'currency'} className="text-right">
+                        Duração da consulta
+                      </Label>
+
+                      <Select name={name} onValueChange={onChange} defaultValue={value}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Minutos" defaultValue={'30'} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="30">30 minutos</SelectItem>
+                            <SelectItem value="35">35 minutos</SelectItem>
+                            <SelectItem value="40">40 minutos</SelectItem>
+                            <SelectItem value="45">45 minutos</SelectItem>
+                            <SelectItem value="50">50 minutos</SelectItem>
+                            <SelectItem value="55">55 minutos</SelectItem>
+                            <SelectItem value="60">60 minutos</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   )}
                 />
               </div>
+              <FormField
+                control={form.control}
+                name="consultValue"
+                render={({ field: { value, onChange } }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <CurrencyInput currencyLabel="R$" value={value} onChange={onChange} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

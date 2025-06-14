@@ -1,33 +1,28 @@
+import { useEffect, useState } from 'react'
 import { AddPatientButton } from '@/components/AddPatientButton'
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-import { Skeleton } from '@/components/ui/skeleton'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import { useAuth } from '@/context/auth'
 import { useGetPatient } from '@/service/patient/hooks'
-import { PatientPayload } from '@/service/patient/service'
+
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 
-import { LayoutGrid, PlusIcon, Rows3 } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { PatientRow } from '@/components/PatientRow'
+import { ChevronLeft, ChevronRight, LayoutGrid, PlusIcon, Rows3 } from 'lucide-react'
 import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import { PatientCard } from '@/components/PatientCard'
+import { PatientCard } from '@/pages/Patients/_components/PatientCard'
+import { DataTable } from '@/components/ui/data-table'
+import { columns, Patients } from './_components/TableColumns'
 
-export const Patients = () => {
+const ITENS_PER_PAGE = 15
+
+export const PatientsPage = () => {
+  const [currentPage, setCurrentPage] = useState(1)
   const { user } = useAuth()
-  const { isLoading, data } = useGetPatient(user.id)
+  const { data } = useGetPatient(user.id, currentPage)
   const { status } = useSubscriptionStatus()
 
   const [filteredList, setFilteredList] = useState([])
@@ -35,16 +30,28 @@ export const Patients = () => {
 
   const [isAddPatientModalOpen, setIsAddPatientModalOpen] = useState(false)
 
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1)
+    }
+  }
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(data.total / ITENS_PER_PAGE)) {
+      setCurrentPage((prev) => prev + 1)
+    }
+  }
+
   useEffect(() => {
     if (data) {
-      setFilteredList(data)
+      setFilteredList(data.data)
     }
   }, [data])
 
   return (
     <div className="w-full h-screen p-4 flex flex-col gap-4">
       <PageHeader pageTitle="Pacientes" />
-      <div className="flex flex-col gap-4 border border-zinc-200 rounded-lg p-4 h-full">
+      <div className="flex flex-col gap-4  h-full">
         <Tabs defaultValue="list" className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -83,58 +90,32 @@ export const Patients = () => {
             )}
           </div>
           <TabsContent value="list">
-            <Table>
-              <TableHeader className="bg-gray-50">
-                <TableHead>ID</TableHead>
-                <TableHead>Nome</TableHead>
-                <TableHead>Idade</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Celular</TableHead>
-                <TableHead className="text-center">WhatsApp</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <>
-                    {Array.from({ length: 8 }, (_, index) => {
-                      return (
-                        <TableRow key={index}>
-                          <TableCell>
-                            <Skeleton className="h-6 w-full" />
-                          </TableCell>
-                          <TableCell>
-                            <Skeleton className="h-6 w-full" />
-                          </TableCell>
-                          <TableCell>
-                            <Skeleton className="h-6 w-full" />
-                          </TableCell>
-                          <TableCell className="flex justify-center">
-                            <Skeleton className="h-6 w-3/12" />
-                          </TableCell>
-                          <TableCell>
-                            <Skeleton className="h-6 w-full" />
-                          </TableCell>
-                        </TableRow>
-                      )
-                    })}
-                  </>
-                ) : (
-                  <>
-                    {filteredList?.map((data: PatientPayload) => (
-                      <PatientRow data={data} key={data.id} />
-                    ))}
-                  </>
-                )}
-              </TableBody>
-            </Table>
+            <DataTable columns={columns} data={filteredList} />
           </TabsContent>
           <TabsContent value="grid">
             <div className="grid grid-cols-4 gap-4">
-              {filteredList?.map((data: PatientPayload) => (
-                <PatientCard key={data.id} data={data} />
-              ))}
+              {filteredList?.map((data: Patients) => <PatientCard key={data.id} data={data} />)}
             </div>
           </TabsContent>
+          <div className="flex items-center justify-center  gap-4">
+            <button
+              disabled={currentPage === 1}
+              onClick={handlePreviousPage}
+              className="border boder-zinc-300 rounded-md p-2"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <span className="w-16 text-center text-sm font-medium text-zinc-500">
+              {currentPage} of {Math.ceil(data?.total / ITENS_PER_PAGE)}
+            </span>
+            <button
+              disabled={currentPage === Math.ceil(data?.total / ITENS_PER_PAGE)}
+              onClick={handleNextPage}
+              className="border boder-zinc-300 rounded-md p-2"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </Tabs>
       </div>
     </div>

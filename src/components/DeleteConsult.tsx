@@ -35,9 +35,6 @@ export const DeleteConsult: React.FC<DeleteConsultProps> = ({
 
   return (
     <Dialog modal open={isOpen} onOpenChange={onSetOpen}>
-      <DialogTrigger asChild>
-        <Trash className={`w-4 h-4 text-red-400 cursor-pointer`} />
-      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Remover consulta</DialogTitle>

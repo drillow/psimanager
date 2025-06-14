@@ -13,15 +13,14 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { DashboardCalendar } from '@/components/DashboadCalendar'
+import { DashboardCalendar } from '@/pages/Dashboard/_components/DashboadCalendar'
 import { MenuItens, Settings } from '../../components/Settings'
 import WorkingImage from '@/assets/working-2.png'
-// import { useAuth } from '@/context/auth'
 import { useSearchParams } from 'react-router-dom'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import { SubscriptionStatus, useSubscriptionStatus } from '@/context/subscriptionStatus'
 
-// import { datetime, RRule } from 'rrule'
+import { DashboardMetrics } from './_components/DashboardMetrics'
 
 export const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -47,88 +46,12 @@ export const Home = () => {
         <div className="flex flex-1 h-full items-start gap-4">
           <DashboardCalendar />
           <div className="flex flex-col gap-4 w-5/12 h-full ">
-            {/* <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-white rounded-lg flex-1 h-full border border-zinc-200">
-                <h1>Felipe</h1>
-              </div>
-              <div>
-                <h1>Felipe</h1>
-              </div>
-            </div> */}
-
-            <div className="bg-white rounded-xl p-0 border h-full border-zinc-200 relative flex flex-col items-center justify-center overflow-hidden">
-              {/* <h2 className="text-lg font-semibold text-zinc-700 w-full p-4">
-              Métricas
-            </h2> */}
-              {/* <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-50 bg-white rounded-md p-2 text-zinc-700 font-medium text-sm">
-              Em breve uma novidade para te ajudar ainda mais.
-
-            </p> */}
+            <DashboardMetrics />
+            {/* <div className="bg-white rounded-xl p-0 border h-full border-zinc-200 relative flex flex-col items-center justify-center overflow-hidden">
               <div className="bg-white z-50">
                 <img src={WorkingImage} className="" />
               </div>
-              {/* <div className="flex flex-col gap-10 w-full h-full p-4">
-              <div className="flex items-start justify-between">
-                <div className="flex flex-col gap-2">
-                  <h2 className="text-lg font-semibold text-zinc-700">
-                    Métricas
-                  </h2>
-                  <span className="text-xs text-zinc-400">
-                    Uma visão geral dos seus atendimentos
-                  </span>
-                </div>
-                <Button variant={'outline'} onClick={handleAmountVisibility}>
-                  {isAmountVisible ? <Eye /> : <EyeOff />}
-                </Button>
-              </div>
-
-              <MainChart isHiddenValues={!isAmountVisible} />
-
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col items-center w-full gap-2">
-                  <h2 className="text-sm text-zinc-700">Consultas no mês</h2>
-                  {isAmountVisible ? (
-                    <strong className="text-3xl font-semibold flex items-start gap-2">
-                      120
-                    </strong>
-                  ) : (
-                    <div className="bg-zinc-300 h-9 w-4/12 rounded-md" />
-                  )}
-                  <span className="text-xs text-zinc-400 flex items-center gap-1">
-                    {isAmountVisible ? (
-                      <strong className="text-red-500 flex items-center gap-2">
-                        20%
-                      </strong>
-                    ) : (
-                      <div className="w-7 h-4 bg-zinc-300 rounded-sm" />
-                    )}
-                    a menos que o último mês
-                  </span>
-                </div>
-                <Separator orientation="vertical" />
-                <div className="flex flex-col items-center w-full gap-2">
-                  <h2 className="text-sm text-zinc-700">
-                    Faturamento estimado
-                  </h2>
-                  {isAmountVisible ? (
-                    <strong className="text-3xl font-semibold">
-                      R$ 12.000
-                    </strong>
-                  ) : (
-                    <div className="bg-zinc-300 h-9 w-7/12 rounded-md" />
-                  )}
-                  <span className="text-xs text-zinc-400 flex items-center gap-1">
-                    {isAmountVisible ? (
-                      <strong className="text-green-500">20%</strong>
-                    ) : (
-                      <div className="w-7 h-4 bg-zinc-300 rounded-sm" />
-                    )}
-                    a mais que o último mês
-                  </span>
-                </div>
-              </div>
             </div> */}
-            </div>
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4">
@@ -145,8 +68,6 @@ export const Home = () => {
               icon={<Crown className="w-8 h-8" />}
               hasBadge={status !== SubscriptionStatus.ACTIVE}
               badgeText="Plano gratuíto"
-              // toPath={status !== SubscriptionStatus.ACTIVE ? '/metrics' : undefined}
-              // toPath="/plan"
             />
           </Settings>
 
@@ -154,11 +75,6 @@ export const Home = () => {
             title="Métricas"
             description="Veja total de consultas online e presencial, faturamento e outros."
             icon={<ChartColumnBig className="w-8 h-8" />}
-            // toPath={status === SubscriptionStatus.ACTIVE ? '/metrics' : undefined}
-            // hasBadge
-            // badgeText="Em breve"
-            // badgeVariant='secondary'
-            // toPath="/settings"
           />
           <Settings openScreen={MenuItens.PERSONAL}>
             <WidgetCardLink
@@ -187,7 +103,6 @@ export const Home = () => {
                 Seu pagamento confirmado
               </h2>
               <span className="text-zinc-500">Seu plano já está ativo</span>
-              {/* <Button className='mt-4'>Fechar</Button> */}
             </div>
           </div>
         </DialogContent>

@@ -25,7 +25,7 @@ export const WidgetCardLink: React.FC<WIdgetCardLinkProps> = ({
     return (
       <Link
         to={toPath}
-        className="border border-zinc-200 rounded-xl w-full h-[245px] p-4 flex flex-col justify-between bg-white  animated-card"
+        className="border border-zinc-200 rounded-xl w-full h-[245px] p-4 flex flex-col justify-between bg-white animated-card"
       >
         <div className="flex items-start justify-between">
           <div className="w-20 h-20 rounded-xl border border-zinc-200 flex items-center justify-center">

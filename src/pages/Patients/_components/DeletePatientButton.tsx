@@ -1,4 +1,4 @@
-import { Button } from './ui/button'
+import { Button } from '../../../components/ui/button'
 import {
   DialogHeader,
   Dialog,
@@ -7,11 +7,11 @@ import {
   DialogFooter,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog'
+} from '../../../components/ui/dialog'
 import { useDeletePatient } from '@/service/patient/hooks'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@/context/auth'
-import { Trash } from 'lucide-react'
+
 import { QueryKeys } from '@/utils/queryKeys'
 
 interface DeletePatientProps {
@@ -35,11 +35,6 @@ export const DeletePatient: React.FC<DeletePatientProps> = ({ patientId, open, s
 
   return (
     <Dialog open={open} onOpenChange={setOpen} modal key={'remove-modal'}>
-      <DialogTrigger asChild>
-        <button type="button" className="p-1 border border-zinc-300 rounded-md">
-          <Trash className=" w-4 h-4" />
-        </button>
-      </DialogTrigger>
       <DialogContent className="max-w-[525px]">
         <DialogHeader>
           <DialogTitle>Remover paciente</DialogTitle>

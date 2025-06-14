@@ -11,8 +11,8 @@ export type PatientPayload = {
   age?: number
 }
 
-export const getAllPatients = async (userId: string) => {
-  const response = await api.get(`/api/patient/${userId}/patients`)
+export const getAllPatients = async (userId: string, page: number) => {
+  const response = await api.get(`/api/patient/${userId}/patients?page=${page}`)
 
   return response.data
 }

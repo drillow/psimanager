@@ -15,7 +15,7 @@ export const CurrencyInput: React.FC<CurrencyInputProps> = ({ currencyLabel, ...
         <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sm text-gray-500 dark:text-gray-400">
           {currencyLabel}
         </span>
-        <Input id="currency" type="number" placeholder="Valor" className="pl-10" {...props} />
+        <Input id="currency" type="number" placeholder="Valor" className="pl-10 mr-6" {...props} />
       </div>
     </div>
   )
