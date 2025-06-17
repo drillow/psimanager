@@ -1,6 +1,5 @@
-import { Trash } from 'lucide-react'
 import { Button } from './ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog'
 import { useDeleteConsult } from '@/service/consults/hooks'
 import { Checkbox } from './ui/checkbox'
 import { useState } from 'react'

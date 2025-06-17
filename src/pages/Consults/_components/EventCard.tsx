@@ -51,7 +51,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event }) => {
     <>
       <div
         key={event.id}
-        className={`animated-card flex flex-col justify-between absolute left-1 right-1 bg-purple-100 border border-purple-400 hover:border-purple-600 transition-all ease-in-out rounded-md p-2 text-xs font-medium shadow-sm cursor-pointer z-10 ${event.completed ? 'opacity-60' : ''}`}
+        className={`animated-card flex flex-col justify-between absolute left-1 right-1 bg-purple-100  hover:border-purple-600 transition-all ease-in-out rounded-md p-2 text-xs font-medium shadow-sm cursor-pointer z-10 ${event.completed ? 'opacity-60' : ''}`}
         style={{
           top: position.top,
           height: position.height,
@@ -64,7 +64,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event }) => {
           <div className="flex items-center gap-2">
             <CompleteCheckbox event={event} key={event.id} />
             <span
-              className={`w-full font-semibold text-sm ${event.completed ? 'line-through text-zinc-500' : 'text-zinc-700'} truncate capitalize`}
+              className={`w-full font-semibold text-sm ${event.completed ? 'line-through text-purple-400' : 'text-purple-600'} max-w-28 truncate capitalize`}
             >
               {parseName(event.patientName).toLowerCase()}
             </span>
@@ -76,7 +76,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
         <div className="flex items-center justify-between">
           {event.consultDuration > 45 && (
-            <div className="flex items-center gap-1 text-purple-500 ">
+            <div className="flex items-center gap-1 text-zinc-500 ">
               {event.type === 'IN_PERSON' ? (
                 <MapPin className="h-3 w-3" />
               ) : (

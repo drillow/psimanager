@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { EventCard } from './EventCard'
+import { cx } from 'class-variance-authority'
 
 export interface CalendarEvent {
   id: string
@@ -93,6 +94,19 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
     return event.toDateString() === targetDate.toDateString()
   }
 
+  const getTodayColumnIndex = () => {
+    if (!isCurrentWeek()) return -1
+
+    const today = new Date()
+    return weekDates.findIndex((date) => date.toDateString() === today.toDateString())
+  }
+
+  const getCurrentHour = () => {
+    return currentTime.getHours()
+  }
+
+  const todayColumnIndex = getTodayColumnIndex()
+  const currentHour = getCurrentHour()
   // Update current time every minute
   useEffect(() => {
     const timer = setInterval(() => {
@@ -131,14 +145,13 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
 
         {/* Time Slots and Events */}
         <div className="grid grid-cols-8 overflow-y-auto flex-1 relative">
-          {isCurrentWeek() && (
+          {/* {isCurrentWeek() && (
             <div
               className="absolute left-0 right-0 z-40 pointer-events-none"
               style={{
                 top: `${getCurrentTimePosition()}rem`,
               }}
             >
-              {/* Time indicator on the left */}
               <div className="absolute left-0 -top-[11px] w-20 flex justify-end pr-2">
                 <div className="bg-purple-500 text-white text-xs px-2 py-1 rounded-md shadow-sm font-semibold">
                   {currentTime.toLocaleTimeString('pt-BR', {
@@ -148,33 +161,60 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
                   })}
                 </div>
               </div>
-              {/* Red line across the calendar */}
+
               <div className="ml-20 h-0.5 bg-purple-500 shadow-sm"></div>
-              {/* Red dot at the beginning of the line */}
+
               <div className="absolute left-[78px] top-0 w-2 h-2 bg-purple-500 rounded-full transform -translate-y-[3px]"></div>
             </div>
-          )}
+          )} */}
           {/* Time Column */}
           <div className="border-r border-gray-200 sticky left-0 z-20 bg-white">
-            {timeSlots.map((time) => (
-              <div
-                key={time}
-                className="h-20 border-b border-gray-100 last:border-b-0 flex items-start justify-end pr-3 pt-2"
-              >
-                <span className="text-xs text-gray-500 font-medium">{time}</span>
-              </div>
-            ))}
+            {timeSlots.map((time, timeIndex) => {
+              const timeHour = timeIndex
+              const isCurrentHour = isCurrentWeek() && timeHour === currentHour
+
+              return (
+                <div
+                  key={time}
+                  className="h-20 border-b border-gray-100 last:border-b-0 flex items-start justify-end pr-3 pt-2"
+                >
+                  <span
+                    className={cx(
+                      `text-xs`,
+                      isCurrentHour ? 'text-purple-600 font-semibold' : 'text-gray-500 font-medium',
+                    )}
+                  >
+                    {time}
+                  </span>
+                </div>
+              )
+            })}
           </div>
 
           {/* Days Columns */}
           {[0, 1, 2, 3, 4, 5, 6].map((dayIndex) => {
             // Generate recurring events for the current week
-
+            const isCurrentDay = dayIndex === todayColumnIndex
             return (
               <div
                 key={dayIndex}
                 className="border-r border-gray-200 last:border-r-0 relative min-w-0 flex-1"
               >
+                {isCurrentDay && (
+                  <div
+                    className="absolute left-0 right-0 z-40 pointer-events-none"
+                    style={{
+                      top: `${getCurrentTimePosition()}rem`,
+                    }}
+                  >
+                    {/* Time indicator on the left */}
+
+                    {/* Purple line across the current day column */}
+                    <div className="h-0.5 bg-purple-500 shadow-sm rounded-sm"></div>
+                    {/* Purple dot at the beginning of the line */}
+                    {/* <div className="absolute -left-[2px] top-0 w-1 h-4 bg-purple-500 rounded-md transform -translate-y-[7px]"></div> */}
+                  </div>
+                )}
                 {/* Time Slot Grid */}
                 {timeSlots.map((_, timeIndex) => (
                   <div

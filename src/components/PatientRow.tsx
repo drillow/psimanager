@@ -1,11 +1,12 @@
 import { formatCellphone } from '@/utils/masks/phone_mask'
 import { DeletePatient } from '../pages/Patients/_components/DeletePatientButton'
-import { EditPatientButton } from '../pages/Patients/_components/EditButtonPatient'
+
 import { Badge } from './ui/badge'
 import { TableCell, TableRow } from './ui/table'
 import { PatientPayload } from '@/service/patient/service'
 import { useState } from 'react'
 import { PatientInfo } from './PatientInfo'
+import { EditPatientModal } from '@/pages/Patients/_components/EditButtonPatient'
 
 type PatientRowProps = {
   data: PatientPayload
@@ -51,7 +52,7 @@ export const PatientRow: React.FC<PatientRowProps> = ({ data }) => {
 
       <TableCell className="text-right flex items-center justify-end gap-2">
         <PatientInfo key={data.id} />
-        <EditPatientButton
+        <EditPatientModal
           key={data.id}
           patientData={data}
           open={openEditModal}
