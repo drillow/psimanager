@@ -34,7 +34,7 @@ export const Card: React.FC<CardProps> = ({ patient, isCompleted = false }) => {
         <div className="flex items-center gap-2">
           <Checkbox
             checked={isCompleted}
-            onCheckedChange={() => execute(patient.id)}
+            onCheckedChange={() => execute({ consultId: patient.id })}
             disabled={isLoading}
           />
           <span
