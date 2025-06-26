@@ -7,44 +7,33 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
-import { Label } from './ui/label'
-import { Button } from './ui/button'
+} from '../../../components/ui/dialog'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '../../../components/ui/form'
+import { Label } from '../../../components/ui/label'
+import { Button } from '../../../components/ui/button'
 import { format, formatISO, parseISO } from 'date-fns'
 import { Link2, MapPin } from 'lucide-react'
-import { Checkbox } from './ui/checkbox'
-import { Input } from './ui/input'
-import { CustomInput } from './CustomInput'
+import { Checkbox } from '../../../components/ui/checkbox'
+import { Input } from '../../../components/ui/input'
+import { CustomInput } from '../../../components/CustomInput'
 import { useEffect, useState } from 'react'
 import { useUpdateConsult } from '@/service/consults/hooks'
-import { LoadingSpinner } from './Spinner'
+import { LoadingSpinner } from '../../../components/Spinner'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { QueryKeys } from '@/utils/queryKeys'
 import { useToast } from '@/hooks/use-toast'
 import { cx } from 'class-variance-authority'
-import { DateTimePicker } from './TesteCalendar'
-import { CurrencyInput } from './CurrencyInput'
+import { DateTimePicker } from '../../../components/TesteCalendar'
+import { CurrencyInput } from '../../../components/CurrencyInput'
 import { toZonedTime } from 'date-fns-tz'
-
-interface PatientCardProps {
-  patientName: string
-  endTime: string
-  place?: string
-  type: 'IN_PERSON' | 'ONLINE'
-  url?: string
-  id: string
-  date: string
-  completed: boolean
-  consultValue: number
-}
+import { CalendarEvent } from '@/pages/Consults/_components/WeekCalendar'
 
 type EditPatientModalProps = {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  consultData: PatientCardProps
+  consultData: CalendarEvent
 }
 
 const formSchema = z.object({
@@ -202,7 +191,7 @@ export const EditConsultModal: React.FC<EditPatientModalProps> = ({
               {form.watch('consultType') === 'ONLINE' ? (
                 <FormField
                   control={form.control}
-                  defaultValue={consultData.url}
+                  defaultValue={consultData?.url || ''}
                   name="url"
                   render={({ field }) => (
                     <div className="flex flex-col items-start gap-2">

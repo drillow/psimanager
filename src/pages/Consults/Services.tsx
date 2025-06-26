@@ -8,7 +8,7 @@ import { useSidebar } from '@/components/ui/sidebar'
 import { useAuth } from '@/context/auth'
 import { useGetWeekConsults } from '@/service/consults/hooks'
 
-import { ChevronLeft, ChevronRight, PlusIcon } from 'lucide-react'
+import { PlusIcon } from 'lucide-react'
 
 import { useEffect, useState } from 'react'
 
@@ -40,12 +40,6 @@ const Services = () => {
       <div className="flex items-center justify-between">
         <div className="w-2/12 flex flex-col items-start gap-2">
           <div className="flex items-center gap-2">
-            <Button variant={'outline'} onClick={() => setWeekOffset((prev) => prev - 1)}>
-              <ChevronLeft />
-            </Button>
-            <Button variant={'outline'} onClick={() => setWeekOffset((prev) => prev + 1)}>
-              <ChevronRight />
-            </Button>
             <Button variant={'outline'} onClick={() => setWeekOffset(0)}>
               Hoje
             </Button>
@@ -65,7 +59,7 @@ const Services = () => {
         </div>
       )} */}
 
-      <WeekCalendar weekOffset={weekOffset} events={patinents} />
+      <WeekCalendar weekOffset={weekOffset} events={patinents} setWeekOffset={setWeekOffset} />
 
       {isAddConsultModalOpen && (
         <AddPatientToCalendar isOpen={isAddConsultModalOpen} setIsOpen={setIsAddConsultModalOpen} />

@@ -9,7 +9,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { QueryKeys } from '@/utils/queryKeys'
 import { cx } from 'class-variance-authority'
 import { CopyButton } from './CopyButton'
-import { EditConsultModal } from './EditConsultModal'
+import { EditConsultModal } from '../pages/Consults/_components/EditConsultModal'
 
 import { ptBR } from 'date-fns/locale'
 

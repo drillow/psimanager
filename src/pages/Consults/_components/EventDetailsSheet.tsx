@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { useSaveNotes } from '@/service/consults/hooks'
 import { Separator } from '@/components/ui/separator'
 import { DeleteConsult } from '@/components/DeleteConsult'
+import { EditConsultModal } from '@/pages/Consults/_components/EditConsultModal'
 
 type EventDetailsProps = {
   event: CalendarEvent
@@ -16,6 +17,7 @@ type EventDetailsProps = {
 
 export const EventDetailsSheet: React.FC<EventDetailsProps> = ({ event, open, onOpenChange }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openEditModal, setOpenEditModal] = useState(false)
   const [defaultNotes, setDefaultNotes] = useState(event.notes)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const [enableTextArea, setEnableTextArea] = useState(false)
@@ -53,7 +55,9 @@ export const EventDetailsSheet: React.FC<EventDetailsProps> = ({ event, open, on
     }
   }
 
-  const handleOPenDeleteModal = () => setOpenDeleteModal((prevState) => !prevState)
+  const handleOpenDeleteModal = () => setOpenDeleteModal((prevState) => !prevState)
+
+  const handleOpenEditModal = () => setOpenEditModal((prevState) => !prevState)
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange} key={event.id} modal>
@@ -127,12 +131,7 @@ export const EventDetailsSheet: React.FC<EventDetailsProps> = ({ event, open, on
             ></textarea>
             {enableTextArea && (
               <div className="flex items-center justify-end">
-                <Button
-                  type="button"
-                  // variant={'secondary'}
-                  onClick={() => handleSaveNotes()}
-                  disabled={isLoading}
-                >
+                <Button type="button" onClick={() => handleSaveNotes()} disabled={isLoading}>
                   Salvar
                 </Button>
               </div>
@@ -143,16 +142,23 @@ export const EventDetailsSheet: React.FC<EventDetailsProps> = ({ event, open, on
             consultId={event.id}
             patientName={event.patientName}
             isOpen={openDeleteModal}
-            onSetOpen={handleOPenDeleteModal}
+            onSetOpen={handleOpenDeleteModal}
           />
-          <Button
-            variant={'destructive'}
-            className="w-full absolute bottom-14"
-            onClick={handleOPenDeleteModal}
-          >
-            <Trash className="w-4 h-4" />
-            Remover consulta
-          </Button>
+          <EditConsultModal
+            consultData={event}
+            isOpen={openEditModal}
+            setIsOpen={handleOpenEditModal}
+          />
+          <div className="flex items-center gap-4 absolute bottom-14 w-full">
+            <Button variant={'secondary'} className="w-full" onClick={handleOpenEditModal}>
+              <Edit className="w-4 h-4" />
+              Editar
+            </Button>
+            <Button variant={'destructive'} className="w-full" onClick={handleOpenDeleteModal}>
+              <Trash className="w-4 h-4" />
+              Remover
+            </Button>
+          </div>
         </div>
       </SheetContent>
     </Sheet>

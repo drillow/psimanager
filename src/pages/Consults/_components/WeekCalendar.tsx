@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { EventCard } from './EventCard'
 import { cx } from 'class-variance-authority'
+import { Button } from '@/components/ui/button'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Separator } from '@/components/ui/separator'
 
 export interface CalendarEvent {
   id: string
@@ -17,6 +20,7 @@ export interface CalendarEvent {
 interface WeekCalendarProps {
   weekOffset: number
   events: CalendarEvent[]
+  setWeekOffset: (arg: number) => void
 }
 
 const timeSlots = [
@@ -48,7 +52,12 @@ const timeSlots = [
 
 const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
 
-export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }) => {
+export const WeekCalendar: React.FC<WeekCalendarProps> = ({
+  weekOffset,
+  setWeekOffset,
+  events,
+}) => {
+  // const [weekOffset, setWeekOffset] = useState(0)
   const [currentTime, setCurrentTime] = useState(new Date())
 
   const isCurrentWeek = () => {
@@ -119,8 +128,27 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
   return (
     <div className="w-full bg-white">
       <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm flex flex-col h-[calc(100vh-140px)]">
-        <div className="grid grid-cols-8 border-b border-gray-200 sticky top-0 z-30 bg-white shadow-sm">
-          <div className="p-4 bg-gray-50 border-r border-gray-200 "></div>
+        <div
+          className="grid border-b border-gray-200 sticky top-0 z-30 bg-white shadow-sm"
+          style={{ gridTemplateColumns: '120px repeat(7, 1fr)' }}
+        >
+          <div className=" bg-gray-50 border-r border-gray-200 flex items-center">
+            <Button
+              variant={'outline'}
+              onClick={() => setWeekOffset(weekOffset - 1)}
+              className="rounded-none w-full h-full border-none py-1"
+            >
+              <ChevronLeft />
+            </Button>
+            <Separator orientation="vertical" />
+            <Button
+              variant={'outline'}
+              onClick={() => setWeekOffset(weekOffset + 1)}
+              className="rounded-none w-full h-full border-none py-1"
+            >
+              <ChevronRight />
+            </Button>
+          </div>
           {weekDates.map((date, index) => {
             const dayName = daysOfWeek[index]
             const dayNumber = date.getDate().toString().padStart(2, '0')
@@ -128,23 +156,37 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ weekOffset, events }
             const dateString = `${dayNumber}/${month}`
 
             return (
-              <div
-                key={index}
-                className={`flex items-center justify-between p-4 text-center border-r border-gray-200 last:border-r-0 bg-gray-50 ${
-                  isToday(date)
-                    ? 'text-purple-600 font-semibold bg-purple-50'
-                    : 'text-gray-600 font-normal'
-                }`}
-              >
-                <div className="text-sm ">{dayName}</div>
-                <div className={`text-sm `}>{dateString}</div>
+              <div key={index} className="border-r border-gray-200 last:border-r-0  relative">
+                {/* {isToday(date) && (
+                  <div className="h-1 w-4 rounded-lg bg-purple-500 absolute top-2 left-1/2 -translate-x-1/2"></div>
+                )} */}
+                <div
+                  className={`flex items-center justify-center p-1 gap-2 text-center border-r border-gray-200 last:border-r-0 ${
+                    isToday(date) ? 'text-purple-500' : 'text-gray-600'
+                  }`}
+                >
+                  <div className="text-base">{dayName.slice(0, 3)}</div>
+                  <div
+                    className={cx(
+                      `text-sm `,
+                      isToday(date)
+                        ? ' py-px px-1 rounded-md bg-purple-600 text-white'
+                        : 'text-gray-600',
+                    )}
+                  >
+                    {dayNumber}
+                  </div>
+                </div>
               </div>
             )
           })}
         </div>
 
         {/* Time Slots and Events */}
-        <div className="grid grid-cols-8 overflow-y-auto flex-1 relative">
+        <div
+          className="grid  overflow-y-auto flex-1 relative"
+          style={{ gridTemplateColumns: '120px repeat(7, 1fr)' }}
+        >
           {/* {isCurrentWeek() && (
             <div
               className="absolute left-0 right-0 z-40 pointer-events-none"

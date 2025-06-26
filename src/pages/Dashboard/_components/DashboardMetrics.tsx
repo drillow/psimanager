@@ -3,9 +3,14 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
+import { useGetGraphData } from '@/service/consults/hooks'
+import { useAuth } from '@/context/auth'
 
 export const DashboardMetrics = () => {
   const [isAmountVisible, setIsAmountVisible] = useState(true)
+  const { user } = useAuth()
+  const { data, isLoading } = useGetGraphData(user.id)
+  console.log(data)
   const handleAmountVisibility = () => {
     setIsAmountVisible((prev) => !prev)
   }
@@ -23,7 +28,7 @@ export const DashboardMetrics = () => {
           </Button>
         </div>
 
-        <MainChart isHiddenValues={!isAmountVisible} />
+        {!isLoading && <MainChart isHiddenValues={!isAmountVisible} data={data.data} />}
 
         <div className="flex items-center justify-between">
           <div className="flex flex-col items-center w-full gap-2">

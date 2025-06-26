@@ -19,7 +19,17 @@ export const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
   const formatEventTime = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleTimeString('en-US', {
+    return date.toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    })
+  }
+
+  const formatEventEndTime = (dateString: string, duration: number) => {
+    const startDate = new Date(dateString)
+    const endDate = new Date(startDate.getTime() + duration * 60000) // Add duration in milliseconds
+    return endDate.toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false,
@@ -89,7 +99,8 @@ export const EventCard: React.FC<EventCardProps> = ({ event }) => {
           )}
           {event.consultDuration >= 45 && (
             <span className="text-xs text-zinc-400 font-bold w-full flex justify-end">
-              {formatEventTime(event.date)}
+              {formatEventTime(event.date)} até{' '}
+              {formatEventEndTime(event.date, event.consultDuration)}
             </span>
           )}
         </div>

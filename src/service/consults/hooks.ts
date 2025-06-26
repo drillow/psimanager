@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   Consult,
   createConsult,
+  getGraphData,
   getNextTreeDaysConsults,
   getWeekConsults,
   removeConsult,
@@ -122,6 +123,19 @@ export const useSaveNotes = (onSuccess: () => void) => {
   return {
     execute: mutateAsync,
     isLoading: isPending,
+    isError,
+  }
+}
+
+export const useGetGraphData = (userId: string) => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: QueryKeys.CONSULTS.GRAPH_YEAR,
+    queryFn: () => getGraphData(userId),
+  })
+
+  return {
+    data,
+    isLoading,
     isError,
   }
 }
