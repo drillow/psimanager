@@ -152,8 +152,8 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({
           {weekDates.map((date, index) => {
             const dayName = daysOfWeek[index]
             const dayNumber = date.getDate().toString().padStart(2, '0')
-            const month = (date.getMonth() + 1).toString().padStart(2, '0')
-            const dateString = `${dayNumber}/${month}`
+            // const month = (date.getMonth() + 1).toString().padStart(2, '0')
+            // const dateString = `${dayNumber}/${month}`
 
             return (
               <div key={index} className="border-r border-gray-200 last:border-r-0  relative">

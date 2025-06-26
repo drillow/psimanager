@@ -12,6 +12,7 @@ import { CopyButton } from './CopyButton'
 import { EditConsultModal } from '../pages/Consults/_components/EditConsultModal'
 
 import { ptBR } from 'date-fns/locale'
+import { CalendarEvent } from '@/pages/Consults/_components/WeekCalendar'
 
 export type PatientType = {
   patientName: string
@@ -25,7 +26,7 @@ export type PatientType = {
   consultValue: number
 }
 interface PatientCardProps {
-  patient: PatientType
+  patient: CalendarEvent
 }
 
 export const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
@@ -74,7 +75,7 @@ export const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
                 `text-xs  underline underline-offset-1`,
                 patient.completed ? 'text-zinc-400' : 'text-violet-400',
               )}
-              href={patient.completed ? undefined : patient.url}
+              href={patient.completed ? undefined : patient.url!}
             >
               Link da consulta
             </a>
