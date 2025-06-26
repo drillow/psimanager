@@ -37,14 +37,14 @@ export const PatientsPage = () => {
   }
 
   const handleNextPage = () => {
-    if (currentPage < Math.ceil(data.total / ITENS_PER_PAGE)) {
+    if (currentPage < Math.ceil(data?.total / ITENS_PER_PAGE)) {
       setCurrentPage((prev) => prev + 1)
     }
   }
 
   useEffect(() => {
     if (data) {
-      setFilteredList(data.data)
+      setFilteredList(data?.data)
     }
   }, [data])
 
@@ -77,7 +77,7 @@ export const PatientsPage = () => {
             <Button
               type="button"
               onClick={() => setIsAddPatientModalOpen((prevState) => !prevState)}
-              disabled={filteredList.length === 5 && status === SubscriptionStatus.INACTIVE}
+              disabled={filteredList?.length === 5 && status === SubscriptionStatus.INACTIVE}
             >
               <PlusIcon />
               Adicionar paciente
