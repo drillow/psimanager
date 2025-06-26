@@ -10,7 +10,7 @@ export const DashboardMetrics = () => {
   const [isAmountVisible, setIsAmountVisible] = useState(true)
   const { user } = useAuth()
   const { data, isLoading } = useGetGraphData(user.id)
-  console.log(data)
+
   const handleAmountVisibility = () => {
     setIsAmountVisible((prev) => !prev)
   }
@@ -28,7 +28,7 @@ export const DashboardMetrics = () => {
           </Button>
         </div>
 
-        {!isLoading && <MainChart isHiddenValues={!isAmountVisible} data={data.data} />}
+        {!isLoading && <MainChart isHiddenValues={!isAmountVisible} data={data?.data} />}
 
         <div className="flex items-center justify-between">
           <div className="flex flex-col items-center w-full gap-2">
