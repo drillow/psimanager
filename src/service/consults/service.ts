@@ -65,4 +65,9 @@ export const getGraphData = async (userId: string) => {
   const response = await api.get(`/api/consult/summary/${userId}/year`)
   return response.data
 }
+
+export const getConsultMonthMetric = async (userId: string) => {
+  const response = await api.get(`/api/consult/metrics/${userId}/monthly`)
+  return response.data
+}
 // "rrule": "RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=TU"

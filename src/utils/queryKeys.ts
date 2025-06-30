@@ -8,6 +8,7 @@ export const QueryKeys = {
     WEEK: (offset?: number) => ['WEEK_CONSULTS', offset],
     NEXT_TREE_DAYS: ['NEXT_TREE_DAYS_CONSULTS'],
     GRAPH_YEAR: ['GRAPH_YEAR_CONSULT_DATA'],
+    MONTH_METRICS: ['MONTH_METRICS'],
   },
   USER: {
     PROFILE_IMAGE: ['PROFILE_IMAGE'],

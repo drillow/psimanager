@@ -3,13 +3,14 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
-import { useGetGraphData } from '@/service/consults/hooks'
+import { useGetGraphData, useGetMonthMetrics } from '@/service/consults/hooks'
 import { useAuth } from '@/context/auth'
 
 export const DashboardMetrics = () => {
   const [isAmountVisible, setIsAmountVisible] = useState(true)
   const { user } = useAuth()
   const { data, isLoading } = useGetGraphData(user.id)
+  const { data: metricData, isLoading: isLoadingMetrics } = useGetMonthMetrics(user.id)
 
   const handleAmountVisibility = () => {
     setIsAmountVisible((prev) => !prev)
@@ -34,18 +35,35 @@ export const DashboardMetrics = () => {
           <div className="flex flex-col items-center w-full gap-2">
             <h2 className="text-sm text-zinc-700">Consultas no mês</h2>
             {isAmountVisible ? (
-              <strong className="text-3xl font-semibold flex items-start gap-2">120</strong>
+              <strong className="text-3xl font-semibold flex items-start gap-2">
+                {metricData?.totalConstult}
+              </strong>
             ) : (
               <div className="bg-zinc-300 h-9 w-4/12 rounded-md" />
             )}
-            <span className="text-xs text-zinc-400 flex items-center gap-1">
-              {isAmountVisible ? (
-                <strong className="text-red-500 flex items-center gap-2">20%</strong>
-              ) : (
-                <div className="w-7 h-4 bg-zinc-300 rounded-sm" />
-              )}
-              a menos que o último mês
-            </span>
+            {metricData?.statusMetrict === 'increase' ? (
+              <span className="text-xs text-zinc-400 flex items-center gap-1">
+                {isAmountVisible ? (
+                  <strong className="text-green-500 flex items-center gap-2">
+                    {metricData?.percentage}%
+                  </strong>
+                ) : (
+                  <div className="w-7 h-4 bg-zinc-300 rounded-sm" />
+                )}
+                a mais que o último mês
+              </span>
+            ) : (
+              <span className="text-xs text-zinc-400 flex items-center gap-1">
+                {isAmountVisible ? (
+                  <strong className="text-red-500 flex items-center gap-2">
+                    {metricData?.percentage}%
+                  </strong>
+                ) : (
+                  <div className="w-7 h-4 bg-zinc-300 rounded-sm" />
+                )}
+                a menos que o último mês
+              </span>
+            )}
           </div>
           <Separator orientation="vertical" />
           <div className="flex flex-col items-center w-full gap-2">

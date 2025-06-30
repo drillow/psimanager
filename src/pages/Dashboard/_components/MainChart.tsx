@@ -47,7 +47,11 @@ export const MainChart: React.FC<MainChartProps> = ({ isHiddenValues = false, da
   }, [data])
 
   return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+    <ChartContainer
+      config={chartConfig}
+      className="min-h-[200px] w-full"
+      style={{ maxHeight: 300 }}
+    >
       <BarChart
         accessibilityLayer
         data={isHiddenValues ? emptyChart : chartData}

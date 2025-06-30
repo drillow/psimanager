@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   Consult,
   createConsult,
+  getConsultMonthMetric,
   getGraphData,
   getNextTreeDaysConsults,
   getWeekConsults,
@@ -12,6 +13,12 @@ import {
 } from './service'
 import { QueryKeys } from '@/utils/queryKeys'
 import { AxiosError } from 'axios'
+
+type MetricsReturn = {
+  percentage: number
+  statusMetrict: 'increase' | 'decrease'
+  totalConstult: number
+}
 
 export const useNextTreeDaysConsults = (userId: string, enabled: boolean) => {
   const { data, isLoading, isError } = useQuery({
@@ -135,6 +142,21 @@ export const useGetGraphData = (userId: string) => {
 
   return {
     data,
+    isLoading,
+    isError,
+  }
+}
+
+export const useGetMonthMetrics = (
+  userId: string,
+): { data: MetricsReturn; isLoading: boolean; isError: boolean } => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: QueryKeys.CONSULTS.MONTH_METRICS,
+    queryFn: () => getConsultMonthMetric(userId),
+  })
+
+  return {
+    data: data?.data,
     isLoading,
     isError,
   }
