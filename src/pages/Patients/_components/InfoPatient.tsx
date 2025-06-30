@@ -48,7 +48,7 @@ export const InfoPatient: React.FC<InfoPatientProps> = ({ open, onOpenChange, pa
   const [selectedConsult, setSelectedConsult] = useState<Note | null>(null)
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={open} onOpenChange={onOpenChange} modal key={'info-patient'}>
       <SheetContent className="min-w-[475px]">
         <SheetHeader>
           <SheetTitle>Detalhes do paciente</SheetTitle>

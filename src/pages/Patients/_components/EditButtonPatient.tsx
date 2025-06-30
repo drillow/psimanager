@@ -62,11 +62,6 @@ export const EditPatientModal: React.FC<EditPatientModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen} modal key={patientData.id}>
-      {/* <DialogTrigger asChild>
-        <button type="button" className="p-1 border border-zinc-300 rounded-md">
-          <PencilIcon className="w-4 h-4" />
-        </button>
-      </DialogTrigger> */}
       <DialogContent className="max-w-[525px]">
         <Form {...form}>
           <form onSubmit={handleSubmit(handlePayload)} className="grid gap-4 py-2">

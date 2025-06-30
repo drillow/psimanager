@@ -15,7 +15,11 @@ export const SubscriptionProvider = ({ children }: { children: JSX.Element }) =>
   }, [data])
 
   if (isLoading) {
-    return <p>Loading</p>
+    return (
+      <div className="w-screen h-screen flex items-center justify-center">
+        <p>Loading</p>
+      </div>
+    )
   }
 
   return children
