@@ -28,7 +28,7 @@ export const ActionCell: React.FC<ActionCellProps> = ({ data }) => {
 
   return (
     <div className="flex gap-2 items-center justify-end" key={data.id}>
-      <DropdownMenu>
+      <DropdownMenu modal>
         <DropdownMenuTrigger asChild>
           <button className="px-3 py-1 rounded-xl transition-all ease-in-out hover:bg-zinc-200">
             <Ellipsis className="w-4 h-4" />
