@@ -10,7 +10,7 @@ export const DashboardMetrics = () => {
   const [isAmountVisible, setIsAmountVisible] = useState(true)
   const { user } = useAuth()
   const { data, isLoading } = useGetGraphData(user.id)
-  const { data: metricData, isLoading: isLoadingMetrics } = useGetMonthMetrics(user.id)
+  const { data: metricData } = useGetMonthMetrics(user.id)
 
   const handleAmountVisibility = () => {
     setIsAmountVisible((prev) => !prev)
