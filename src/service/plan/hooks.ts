@@ -25,6 +25,7 @@ export function useStripe() {
     try {
       const data = await makeSubscription(userId)
       setIsLoading(false)
+      console.log(data)
       await stripe.redirectToCheckout({ sessionId: data.sessionId })
     } catch (err) {
       console.log(err)
