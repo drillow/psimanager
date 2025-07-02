@@ -4,6 +4,7 @@ import {
   createConsult,
   getConsultMonthMetric,
   getGraphData,
+  getMonthNotes,
   getNextTreeDaysConsults,
   getWeekConsults,
   removeConsult,
@@ -157,6 +158,19 @@ export const useGetMonthMetrics = (
 
   return {
     data: data?.data,
+    isLoading,
+    isError,
+  }
+}
+
+export const useGetConsultNotes = (userId: string, patientId: string, date: string) => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: QueryKeys.CONSULTS.MONTH_NOTES(date),
+    queryFn: () => getMonthNotes({ userId, patientId, date }),
+  })
+
+  return {
+    data,
     isLoading,
     isError,
   }

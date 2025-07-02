@@ -70,4 +70,17 @@ export const getConsultMonthMetric = async (userId: string) => {
   const response = await api.get(`/api/consult/metrics/${userId}/monthly`)
   return response.data
 }
+
+export const getMonthNotes = async ({
+  userId,
+  patientId,
+  date,
+}: {
+  userId: string
+  patientId: string
+  date: string
+}) => {
+  const response = await api.get(`/api/consult/notes/${userId}/${patientId}?date=${date}`)
+  return response.data
+}
 // "rrule": "RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=TU"

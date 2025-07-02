@@ -22,7 +22,7 @@ export const DashboardMetrics = () => {
         <div className="flex items-start justify-between">
           <div className="flex flex-col gap-2">
             <h2 className="text-lg font-semibold text-zinc-700">Métricas</h2>
-            <span className="text-xs text-zinc-400">Uma visão geral dos seus atendimentos</span>
+            <span className="text-sm text-zinc-400">Uma visão geral dos seus atendimentos</span>
           </div>
           <Button variant={'outline'} onClick={handleAmountVisibility}>
             {isAmountVisible ? <Eye /> : <EyeOff />}

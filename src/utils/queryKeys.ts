@@ -9,6 +9,7 @@ export const QueryKeys = {
     NEXT_TREE_DAYS: ['NEXT_TREE_DAYS_CONSULTS'],
     GRAPH_YEAR: ['GRAPH_YEAR_CONSULT_DATA'],
     MONTH_METRICS: ['MONTH_METRICS'],
+    MONTH_NOTES: (date: string) => ['MONTH_NOTES', date],
   },
   USER: {
     PROFILE_IMAGE: ['PROFILE_IMAGE'],
