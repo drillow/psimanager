@@ -9,11 +9,17 @@ type InfoPatientProps = {
   open: boolean
   patientData: Patients
   onOpenChange: (open: boolean) => void
+  key: string
 }
 
-export const InfoPatient: React.FC<InfoPatientProps> = ({ open, onOpenChange, patientData }) => {
+export const InfoPatient: React.FC<InfoPatientProps> = ({
+  open,
+  onOpenChange,
+  patientData,
+  key,
+}) => {
   return (
-    <Sheet open={open} onOpenChange={onOpenChange} modal key={'info-patient'}>
+    <Sheet open={open} onOpenChange={onOpenChange} modal key={key}>
       <SheetContent className="min-w-[475px]">
         <SheetHeader>
           <SheetTitle>Detalhes do paciente</SheetTitle>

@@ -56,7 +56,12 @@ export const ActionCell: React.FC<ActionCellProps> = ({ data }) => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <InfoPatient open={openInfoModal} onOpenChange={handleOpenInfoModal} patientData={data} />
+      <InfoPatient
+        open={openInfoModal}
+        onOpenChange={handleOpenInfoModal}
+        patientData={data}
+        key={data.id}
+      />
 
       <EditPatientModal
         key={data.id}

@@ -48,7 +48,12 @@ export const PatientCard: React.FC<PatientCardProps> = ({ data }) => {
           </button>
         </div>
       </div>
-      <InfoPatient open={openInfoModal} onOpenChange={handleOpenInfoModal} patientData={data} />
+      <InfoPatient
+        open={openInfoModal}
+        onOpenChange={handleOpenInfoModal}
+        patientData={data}
+        key={data.id}
+      />
     </div>
   )
 }
