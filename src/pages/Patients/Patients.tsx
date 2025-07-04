@@ -52,7 +52,7 @@ export const PatientsPage = () => {
     <div className="w-full h-screen p-4 flex flex-col gap-4">
       <PageHeader pageTitle="Pacientes" />
       <div className="flex flex-col gap-4  h-full">
-        <Tabs defaultValue="list" className="flex flex-col gap-4">
+        <Tabs defaultValue="grid" className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="relative flex items-center w-2/12 flex-1">
@@ -66,11 +66,11 @@ export const PatientsPage = () => {
               </div>
 
               <TabsList>
-                <TabsTrigger value="list">
-                  <Rows3 className="w-4 h-4" />
-                </TabsTrigger>
                 <TabsTrigger value="grid">
                   <LayoutGrid className="w-4 h-4" />
+                </TabsTrigger>
+                <TabsTrigger value="list">
+                  <Rows3 className="w-4 h-4" />
                 </TabsTrigger>
               </TabsList>
             </div>

@@ -33,7 +33,7 @@ export const DashboardMetrics = () => {
 
         <div className="flex items-center justify-between">
           <div className="flex flex-col items-center w-full gap-2">
-            <h2 className="text-sm text-zinc-700">Consultas no mês</h2>
+            <h2 className="text-sm text-zinc-700">Consultas completas esse mês</h2>
             {isAmountVisible ? (
               <strong className="text-3xl font-semibold flex items-start gap-2">
                 {metricData?.totalConstult}
@@ -69,7 +69,7 @@ export const DashboardMetrics = () => {
           <div className="flex flex-col items-center w-full gap-2">
             <h2 className="text-sm text-zinc-700">Faturamento estimado</h2>
             {isAmountVisible ? (
-              <strong className="text-3xl font-semibold">R$ 12.000</strong>
+              <strong className="text-3xl font-semibold">Em breve</strong>
             ) : (
               <div className="bg-zinc-300 h-9 w-7/12 rounded-md" />
             )}

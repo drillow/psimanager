@@ -48,7 +48,7 @@ const Services = () => {
 
         <Button type="button" onClick={() => setIsAddConsultModalOpen(true)}>
           <PlusIcon />
-          Adicionar consulta
+          Nova consulta
         </Button>
       </div>
 

@@ -22,8 +22,8 @@ export const Login: React.FC = () => {
   return (
     <>
       <Toaster />
-      <div className="w-screen h-screen  p-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-no-repeat bg-cover">
-        <div className="w-full h-full flex flex-col items-center justify-center rounded-3xl shadow-2xl bg-white gap-8 relative">
+      <div className="w-screen h-screen p-0 md:p-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-no-repeat bg-cover">
+        <div className="w-full h-full flex flex-col items-center justify-center md:rounded-3xl shadow-2xl bg-white gap-8 relative p-8 md:p-4">
           <div className={`flex flex-col items-center justify-center gap-2`}>
             <div className="flex items-center gap-2">
               <img src={DrillowIcon} alt="Drillow Icon" className="w-10 h-10" />
@@ -33,7 +33,7 @@ export const Login: React.FC = () => {
           </div>
           <Tabs
             defaultValue={AuthTabs.SINGIN}
-            className="w-[400px] flex flex-col gap-4"
+            className="w-full max-w-[400px] flex flex-col gap-4"
             onValueChange={(value) => setTab(value as AuthTabs)}
             value={tab}
           >

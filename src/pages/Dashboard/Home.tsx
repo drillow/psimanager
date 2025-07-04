@@ -46,11 +46,6 @@ export const Home = () => {
           <DashboardCalendar />
           <div className="flex flex-col gap-4 w-5/12 h-full ">
             <DashboardMetrics />
-            {/* <div className="bg-white rounded-xl p-0 border h-full border-zinc-200 relative flex flex-col items-center justify-center overflow-hidden">
-              <div className="bg-white z-50">
-                <img src={WorkingImage} className="" />
-              </div>
-            </div> */}
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4">

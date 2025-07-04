@@ -66,7 +66,7 @@ export const SignInForm: React.FC<SignInFormType> = ({ onRecoveryPassword }) => 
         onSubmit={handleSubmit(handleLogin)}
         className="w-full flex items-center justify-center"
       >
-        <div className="flex flex-col items-center justify-center gap-4 w-[400px]">
+        <div className="flex flex-col items-center justify-center gap-4 w-full max-w-[400px]">
           {/* <div className="flex flex-col items-center justify-center gap-2">
             <div className="flex items-center gap-2">
               <Hexagon className={`w-10 h-10 text-violet-600`} />
