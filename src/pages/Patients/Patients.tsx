@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AddPatientButton } from '@/components/AddPatientButton'
+import { AddPatientButton } from '@/pages/Patients/_components/AddPatientButton'
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -55,13 +55,13 @@ export const PatientsPage = () => {
         <Tabs defaultValue="grid" className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="relative flex items-center w-2/12 flex-1">
+              <div className="relative flex items-center w-4/12 flex-1">
                 <MagnifyingGlassIcon className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 transform" />
                 <Input
                   placeholder="Buscar por nome"
                   value={filter}
                   onChange={(event) => setFilter(event.target.value)}
-                  className="pl-8 flex-1"
+                  className="pl-8 flex-1 w-[250px]"
                 />
               </div>
 

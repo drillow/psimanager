@@ -28,7 +28,7 @@ export const Login: React.FC = () => {
             <div className="flex items-center gap-2">
               <img src={DrillowIcon} alt="Drillow Icon" className="w-10 h-10" />
 
-              <h1 className="font-bold text-3xl text-violet-600">Drillow</h1>
+              <h1 className="font-bold text-3xl text-violet-600 fontRounded">Drillow</h1>
             </div>
           </div>
           <Tabs

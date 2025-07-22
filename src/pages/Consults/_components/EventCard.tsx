@@ -46,8 +46,8 @@ export const EventCard: React.FC<EventCardProps> = ({ event }) => {
     const startPosition = (startHour * 60 + startMinute) / 60
 
     return {
-      top: `calc(${startPosition * 5}rem + 4px)`,
-      height: `calc(${durationInHours * 5}rem - 9px)`,
+      top: `calc(${startPosition * 8}rem + 4px)`,
+      height: `calc(${durationInHours * 8}rem - 9px)`,
     }
   }
 

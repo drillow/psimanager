@@ -19,7 +19,47 @@ export type Patients = {
   phone_number: string
   updatedAt: string
   userId: string
+  address?: string
+  birth_date?: string
+  cep?: string
+  city?: string
+  complement?: string
+  country?: string
+  neighborhood?: string
+  number?: string
+  state?: string
+  takeMedication?: boolean
+  medicationInfo?: string
+  hadTherapyBefore?: boolean
 }
+
+// address: null
+// birth_date: null
+// cep: null
+// city: null
+// complement: null
+// country: null
+// createAt: '2025-07-05T01:15:12.489Z'
+// deteledAt: null
+// email: 'tamiresb.santos99@gmail.com'
+// firstName: 'Tamires'
+// first_name: 'Tamires'
+// hadTherapyBefore: false
+// id: '619dd750-de98-47eb-8028-b8a770d6ad49'
+// isWhatsApp: true
+// lastName: 'Brito dos Santos'
+// last_name: 'Brito dos Santos'
+// medicationInfo: null
+// neighborhood: null
+// number: null
+// patientId: '#19'
+// phoneNumber: '(71) 98364-2291'
+// phone_number: '(71) 98364-2291'
+// state: null
+// takeMedication: false
+// updatedAt: '2025-07-05T01:15:12.489Z'
+// userId: '5b33c474-ff25-4e15-9327-fcc57cb7a207'
+
 export const columns: ColumnDef<Patients>[] = [
   {
     accessorKey: 'patientId',

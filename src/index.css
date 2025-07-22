@@ -79,7 +79,7 @@
 @layer base {
   * {
     @apply border-border;
-    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
   body {
     @apply bg-background text-foreground;
@@ -88,4 +88,8 @@
 
 * {
   -webkit-font-smoothing: antialiased;
+}
+
+.fontRounded {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
 }

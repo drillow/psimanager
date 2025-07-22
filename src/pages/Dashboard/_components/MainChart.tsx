@@ -13,6 +13,7 @@ const emptyChart = [
   { month: 'Fevereiro', in_person: 0, online: 0 },
   { month: 'Março', in_person: 0, online: 0 },
   { month: 'Abril', in_person: 0, online: 0 },
+  { month: 'Maio', in_person: 0, online: 0 },
   { month: 'Junho', in_person: 0, online: 0 },
   { month: 'Julho', in_person: 0, online: 0 },
   { month: 'Agosto', in_person: 0, online: 0 },

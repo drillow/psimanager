@@ -1,12 +1,14 @@
-import { ArrowLeft, ArrowRight, Save } from 'lucide-react'
+import { ArrowLeft, ArrowRight, PenLine, Save } from 'lucide-react'
 import { CustomMonthYearPicker } from './MonthYearPicker'
 import { useAuth } from '@/context/auth'
-import { useGetConsultNotes } from '@/service/consults/hooks'
+import { useGetConsultNotes, useSaveNotes } from '@/service/consults/hooks'
 import { useState } from 'react'
 import { format, parseISO } from 'date-fns'
 import { cx } from 'class-variance-authority'
 import { Button } from '@/components/ui/button'
 import { Patients } from './TableColumns'
+import { useQueryClient } from '@tanstack/react-query'
+import { QueryKeys } from '@/utils/queryKeys'
 
 type Note = {
   id: string
@@ -19,10 +21,12 @@ type ConsultNotesType = {
 }
 
 export const ConsultsNotes: React.FC<ConsultNotesType> = ({ patientData }) => {
+  const [isEditing, setIsEditing] = useState(false)
   const [textAreaValue, setTextAreaValue] = useState('')
   const [selectedMonth, setSelectedMonth] = useState<string>('06')
   const [selectedYear, setSelectedYear] = useState<string>('2025')
   const [selectedConsultNote, setSelectedConsultNote] = useState<Note | null>(null)
+  const queryClient = useQueryClient()
 
   const setSelectedConsult = (item: Note) => {
     setSelectedConsultNote(item)
@@ -30,6 +34,13 @@ export const ConsultsNotes: React.FC<ConsultNotesType> = ({ patientData }) => {
   }
 
   const { user } = useAuth()
+
+  const { execute, isLoading } = useSaveNotes(() => {
+    setIsEditing(!isEditing)
+    queryClient.invalidateQueries({
+      queryKey: QueryKeys.CONSULTS.MONTH_NOTES_ALL,
+    })
+  })
 
   const { data } = useGetConsultNotes(
     user.id,
@@ -39,6 +50,12 @@ export const ConsultsNotes: React.FC<ConsultNotesType> = ({ patientData }) => {
       useGrouping: false,
     })}-${selectedYear}`,
   )
+
+  const handleSaveNotes = () => {
+    if (selectedConsultNote) {
+      execute({ consultId: selectedConsultNote.id, notes: textAreaValue })
+    }
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -64,34 +81,51 @@ export const ConsultsNotes: React.FC<ConsultNotesType> = ({ patientData }) => {
           <>
             {selectedConsultNote ? (
               <div className="flex flex-col gap-4">
-                <span className="font-bold text-sm flex items-center gap-2">
-                  <ArrowLeft
-                    width={20}
-                    height={20}
-                    className="text-violet-700 cursor-pointer"
-                    onClick={() => setSelectedConsultNote(null)}
-                  />
-                  {format(parseISO(selectedConsultNote?.date), 'dd MMM, yyyy')}
-                </span>
+                <div className="flex items-center justify-between w-full">
+                  <span className="font-bold text-sm flex items-center gap-2">
+                    <ArrowLeft
+                      width={20}
+                      height={20}
+                      className="text-violet-700 cursor-pointer"
+                      onClick={() => setSelectedConsultNote(null)}
+                    />
+                    {format(parseISO(selectedConsultNote?.date), 'dd MMM, yyyy')}
+                  </span>
+                  <div
+                    className="text-purple-600 text-sm flex items-center gap-2 cursor-pointer hover:underline"
+                    onClick={() => setIsEditing((prevState) => !prevState)}
+                  >
+                    <PenLine className="w-4 h-4" />
+                    Editar
+                  </div>
+                </div>
                 <textarea
                   className={cx(
-                    `w-full h-96 p-2 border border-zinc-300 rounded-md resize-none focus:outline-none  cursor-text text-black focus:ring-2 focus:ring-violet-500`,
+                    `w-full h-96 p-2 border border-zinc-300 rounded-md resize-none focus:outline-none  cursor-text text-black focus:ring-2 focus:ring-violet-500 bg-white`,
                   )}
                   placeholder="Escreva suas anotações aqui..."
                   value={textAreaValue}
                   onChange={(e) => setTextAreaValue(e.target.value)}
+                  disabled={!isEditing}
                 ></textarea>
 
-                <Button type="button" onClick={() => {}} disabled={false} className="w-full">
-                  <Save />
-                  Salvar
-                </Button>
+                {isEditing && (
+                  <Button
+                    type="button"
+                    onClick={handleSaveNotes}
+                    disabled={isLoading}
+                    className="w-full"
+                  >
+                    <Save />
+                    Salvar
+                  </Button>
+                )}
               </div>
             ) : (
               <div className="max-w-full mx-auto">
                 <div className="relative">
                   {/* Vertical line - stops at the last item */}
-                  <div className="absolute left-[6px] top-0 bottom-16 w-1 bg-purple-600"></div>
+                  <div className="absolute left-[6px] top-0 bottom-20  w-1 bg-purple-600"></div>
 
                   {/* Timeline items */}
                   <div className="space-y-4">
@@ -110,7 +144,7 @@ export const ConsultsNotes: React.FC<ConsultNotesType> = ({ patientData }) => {
                           <div className="text-gray-800 text-sm font-semibold mb-2 flex items-center justify-between">
                             {format(parseISO(item.date), 'dd MMM, yyyy')}
                             <div
-                              className="text-purple-600 text-xs flex items-center gap-1 cursor-pointer hover:underline"
+                              className="text-purple-600 text-sm flex items-center gap-2 cursor-pointer hover:underline"
                               onClick={() => setSelectedConsult(item)}
                             >
                               Editar
@@ -118,7 +152,7 @@ export const ConsultsNotes: React.FC<ConsultNotesType> = ({ patientData }) => {
                             </div>
                           </div>
 
-                          <p className="text-gray-800 text-sm  max-w-2xl line-clamp-2">
+                          <p className="text-gray-800 text-sm  max-w-2xl line-clamp-3">
                             {item.note}
                           </p>
                         </div>

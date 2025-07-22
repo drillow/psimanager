@@ -1,7 +1,7 @@
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 
-import { WidgetCardLink } from '@/components/WidgetCardLink'
+import { WidgetCardLink } from '@/pages/Dashboard/_components/WidgetCardLink'
 import { UserPlus2, Crown, Settings as SettingsIcon, ChartColumnBig } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import {
@@ -69,6 +69,7 @@ export const Home = () => {
             title="Métricas"
             description="Veja total de consultas online e presencial, faturamento e outros."
             icon={<ChartColumnBig className="w-8 h-8" />}
+            disabled
           />
           <Settings openScreen={MenuItens.PERSONAL}>
             <WidgetCardLink

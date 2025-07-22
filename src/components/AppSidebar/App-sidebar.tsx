@@ -94,7 +94,7 @@ export function AppSidebar() {
             className={`${open ? 'w-6 h-6' : 'w-5 h-5'} text-violet-600`}
           />
         </div>
-        {open && <h1 className="font-extrabold text-2xl text-violet-600">Drillow</h1>}
+        {open && <h1 className="font-extrabold text-2xl text-violet-600 fontRounded">Drillow</h1>}
       </SidebarHeader>
       {/* <Separator /> */}
       <SidebarContent>

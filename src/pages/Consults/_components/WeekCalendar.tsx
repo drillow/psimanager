@@ -184,32 +184,9 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({
 
         {/* Time Slots and Events */}
         <div
-          className="grid  overflow-y-auto flex-1 relative"
+          className="grid overflow-y-auto flex-1 relative"
           style={{ gridTemplateColumns: '120px repeat(7, 1fr)' }}
         >
-          {/* {isCurrentWeek() && (
-            <div
-              className="absolute left-0 right-0 z-40 pointer-events-none"
-              style={{
-                top: `${getCurrentTimePosition()}rem`,
-              }}
-            >
-              <div className="absolute left-0 -top-[11px] w-20 flex justify-end pr-2">
-                <div className="bg-purple-500 text-white text-xs px-2 py-1 rounded-md shadow-sm font-semibold">
-                  {currentTime.toLocaleTimeString('pt-BR', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false,
-                  })}
-                </div>
-              </div>
-
-              <div className="ml-20 h-0.5 bg-purple-500 shadow-sm"></div>
-
-              <div className="absolute left-[78px] top-0 w-2 h-2 bg-purple-500 rounded-full transform -translate-y-[3px]"></div>
-            </div>
-          )} */}
-          {/* Time Column */}
           <div className="border-r border-gray-200 sticky left-0 z-20 bg-white">
             {timeSlots.map((time, timeIndex) => {
               const timeHour = timeIndex
@@ -218,7 +195,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({
               return (
                 <div
                   key={time}
-                  className="h-20 border-b border-gray-100 last:border-b-0 flex items-start justify-end pr-3 pt-2"
+                  className="h-32 border-b border-gray-100 last:border-b-0 flex items-start justify-end pr-3 pt-2"
                 >
                   <span
                     className={cx(
@@ -261,7 +238,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({
                 {timeSlots.map((_, timeIndex) => (
                   <div
                     key={timeIndex}
-                    className="h-20 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 cursor-pointer transition-colors"
+                    className="h-32 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 cursor-pointer transition-colors"
                   />
                 ))}
 
